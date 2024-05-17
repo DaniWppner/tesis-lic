@@ -1,0 +1,179 @@
+
+\section{Construcción clásica de \textit{EPAs}}
+Tradicionalmente, existe un algoritmo genérico para la construcción de \textit{EPAs} de artefactos de código.
+Por cuestiones de notación, para ver el algoritmo de generación de EPAs es conveniente definir el siguiente predicado presentado por De Caso et. al \cite{de-caso-epa} sobre las configuraciones dado un conjunto de precondiciones de un contrato:
+
+\begin{definition}[Predicado de un conjunto de métodos]
+    Dados un contrato $SC = \langle M, F, R, inv, init \rangle$ y un conjunto de metodos, $\mathcal{M} \subseteq M$, definimos $pred_\mathcal{M} : \mathcal{C} \rightarrow \{\textbf{true}, \textbf{false}\}$ como
+    \[pred_\mathcal{M}(c) \iff inv(c) \land \bigwedge\limits_{m \in \mathcal{M}} \exists p \in \mathds{Z} . R_m(c,p) \land \bigwedge\limits_{   m \notin \mathcal{M}} \nexists p \in \mathds{Z} . R_m(c,p)\]
+\end{definition}
+Este algoritmo genera la porción de la EPA que es alcanzable desde $P_0$ (los estados iniciales), realizando \textit{Breadth-First-Search} en el grafo de las transiciones \cite{de-caso-epa}.
+El algoritmo es el siguiente:
+
+
+\begin{algorithm}[H]
+    \caption{Construcción de EPAs}
+    \hspace*{\algorithmicindent} \textbf{Input} $SC = \langle M, F, R, inv, init \rangle$ contrato \\
+    \hspace*{\algorithmicindent} \textbf{Output} La \textit{EPA} $L_A =\langle \Sigma, S, P_0, \Delta \rangle$
+    \begin{algorithmic}[1]
+        \State $\Sigma = M$; $S = \emptyset$
+        \State $\Delta(s,m) = \emptyset \quad \forall s \in 2^R, m \in M$
+        \State $\mathcal{M}^- = \{m \in M | \forall c \: . \: init(c) \Rightarrow \nexists p \in \mathds{Z} \: . \: R_m(c,p)\}$
+        \State $\mathcal{M}^+ = \{m \in M | \forall c \: . \: init(c) \Rightarrow \exists p \in \mathds{Z} \: . \: R_m(c,p)\}$
+        \State $P_0^c = \{\mathcal{M} \in 2^M | \mathcal{M}^+ \subseteq \mathcal{M} \land \mathcal{M}^- \cap \mathcal{M} = \emptyset \}$
+        \State $P_0 = \{\mathcal{M} \in P_0^c | \exists c . init(c) \land pred_\mathcal{M}(c) \}$
+        \State $W =$ Cola con los elementos de $P_0$
+        \While{hay un conjunto $\mathcal{M}$ en la cabeza de $W$}
+        \State $S = S \cup \{\mathcal{M}\}$
+        \For{$m \in \mathcal{M}$}
+        \State $\mathcal{N}^- = \{n \in M | \forall c \in \mathcal{C}, p \in \mathds{Z} \: . \: pred_\mathcal{M}(c) \land R_m(c,p) \Rightarrow \nexists p^\prime \in \mathds{Z} \: . \: R_n(F_m(c,p),p^\prime)\}$
+        \State $\mathcal{N}^+ = \{n \in M | \forall c \in \mathcal{C}, p \in \mathds{Z} \: . \: pred_\mathcal{M}(c) \land R_m(c,p) \Rightarrow \exists p^\prime \in \mathds{Z} \: . \: R_n(F_m(c,p),p^\prime)\}$
+        \State $S^C = \{\mathcal{N} \in 2^M | \mathcal{N}^+ \subseteq \mathcal{N} \land \mathcal{N}^- \cap \mathcal{N} = \emptyset\}$
+        \For{$\mathcal{N} \in S^C$}
+        \If{$ \exists c \in \mathcal{C} \: . \: pred_\mathcal{M} (c) \land \exists p \in \mathds{Z} \: . \: R_m(c,p) \land pred_\mathcal{N}(F_m(c,p)) $}
+            \State $\Delta (\mathcal{M},m) = \Delta (\mathcal{M},m) \cup \mathcal{N}$
+            \If{$\mathcal{N} \notin S \land \mathcal{N} \notin W$}
+            \State $W.push(\mathcal{N})$
+            \EndIf
+            \EndIf
+            \EndFor
+            \EndFor
+            \EndWhile
+            \State \Return $\langle \Sigma, S, P_0, \Delta \rangle$
+    \end{algorithmic}
+\end{algorithm}
+
+Aquí, calcular los conjuntos $\mathcal{M}^-$, $\mathcal{M}^+$, $\mathcal{N}^-$ y $\mathcal{N}^+$ es una optimización que permite reducir la cantidad de transiciones canidadatas de la EPA \cite{de-caso-epa}.
+
+Decidir si una transición pertenece o no la EPA, como está planteado en el algoritmo, es resolver problemas de validez de fórmulas de primer orden.
+Esto en general es indecidible, sin embargo la sugerencia principal consiste en transformar estas preguntas de validez de fórmulas de primer orden en problemas de alcanzabilidad de código, dado que se espera que las precondiciones y los invariantes definidos en la formalización~\ref{definicion-smart-contract} estén debidamente implementados en el contrato.
+
+En general, por optimizaciones de gas, es común que en los métodos externos los contratos definan las precondiciones explícitamente en mediante instrucciones \textcolor{blue}{\texttt{require}}, como en el contrato ejemplo \ref{fig:solidity-example} \texttt{SimpleMarketplace}.
+Dado que los inputs externos nunca garantizan estar bien formados, resulta menos costoso para el contrato abortar estas ejecuciones lo antes posible en lugar de hacerlas avanzar hasta llegar a un estado de error.
+Sin embargo, debido a que no se espera que sea posible generar instancias que no satisfagan el invariante, por el mismo motivo de ahorro de gas no es usual contar con una implementación explícita del invariante en el código fuente del contrato.
+Tenerlo implicaría ejecutar código que se espera que dé siempre el mismo resultado, por lo que resulta más eficiente no hacerlo.
+
+\section{Manticore}
+
+Toda esta sección se refiere a la versión de \texttt{Manticore 0.3.7}.
+
+\texttt{Manticore} es un proyecto desarrollado por \texttt{TrailOfBits} lanzado en 2017.
+Es una herramienta de ejecución simbólica, implementada en Python, que soporta análisis para diversas plataformas: EVM, bytecode nativo (arquitecturas \texttt{x86}, \texttt{x86\_64}, \texttt{aarch64} y \texttt{ARMv7}) y WASM.
+Principalmente funciona como un motor de ejecución simbólica programable (mediante APIs externas en Python), aunque también incluye una herramienta plug-and-play por línea de comandos, y existe un proyecto que intenta integrar la herramienta con una interfaz gráfica, \texttt{ManticoreUI} \cite{manticoreUI} que nunca se lanzó.
+
+\subsection{Command Line Tool}
+
+El comportamiento por defecto de la herramienta de línea de comandos varía mucho dependiendo de la plataforma a la que es aplicada, pero en general busca explorar todos los caminos de ejecución factibles en el código fuente provisto, utilizando valores simbólicos para cada valor generalmente introducido por usuarios.
+Luego, por cada camino explorado, genera un caso de test (es decir, para cada valor ``input'' simbólico genera un valor concreto que fuerze el camino).
+Además, la exploración de los caminos incluye el seguimiento de algunas propiedades interesantes por defecto, dependientes de la plataforma.
+Para los binarios nativos, por ejemplo, registra el conjunto (total) de instrucciones visitadas, y registra para cada caso de test el número y la traza exacta de instrucciones ejecutadas.
+
+En el caso de la EVM, la herramienta por consola funciona con código fuente Solidity (no acepta precompilados).
+Para explorar caminos de ejecución la herramienta toma los métodos externos del contrato y los ejecuta (en cualquier orden) hasta alcanzar 100\% de line coverage o, dentro de un límite si es que se introdujo uno, hasta cubrir todo el espacio de secuencias de llamados a métodos externos.
+De no alcanzar ninguno de los dos criterios, termina el análisis por time out.
+La herramienta cuenta con una batería de \texttt{detectors} que registran eventos de  interés específico a Ethereum, como la presencia de integer overflows, la ejecución de opcodes inválidos, la lectura de memoria o storage no inicializado, bugs de reentrancy o la ejecución de ciertas instrucciones específicas con parámetros controlados por el usuario.
+Estos \texttt{detectors} se encuentran apagados por defecto, al igual que por defecto se descartan caminos que incluyan el rollback de una transacción.
+Esto significa que, por ejemplo, para realizar una simple búsqueda de incumplimiento de una aserción (la instrucción \textcolor{blue}{\texttt{assert}} en Solidity), es preciso activar el modo detallado (\texttt{--thorough-mode}) de la herramienta.
+
+\subsection{Manticore-Verifier}
+Manticore cuenta con otra herramienta por consola de comandos de análisis de smart contracts denominada \texttt{manticore-verifier}.
+Permite marcar ciertos métodos externos como ``invariantes'' que la herramienta luego busca falsificar.
+Una fortaleza de esta herramienta es que la sintaxis para marcar los invariantes es la misma que la utilizada por \texttt{Echidna}, un fuzzer desarollado también por \texttt{TrailOfBits}, permitiendo el análisis por ambas herramientas con una única intervención manual.
+
+\subsection{Arquitectura de Manticore}
+La arquitectura de Manticore se organiza en tres partes:
+\begin{itemize}
+    \item El mecanismo central de ejecución simbólica
+    \item Los módulos que implementan la simulación de cada una de las plataformas soportadas (Ethereum, \texttt{x86}, etc)
+    \item SMT solvers externos
+\end{itemize}
+
+Por defecto, la instalación de Manticore incluye una instalación del \texttt{Z3 Theorem Prover}, un SMT solver desarrollado por Microsoft Research desde 2012 \cite{z3TheoremProver}.
+Sin embargo, Manticore puede integrarse con cualquier SMT solver que se conforme a la interfaz definida por \texttt{SMTLIB2} \cite{smtlib2}, como lo es por ejemplo también \texttt{Yices} \cite{yices}, otro SMT solver open source.
+
+El mecanismo central de ejecución simbólica de Manticore está compuesto por varios módulos de Python: \texttt{\textbf{smtlib}}, \texttt{\textbf{manticorebase}}, \texttt{\textbf{plugin}}, \texttt{\textbf{state}}, \texttt{\textbf{worker}} y \texttt{\textbf{workspace}}, representados en la figura \ref{fig:core-modules}.
+
+\begin{figure}
+    \centering
+    {\includegraphics {figs/core-architecture-manticore.png}}
+    \caption{Módulos que componen el mecanismo central de ejecución simbólica de Manticore}
+    \label{fig:core-modules}
+\end{figure}
+
+\texttt{\textbf{smtlib}} provee a los demás módulos de la aplicación APIs para generar y manipular variables, expresiones y constraints simbólicas, y para realizar consultas de (in)satisfacibilidad sobre las expresiones simbólicas generadas, delegando estas consultas en última instancia al SMT solver externo.
+Los módulos \texttt{\textbf{manticorebase}} y \texttt{\textbf{state}} implementan en conjunto el mecanismo central de ejecución simbólica de Manticore de manera agnóstica a la plataforma subyacente, asumiendo muy poco sobre las instrucciones emuladas.
+Por último, \texttt{\textbf{worker}} y \texttt{\textbf{workspace}} sirven de auxiliares que soportan los aspectos de perstistencia, entrada/salida y multithreading, entre otros, de la aplicación.
+El módulo \texttt{\textbf{plugin}} provee una API de \textit{callbacks} que otorgan acceso al estado interno emulado en distintos momentos de la ejecución.
+Este módulo es una parte central de la API programable accesible al usuario de Manticore, pero también es la manera en la que la aplicación base puede realizar sus análisis de coverage, etc.
+
+La abstracción principal para la ejecución simbólica utilizada por Manticore es la del objeto \textcolor{cyan}{\texttt{state}}.
+Un \textcolor{cyan}{\texttt{state}} representa, habiendo realizado un camino de ejecución particular, el estado del programa emulado hasta cierto punto.
+Los \textcolor{cyan}{\texttt{state}} son responsables de conocer cuáles son los próximos pasos en su ejecución, cuál es el conjunto de variables simbólicas que existieron en su ejecución, y que conjunto de fórmulas deben satisfacerse.
+Asimismo, cada \textcolor{cyan}{\texttt{state}} individual cuenta con una instancia entera emulada del programa (en el caso de Ethereum, la blockchain).
+Por otro lado, el estado global de la aplicación (mantenido por el módulo \texttt{\textbf{manticorebase}}) consiste simplemente en una colección de \textcolor{cyan}{\texttt{state}}s.
+
+\subsection{API programable}
+La principal API presentada al usuario permite manejar el conjunto de  \textcolor{cyan}{\texttt{state}}s, siempre ``entre medio'' de la ejecución de métodos del contrato (es decir, antes de comenzar a ejecutarlos o después de que terminen, pero no durante).
+Los principales métodos de la API permiten lado realizar acciones globales como introducir nuevas constraints, ejecutar métodos de un smart contract, deployear un contrato nuevo, o iniciar la transforación de estados en casos de test que afecten a todos los state \textcolor{cyan}{\texttt{state}} por igual.
+Además, permiten acceder a \textcolor{cyan}{\texttt{state}} individuales (siempre y cuando no estén corriendo) y leer y/o modificar los elementos simbólicos de su estado.
+En particular, no es posible, al menos mediante la API expuesta, expandir el camino de ejecución de solo algunos \textcolor{cyan}{\texttt{state}}.
+
+Por otro lado los callbacks como los del módulo
+\texttt{\textbf{plugin}} permiten interactuar con los \textcolor{cyan}{\texttt{state}} mientras estos se ejecutan.
+Los callbacks pueden subcribirse a cualquiera de los eventos publicados nativamente por la aplicación, que son mucho más amplios que simplemente el estado de los \textcolor{cyan}{\texttt{state}}.
+Algunos de los eventos pueden categorizarse en:
+\begin{itemize}
+    \item eventos de estado (\texttt{will\textbackslash did\_fork\_state, will\textbackslash did\_terminate\_state})
+    \item eventos de smt (\texttt{will\textbackslash did\_solve})
+    \item eventos de plataforma (\texttt{will\textbackslash did\_open\_transaction},\\ \texttt{will\textbackslash did\_evm\_read\_storage})
+\end{itemize}
+Estos pueden utilizarse para debugear o mantener el registro de propiedades, pero también para modificar el estado de la ejecución en vivo.
+
+
+
+\section{Algoritmo alternativo}
+
+Implementar el invariante del contrato, además de no ser una práctica estándar, es a menudo exigente para el programador, y es también una actividad propensa a errores.
+Sin embargo, es importante en la definición~\ref{definicion-lts} de la semántica de un contrato inteligente la  presencia del invariante.
+Intentar construir EPAs incluyendo estados que no satisfagan el invariante suele producir abstracciones demasiado sobreaproximadas \cite{de-caso-epa}.
+Por eso, en continuación del trabajo presentado por Godoy et al. \cite{predicate-abstraction-for-smart-contract-validation}, trabajaremos construyendo las EPAs a partir de las precondiciones explícitas dadas por las declaraciones \textcolor{blue}{\texttt{require}} al comienzo de los métodos, y haciendo uso  del invariante implícito dado por los métodos mismos del contrato.
+
+La idea es, tomando la definición de que un contrato es correcto si la ejecución de todos sus métodos satisface el invariante si se satisfacen el invariante y las precondiciones del método, entonces bajo la asunción de que un contrato es correcto, ejecutar cualquier sucesión del método del contrato con parámetros válidos (es decir, que satisfagan las precondiciones), genera instancias que satisfacen el invariante.
+Es decir, explorar estados del contrato que puedan ser generados por cadenas de transacciones desde el constructor, siempre considera estados que satisfacen el invariante, y no es necesario pedir esta propiedad si se presenta una traza de métodos que comienza por el constructor.
+Aún más, bajo la presunción de que todos los métodos de un contrato implementan explícitamente sus precondiciones, cualquier traza concrta de métodos que comienze por el constructor genera una instancia válida del contrato (es decir, que cumple el invariante), considerando que un llamado que no cumpla la precondición de un método devolverá un estado (idéntico) válido.
+\\
+\\
+\\
+
+\begin{tcolorbox}[blanker,
+        float=htb!,
+        grow to left by=1.5cm,
+        grow to right by=1.2cm,
+        top=-1.2cm,
+        bottom=-0.8cm,
+        phantom={\phantomsection\label{epa-algoritmo}}]
+    \input{epa-algoritmo}
+\end{tcolorbox}
+
+\paragraph{}
+El algoritmo \hyperref[epa-algoritmo]{1} realiza una versión modificada de DFS (\textit{Depth-First-Search}) sobre la porción alcanzable de la EPA en el que se exploran varios nodos del grafo a la vez.
+Para esto, utiliza herramientas de ejecución simbólica y smt-solving para encontrar las transiciones.
+
+El estado inicial y la función de transición comienzan vacíos.
+El conjunto ${Paths_{pre}}$ contiene todos los caminos posibles que puede tomar la ejecución del constructor seguida por la ejecución de las precondiciones de los métodos.
+Si llamamos $init$ al estado (simbólico) luego de ejecutar $F_{Constructor}$, en $Symb_{pre}$ hay para cada uno de los caminos en $Path_{pre}$ una expresión que representa el resultado de la ejecución realizada. Esa expresión es de la forma $(R_1(init) = r_1 , R_2(init) = r_2 \cdots , R_n(init) = r_n)$ .
+Luego, puede calcularse $P_0$ mediante una sucesión de preguntas de satisfacibilidad de fórmulas.
+En particular, para cada expresión $sy \in Symb_{pre}$, nos interesa saber con qué estado de la EPA es consistente $sy$.
+
+Por ejemplo, en la construcción de la EPA de SimpleMarketplace, sean $s_1 = \{R_{MakeOffer},R_{Reject}\}$ y $ sy \in Symb_{Pre}$ tal que los resultados de las precondiciones en $sy$ son $\{R_{MakeOffer}(init) = r_1, R_{AcceptOffer}(init) = r_2, R_{Reject}(init) = r_3\}$.
+La fórmula $(r_1 = \textbf{true} \land r_2 = \textbf{false} \land r_3 = \textbf{true} \land sy)$ significa que para el camino de ejecución asociado a $sy$, existen valores de entrada que lo recorren y que llegan a un estado final en el que \texttt{MakeOffer} y \texttt{Reject} se encuentran habilitados (o, lo que es lo mismo, un estado que se abstrae a $s_1$).
+En la línea 6 del algoritmo notamos a esta fórmula que expresa que el camino asociado a $sy$ es compatible con $s_1$ como $(sy = s_1)$.
+
+Habiendo determinado $P_0$, el algoritmo marca $S_{current}$ como el conjunto de estados de la EPA con los que se corresponde $Symb_{pre}$, y agrega ambos a la pila $W$, que representa conjuntos de estados de la EPA por visitar.
+Para continuar la exploración desde $S_{current}$, se elige uno de los métodos que esté habilitado en alguno de los estados de $S_{current}$ y no se haya explorado ya.
+Luego, para cada estado $s \in S_{current}$ que permite la ejecución de $m$, se calculan los nuevos estados a los que se puede llegar ejecutando $m$, de manera similar a la que se calcula $P_0$.
+
+El conjunto $Symb_{post}$ de la línea 15 representa los resultados de continuar la ejecución donde la había dejado $Symb_{pre}$.
+En la línea 19, donde se calculan las próximas transiciones, es necesario revisar no sólo la satisfacibildad de que el estado simbólico nuevo sea compatible con el estado de la EPA objetivo, sino que es necesario que aún se mantenga la compatibilidad entre el estado simbólico viejo y el estado de la EPA desde el que se está transisionando.
+Esto es porque las expresiones en $Symb_{pre}$ pueden ser compatibles con $s_1$, pero puede ocurrir una contradicción al pedir que $Symb_{post}$ sea compatible con $s_2$ también.
+De no exigir esto, consideraríamos que valores de entrada que permiten alcanzar $s_2$ pero que nunca alcanzaban $s_1$ previamente indican una transición entre $s_1$ y $s_2$.
