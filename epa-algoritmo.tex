@@ -1,38 +1,46 @@
+\newcommand\CONDITION[2]%
+{\begin{tabular}[t]{@{}l@{}}#1#2\end{tabular}}
+\algdef{SE}[IF]{If}{EndIf}[1]%
+{\algorithmicif\ \CONDITION{#1}{\ \algorithmicthen}}%
+{\algorithmicend\ \algorithmicif}
+\algdef{C}[IF]{IF}{ElsIf}[1]%
+{\algorithmicelse\ \algorithmicif\ \CONDITION{#1}{\ \algorithmicthen}}
 \begin{algorithm}[H]
-\captionsetup{belowskip=0pt}
-\caption{Construcción de EPAs mediante ejecución simbólica}
- \hspace*{\algorithmicindent} \textbf{Input} $C = \langle M, F, R \rangle$ contrato \\
- \hspace*{\algorithmicindent} \textbf{Output} La \textit{EPA} $L_A =\langle \Sigma, S, P_0, \Delta \rangle$
- \begin{algorithmic}[1]
-\State $\Sigma = M$
-\State $S = \emptyset$ $;P_0 = \emptyset$
-\State $\Delta(s,m) = \emptyset \quad \forall s \in 2^R, m \in M$
-\State $Paths_{pre} = \{p | p$ es un posible camino de ejecución de $F_{Constructor};R\_1;R\_2; \dots R\_n\}$
-\State $Symb_{pre} = \{$resultado simbólico luego de ejecutar $p | p \in Paths_{pre} \}$ 
-\State $P_0 = \{s \in 2^R | \exists sy \in Symb_{pre} \: . \: SAT(sy= s)\}$
-\State $S_{current } = P_0$
-\State $marcados = \emptyset$
-\State $W =$ Pila vacía ;$W.$Push$((S_{current},Symb_{pre}))$
-\While{$W . $NotEmpty$()$}
-    \State $S =$ Update con $S_{current }$
-    \If{$\exists m \in M\: . \: \{s \in S_{current } | m \in s \land (s,m) \notin marcados\} \neq \emptyset$} 
-        \State Elegir tal $m$
-        \State $Paths_{post\_m} = \{p | p$ es un posible camino de ejecución de $F_m;R\_1;R\_2; \dots R\_n\}$
-        \State $Symb_{post} = \{$resultado simbólico luego de ejecutar $p1;p2 \:|\: p1 \in Paths_{pre} \land p2 \in Paths_{post\_m} \} $
+    \captionsetup{belowskip=0pt}
+    \caption{Construcción de EPAs mediante ejecución simbólica}
+    \hspace*{\algorithmicindent} \textbf{Input} $SC = \langle M, F, R \rangle$ contrato \\
+    \hspace*{\algorithmicindent} \textbf{Output} La \textit{EPA} $L_A =\langle \Sigma, S, P_0, \Delta \rangle$
+    \begin{algorithmic}[1]
+        \State $\Sigma = M; S = \emptyset$
+        \State $\Delta(s,m) = \emptyset \quad \forall s \in 2^M, m \in M$
+        \State $Paths_{pre} = $ \texttt{ paths\_of}($F_{Constructor};R_1;R_2; \dots R_n$)
+        \State $Symb_{pre} = \{$\texttt{sym\_res\_of}$(p) | p \in Paths_{pre} \}$
+        \State $P_0 = \{s \in 2^M | \exists sy \in Symb_{pre}$ \textbf{tal que} $SAT(sy= s)\}$
+        \State $S_{current } = P_0$
+        \State $W =$ Pila de tuplas con ($S_{current},Symb_{pre}$)
+        \While{hay un elemento en la cabeza de $W$}
+        \State $S = S \cup S_{current}$
+        \If{hay un $ m \in M$ \textbf{tal que}\\ \{$\mathcal{M} \in S_{current} | m \in \mathcal{M} \land (\mathcal{M} ,m) $ no está marcado\} $\neq \emptyset$}
+        \State $Paths_{post\_m} = $\texttt{ paths\_of}($F_m;R_1;R_2; \dots R_n$)
+        \State $Symb_{post} =  \{$\texttt{sym\_res\_of}$(p_1;p_2) \:|\: p_1 \in Paths_{pre} \land p_2 \in Paths_{post\_m} \} $
         \State $S_{next} = \emptyset$
-        \For{$\{s_1 \in S_{current } | m \in s_1 \land (s_1,m) \notin marcados\}$}
-            \State $marcados \pluseq \{(s_1,m)\}$
-            \State  $\Delta(s_1,m) = \{s_2 \in 2^R | \exists sy_1 \in Symb_{pre}, sy_2 \in Symb_{post\_m} \: . \: SAT(sy_1= s_1 \land sy_2 = s_2)\}$ 
-            \State $S_{next} = \Delta(s_1,m)$
+        \For{$\{\mathcal{M} \in S_{current } | m \in \mathcal{M} \land (\mathcal{M},m)$ no está marcado\}}
+        \State marcar $\{(\mathcal{M},m)\}$
+        \For{$\mathcal{N} \in 2^M $}
+        \If{$\exists sy_1 \in Symb_{pre}, sy_2 \in Symb_{post\_m}$ \textbf{tales que}\\ $SAT(sy_1= \mathcal{M} \land sy_2 = \mathcal{N})$}
+        \State $\Delta(\mathcal{M},m) = \Delta(\mathcal{M},m) \cup \mathcal{N} $
+        \EndIf
+        \EndFor
+        \State $S_{next} = S_{next} \cup \Delta(\mathcal{M},m)$
         \EndFor
         \State $S_{current } = S_{next}$
         \State $Symb_{pre} = Symb_{post}$
-        \State $Paths_{pre} = (Paths_{Pre};$ $Paths_{Post})$ 
-        \State $W.$Push$((S_{current },Symb_{pre}))$
-    \Else
+        \State $Paths_{pre} = (Paths_{Pre};$ $Paths_{Post})$
+        \State $W.$Push$((S_{next},Symb_{post}))$
+        \Else
         \State $(S_{current },Symb_{pre}) = W.$Pop$()$
-    \EndIf
-\EndWhile
-\State \Return $\langle \Sigma, S, P_0, \Delta \rangle$
-\end{algorithmic}
+        \EndIf
+        \EndWhile
+        \State \Return $\langle \Sigma, S, P_0, \Delta \rangle$
+    \end{algorithmic}
 \end{algorithm}

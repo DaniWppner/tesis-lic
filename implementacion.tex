@@ -101,7 +101,7 @@ El mecanismo central de ejecución simbólica de Manticore está compuesto por v
 \end{figure}
 
 \texttt{\textbf{smtlib}} provee a los demás módulos de la aplicación APIs para generar y manipular variables, expresiones y constraints simbólicas, y para realizar consultas de (in)satisfacibilidad sobre las expresiones simbólicas generadas, delegando estas consultas en última instancia al SMT solver externo.
-Los módulos \texttt{\textbf{manticorebase}} y \texttt{\textbf{state}} implementan en conjunto el mecanismo central de ejecución simbólica de Manticore de manera agnóstica a la plataforma subyacente, asumiendo muy poco sobre las instrucciones emuladas.
+Los módulos \texttt{\textbf{manticorebase}} y \texttt{\textbf{state}} implementan en conjunto el mecanismo central de ejecución simbólica de Manticore asumiendo muy poco sobre las instrucciones emuladas.
 Por último, \texttt{\textbf{worker}} y \texttt{\textbf{workspace}} sirven de auxiliares que soportan los aspectos de perstistencia, entrada/salida y multithreading, entre otros, de la aplicación.
 El módulo \texttt{\textbf{plugin}} provee una API de \textit{callbacks} que otorgan acceso al estado interno emulado en distintos momentos de la ejecución.
 Este módulo es una parte central de la API programable accesible al usuario de Manticore, pero también es la manera en la que la aplicación base puede realizar sus análisis de coverage, etc.
@@ -113,8 +113,8 @@ Asimismo, cada \textcolor{cyan}{\texttt{state}} individual cuenta con una instan
 Por otro lado, el estado global de la aplicación (mantenido por el módulo \texttt{\textbf{manticorebase}}) consiste simplemente en una colección de \textcolor{cyan}{\texttt{state}}s.
 
 \subsection{API programable}
-La principal API presentada al usuario permite manejar el conjunto de  \textcolor{cyan}{\texttt{state}}s, siempre ``entre medio'' de la ejecución de métodos del contrato (es decir, antes de comenzar a ejecutarlos o después de que terminen, pero no durante).
-Los principales métodos de la API permiten lado realizar acciones globales como introducir nuevas constraints, ejecutar métodos de un smart contract, deployear un contrato nuevo, o iniciar la transforación de estados en casos de test que afecten a todos los state \textcolor{cyan}{\texttt{state}} por igual.
+La principal API presentada al usuario permite manejar el conjunto global de \textcolor{cyan}{\texttt{state}}s, siempre ``entre medio'' de la ejecución de métodos del contrato (es decir, antes de comenzar a ejecutarlos o después de que terminen, pero no durante).
+Los principales métodos de la API permiten realizar acciones globales como introducir nuevas constraints, ejecutar métodos de un smart contract, deployear un contrato nuevo, o iniciar la generación de casos de test que a partir de todos los \textcolor{cyan}{\texttt{state}}.
 Además, permiten acceder a \textcolor{cyan}{\texttt{state}} individuales (siempre y cuando no estén corriendo) y leer y/o modificar los elementos simbólicos de su estado.
 En particular, no es posible, al menos mediante la API expuesta, expandir el camino de ejecución de solo algunos \textcolor{cyan}{\texttt{state}}.
 
@@ -138,26 +138,28 @@ Sin embargo, es importante en la definición~\ref{definicion-lts} de la semánti
 Intentar construir EPAs incluyendo estados que no satisfagan el invariante suele producir abstracciones demasiado sobreaproximadas \cite{de-caso-epa}.
 Por eso, en continuación del trabajo presentado por Godoy et al. \cite{predicate-abstraction-for-smart-contract-validation}, trabajaremos construyendo las EPAs a partir de las precondiciones explícitas dadas por las declaraciones \textcolor{blue}{\texttt{require}} al comienzo de los métodos, y haciendo uso  del invariante implícito dado por los métodos mismos del contrato.
 
-La idea es, tomando la definición de que un contrato es correcto si la ejecución de todos sus métodos satisface el invariante si se satisfacen el invariante y las precondiciones del método, entonces bajo la asunción de que un contrato es correcto, ejecutar cualquier sucesión del método del contrato con parámetros válidos (es decir, que satisfagan las precondiciones), genera instancias que satisfacen el invariante.
-Es decir, explorar estados del contrato que puedan ser generados por cadenas de transacciones desde el constructor, siempre considera estados que satisfacen el invariante, y no es necesario pedir esta propiedad si se presenta una traza de métodos que comienza por el constructor.
-Aún más, bajo la presunción de que todos los métodos de un contrato implementan explícitamente sus precondiciones, cualquier traza concrta de métodos que comienze por el constructor genera una instancia válida del contrato (es decir, que cumple el invariante), considerando que un llamado que no cumpla la precondición de un método devolverá un estado (idéntico) válido.
-\\
-\\
-\\
+La idea es, tomando la definición de que un contrato es correcto si la ejecución de todos sus métodos preservan el invariante si se satisfacen las precondiciones del método, entonces bajo la asunción de que un contrato es correcto, ejecutar cualquier sucesión de métodos del contrato con parámetros válidos (es decir, que satisfagan las precondiciones), genera instancias que satisfacen el invariante.
+Esto significa que explorar cadenas de transacciones que comienzen por el constructor siempre considera estados que satisfacen el invariante, siempre y cuando cada llamado individual a métodos cumpla las precondiciones correspondientes.
+Entonces, es posible asumir que se satisface el invariante si se presenta una traza de llamados válidos a métodos que comienza por el constructor.
 
-\begin{tcolorbox}[blanker,
-        float=htb!,
-        grow to left by=1.5cm,
-        grow to right by=1.2cm,
-        top=-1.2cm,
-        bottom=-0.8cm,
-        phantom={\phantomsection\label{epa-algoritmo}}]
-    \input{epa-algoritmo}
-\end{tcolorbox}
+Por otro lado, si todos los métodos de un contrato implementan explícitamente sus precondiciones, podemos decir aún mas.
+Si todos los métodos de un contrato implementan explícitamente sus precondiciones, entonces es imposible que cualquier llamado a un método genere un estado inválido.
+En su lugar, un llamado que no satisfaga las precondiciones del método será revertido.
+De esta manera, \textit{cualquier} traza de métodos que comienze por el constructor genera una instancia del contrato que satisface el invariante, si los métodos implementan explícitamente sus precondiciones.
 
-\paragraph{}
-El algoritmo \hyperref[epa-algoritmo]{1} realiza una versión modificada de DFS (\textit{Depth-First-Search}) sobre la porción alcanzable de la EPA en el que se exploran varios nodos del grafo a la vez.
-Para esto, utiliza herramientas de ejecución simbólica y smt-solving para encontrar las transiciones.
+En esta sección presentamos el algoritmo que construye EPAs haciendo uso de una herramienta de ejecución simbólica, siguiendo la idea esbozada anteriormente para mantener el análisis en estados que satisfagan el invariante.
+El algoritmo explora la porción de la EPA que es alcanzable desde $P_0$, realizando una versión	modificada de (\textit{Depth-First-Search}) en el grafo de las transiciones, explorando varias aristas del grafo a la vez.
+El algoritmo es el siguiente:
+
+\input{epa-algoritmo.tex}
+%\begin{tcolorbox}[blanker,
+%        float=htb!,
+%        grow to left by=1.5cm,
+%        grow to right by=1.2cm,
+%        top=-1.2cm,
+%        bottom=-0.8cm]
+%    \input{epa-algoritmo}
+%\end{tcolorbox}
 
 El estado inicial y la función de transición comienzan vacíos.
 El conjunto ${Paths_{pre}}$ contiene todos los caminos posibles que puede tomar la ejecución del constructor seguida por la ejecución de las precondiciones de los métodos.
