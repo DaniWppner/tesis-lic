@@ -155,7 +155,7 @@ Dado que trabajaremos asumiendo que no hay acceso explícito al invariante, la n
     \begin{itemize}
         \item $M, F$ y $R$ son iguales a la definición original
         \item $inv$ no forma parte de $SC$ porque asumimos que se preserva luego de cada llamado a $F_m(c,p)$ independientemente de si $R_m(c,p) = \textbf{true}$
-        \item $Constructor \in M$ reemplaza el predicado $init$ y representa un método implementado del contrato que genera todas las instancias iniciales.
+        \item $Constructor \in M$ reemplaza el predicado $init$ y representa un método del contrato que genera las instancias iniciales.
     \end{itemize}
 \end{definition}
 El LTS concreto (la semántica) y el LTS abstracto (la EPA) de smart contracts que usan esta definición pueden formalizarse de manera análoga a las secciones anteriores.
@@ -167,24 +167,54 @@ Por cuestiones de notación, nos gustaría introducir algunas funciones sobre so
         \text{que podría ser un camino que toma la ejecución de } f_1, f_2, \cdots f_k \}
     \end{multline}
 \end{definition}
+En particular, esto se refiere a los caminos que son efectivamente factibles.
+Es decir, no se consideran caminos de ejecución para los que no exista una serie de inputs que obligan a recorrerlos.
 \begin{definition}[Resultado simbólico del camino de ejecución en una secuencia de funciones]
     Dados un contrato $SC = \langle M, F, R, Constructor \rangle$ definimos la función \texttt{sym\_res\_of} que opera en el dominio de los caminos de secuencias de funciones:
     \begin{multline}
-        \texttt{sym\_res\_of}(p) = \text{que le asocia un valor simbólico a cada función que fue llamada en }p
+        \texttt{sym\_res\_of}(p) = \text{le asocia un valor simbólico a cada función que fue llamada en }p
     \end{multline}
 \end{definition}
 
-Luego, cuando notamos $=$ entre estados de la EPA y uno de los recién mencionados resultados simbólicos, nos estaremos refiriendo a la ``fórmula de compatibilidad'' entre estos dos.
-Brevemente, recordemos que un estado de la EPA $\mathcal{M} \subseteq M$ es un subconjunto de los métodos del contrato, y representa los estados concretos en los que todos los métodos contenidos en el subconjunto se encuentran habilitados, y los demás se encuentran deshabilitados.
-Podremos decir que para un camino de ejecución $p$ de las funciones $R_m\_1,R_m\_2 \cdots R_m\_n$, el resultado simbólico de $p$, $sy = \texttt{symb\_res\_of}(p)$ es compatible con $\mathcal{M}$ sí y sólo sí para cada $R_m \in R$, el resultado de $R_m\_i$ en $sy$ es \textbf{true} $\iff m\_i \in \mathcal{M}$.
+Luego, cuando notamos ``$=$'' entre estados de la EPA y uno de los recién mencionados resultados simbólicos, nos estaremos refiriendo a la ``fórmula de compatibilidad'' entre estos dos.
+Brevemente, recordemos que un estado de la EPA $\mathcal{M}$ es un subconjunto de los métodos del contrato, y representa los estados concretos en los que todos los métodos contenidos en el subconjunto se encuentran habilitados, y los demás se encuentran deshabilitados.
+Podremos decir que para un camino de ejecución $p$ de las funciones $R_{m\_1},R_{m\_2} \cdots R_{m\_n}$ el resultado simbólico de $p$, $sy = \texttt{symb\_res\_of}(p)$ es compatible con $\mathcal{M}$ sí y sólo sí para cada $R_m$, el resultado de $R_{m\_i}$ en $sy$ es \textbf{true} $\iff m\_i \in \mathcal{M}$.
 
 Consideremos el siguiente ejemplo para el contrato \texttt{SimpleMarketplace}:
-Sean $\mathcal{M} = \{MakeOffer, Reject\}$, $ p \in \texttt{paths\_of}(R_{MakeOffer}; R_{AcceptOffer}; R_{Reject})$ y $sy = \texttt{symb\_res\_of}(p)$ tal que los resultados de las precondiciones en $sy$ son $\{R_{MakeOffer}(init) = r_1, R_{AcceptOffer}(init) = r_2, R_{Reject}(init) = r_3\}$.
-La fórmula $(r_1 = \textbf{true} \land r_2 = \textbf{false} \land r_3 = \textbf{true} \land sy)$ significa que para el camino de ejecución asociado a $sy$, existen valores de entrada que lo recorren y que llegan a un estado final en el que \texttt{MakeOffer} y \texttt{Reject} se encuentran habilitados (o, lo que es lo mismo, un estado que se abstrae a $s_1$).
-En la línea 6 del algoritmo notamos a esta fórmula que expresa que el camino asociado a $sy$ es compatible con $s_1$ como $(sy = s_1)$.
+Sean $\mathcal{M} = \{MakeOffer, Reject\}$ y $p_1$ que representa un camino realizado en llamados a métodos anteriores en \texttt{SimpleMarketplace}.
+Por otro lado sean $p_2 \in \texttt{paths\_of}(R_{MakeOffer}; R_{AcceptOffer}; R_{Reject})$ que representa un camino posible de ejecutar las precondiciones del contrato y $sy = \texttt{symb\_res\_of}(p_1;p_2)$ tal que los resultados de las precondiciones en $sy$ son $\{R_{MakeOffer} = r_1$, $R_{AcceptOffer} = r_2$, $R_{Reject} = r_3\}$.
+La fórmula de compatibilidad entre $\mathcal{M}$ y $sy$ será $\Phi = (r_1 = \textbf{true} \land r_2 = \textbf{false} \land r_3 = \textbf{true} \land sy)$ y significa que en la ejecución de $(R_{MakeOffer}; R_{AcceptOffer}; R_{Reject})$ existen valores de entrada que recorren $p_1;p_2$ y que los resultados dan \textbf{true} para \texttt{MakeOffer} y \texttt{Reject} y false para \texttt{AcceptOffer}.
+Dicho de otra manera, esto es que existen parámetros de entrada que generan un estado que se abstrae a $\mathcal{M}$ luego de la ejecución de $p_1$.
+Luego, esto quiere decir que si la fórmula $\Phi$ es satisfacible, entonces tenemos garantía de que luego de ejecutar $p_1$ el contrato \textit{puede} encontrarse en un estado que se abstrae a $\mathcal{M}$.
+Por otro lado la no satisfacibildad de $\Phi$ indicaría que es imposible llegar al estado de la epa $\mathcal{M}$ luego de ejecutar $p1$.
+El algoritmo para expresar la fórmula de compatibilidad entre $p_1$ y $sy$ es el siguiente:
 
+\begin{algorithm}[H]
+    \captionsetup{belowskip=0pt}
+    \caption{Operador ``$=$'' entre estados de una EPA y resultados simbólicos (ecuación de compatibilidad)}
+    \hspace*{\algorithmicindent} \textbf{Input} $SC = \langle M, F, R \rangle$ contrato \\
+    \hspace*{\algorithmicindent} \textbf{Input} $\mathcal{M}$ un estado de la EPA de $SC$ \\
+    \hspace*{\algorithmicindent} \textbf{Input} $sy$ resultado simbolico de una ejecución de $SC$ \\
+    \hspace*{\algorithmicindent} \textbf{Output} La fórmula de compatibilidad $\Phi$
+    \begin{algorithmic}[1]
+        \State $\Phi = sy$
+        \For{$m \in M$}
+        \State $res_m =$ valor de retorno de la última aparición de $R_m$ en $sy$
+        \If{$m \in \mathcal{M}$}
+        \State $\Phi = \Phi \land (res_m == \textbf{true})$
+        \Else
+        \State $\Phi = \Phi \land (res_m == \textbf{false})$
+        \EndIf
+        \EndFor
+        \State \Return $\Phi$
+    \end{algorithmic}
+\end{algorithm}
 
-El algoritmo explora la porción de la EPA que es alcanzable desde $P_0$, realizando una versión	modificada de (\textit{Depth-First-Search}) en el grafo de las transiciones, explorando varias aristas del grafo a la vez.
+Utilizando estas notaciones, podemos presentar el algoritmo que explora la porción de la EPA que es alcanzable desde $P_0$, sin acceso al invariante y haciendo uso de ejecución simbólica.
+Este algoritmo realiza una versión	modificada de textit{Depth-First-Search} en el grafo de las transiciones, explorando varias aristas del grafo a la vez.
+En particular, en cada iteración del ciclo prinicipal este algoritmo agrega múltiples transiciones a la EPA etiquetadas por el mismo método.
+La exploración siempre se realiza a partir del conjunto de estados de la EPA ``$S_{current}$'' que se actualiza en cada iteración con el conjunto de estados en los que puede resultar la ejecución del siguiente método.
+Cuando esta exploración llega a un punto muerto, se retrocede usando la pila del \textit{DFS} hasta otro punto en el que queden llamados de métodos sin explorar.
 El algoritmo es el siguiente:
 
 \input{epa-algoritmo.tex}
@@ -196,19 +226,23 @@ El algoritmo es el siguiente:
 %        bottom=-0.8cm]
 %    \input{epa-algoritmo}
 %\end{tcolorbox}
+Explorar los estados de la EPA de esta manera conjunta se debe a las capacidades de la API programable de Manticore (al ejecutar un método, debemos ejecutarlo en todos los caminos hasta el momento).
 
-El estado inicial y la función de transición comienzan vacíos.
-El conjunto ${Paths_{pre}}$ contiene todos los caminos posibles que puede tomar la ejecución del constructor seguida por la ejecución de las precondiciones de los métodos.
-Si llamamos $init$ al estado (simbólico) luego de ejecutar $F_{Constructor}$, en $Symb_{pre}$ hay para cada uno de los caminos en $Path_{pre}$ una expresión que representa el resultado de la ejecución realizada. Esa expresión es de la forma $(R_1(init) = r_1 , R_2(init) = r_2 \cdots , R_n(init) = r_n)$ .
-Luego, puede calcularse $P_0$ mediante una sucesión de preguntas de satisfacibilidad de fórmulas.
-En particular, para cada expresión $sy \in Symb_{pre}$, nos interesa saber con qué estado de la EPA es consistente $sy$.
+Por último, podemos señalar que para garantizar \textit{soundess} de las EPAs generadas, lo tradicional es consultar por la insatisfacibilidad de que una transición pertenezca a la EPA, e incluirla en el resultado en cualquier caso en el que no se pueda demostrar esto.
+Sin embargo, en este caso sólo estamos incluyendo las transiciones para las que tengamos una demostración de su existencia.
+Esta decisión, aunque discutible, fue prinicipalmente tomada para aprovechar la funcionalidad de generación de casos de test concretos de Manticore.
 
+%El estado inicial y la función de transición comienzan vacíos.
+%El conjunto ${Paths_{pre}}$ contiene todos los caminos posibles que puede tomar la ejecución del constructor seguida por la ejecución de las precondiciones de los métodos.
+%Si llamamos $init$ al estado (simbólico) luego de ejecutar $F_{Constructor}$, en $Symb_{pre}$ hay para cada uno de los caminos en $Path_{pre}$ una expresión que representa el resultado de la ejecución realizada. Esa expresión es de la forma $(R_1(init) = r_1 , R_2(init) = r_2 \cdots , R_n(init) = r_n)$ .
+%Luego, puede calcularse $P_0$ mediante una sucesión de preguntas de satisfacibilidad de fórmulas.
+%En particular, para cada expresión $sy \in Symb_{pre}$, nos interesa saber con qué estado de la EPA es consistente $sy$.
 
-Habiendo determinado $P_0$, el algoritmo marca $S_{current}$ como el conjunto de estados de la EPA con los que se corresponde $Symb_{pre}$, y agrega ambos a la pila $W$, que representa conjuntos de estados de la EPA por visitar.
-Para continuar la exploración desde $S_{current}$, se elige uno de los métodos que esté habilitado en alguno de los estados de $S_{current}$ y no se haya explorado ya.
-Luego, para cada estado $s \in S_{current}$ que permite la ejecución de $m$, se calculan los nuevos estados a los que se puede llegar ejecutando $m$, de manera similar a la que se calcula $P_0$.
+%Habiendo determinado $P_0$, el algoritmo marca $S_{current}$ como el conjunto de estados de la EPA con los que se corresponde $Symb_{pre}$, y agrega ambos a la pila $W$, que representa conjuntos de estados de la EPA por visitar.
+%Para continuar la exploración desde $S_{current}$, se elige uno de los métodos que esté habilitado en alguno de los estados de $S_{current}$ y no se haya explorado ya.
+%Luego, para cada estado $s \in S_{current}$ que permite la ejecución de $m$, se calculan los nuevos estados a los que se puede llegar ejecutando $m$, de manera similar a la que se calcula $P_0$.
 
-El conjunto $Symb_{post}$ de la línea 15 representa los resultados de continuar la ejecución donde la había dejado $Symb_{pre}$.
-En la línea 19, donde se calculan las próximas transiciones, es necesario revisar no sólo la satisfacibildad de que el estado simbólico nuevo sea compatible con el estado de la EPA objetivo, sino que es necesario que aún se mantenga la compatibilidad entre el estado simbólico viejo y el estado de la EPA desde el que se está transisionando.
-Esto es porque las expresiones en $Symb_{pre}$ pueden ser compatibles con $s_1$, pero puede ocurrir una contradicción al pedir que $Symb_{post}$ sea compatible con $s_2$ también.
-De no exigir esto, consideraríamos que valores de entrada que permiten alcanzar $s_2$ pero que nunca alcanzaban $s_1$ previamente indican una transición entre $s_1$ y $s_2$.
+%El conjunto $Symb_{post}$ de la línea 15 representa los resultados de continuar la ejecución donde la había dejado $Symb_{pre}$.
+%En la línea 19, donde se calculan las próximas transiciones, es necesario revisar no sólo la satisfacibildad de que el estado simbólico nuevo sea compatible con el estado de la EPA objetivo, sino que es necesario que aún se mantenga la compatibilidad entre el estado simbólico viejo y el estado de la EPA desde el que se está transisionando.
+%Esto es porque las expresiones en $Symb_{pre}$ pueden ser compatibles con $s_1$, pero puede ocurrir una contradicción al pedir que $Symb_{post}$ sea compatible con $s_2$ también.
+%De no exigir esto, consideraríamos que valores de entrada que permiten alcanzar $s_2$ pero que nunca alcanzaban $s_1$ previamente indican una transición entre $s_1$ y $s_2$.
