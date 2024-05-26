@@ -1,12 +1,10 @@
-\section{Manticore}
-
 Toda esta sección se refiere a la versión de \texttt{Manticore 0.3.7}.
 
 \texttt{Manticore} es un proyecto desarrollado por \texttt{TrailOfBits} lanzado en 2017.
 Es una herramienta de ejecución simbólica, implementada en Python, que soporta análisis para diversas plataformas: EVM, bytecode nativo (arquitecturas \texttt{x86}, \texttt{x86\_64}, \texttt{aarch64} y \texttt{ARMv7}) y WASM.
 Principalmente funciona como un motor de ejecución simbólica programable (mediante APIs externas en Python), aunque también incluye una herramienta plug-and-play por línea de comandos, y existe un proyecto que intenta integrar la herramienta con una interfaz gráfica, \texttt{ManticoreUI} \cite{manticoreUI} que nunca se lanzó.
 
-\subsection{Command Line Tool}
+\section{Command Line Tool}
 
 El comportamiento por defecto de la herramienta de línea de comandos varía mucho dependiendo de la plataforma a la que es aplicada, pero en general busca explorar todos los caminos de ejecución factibles en el código fuente provisto, utilizando valores simbólicos para cada valor generalmente introducido por usuarios.
 Luego, por cada camino explorado, genera un caso de test (es decir, genera un valor concreto que fuerze el camino para cada valor ``input'' simbólico).
@@ -20,12 +18,12 @@ La herramienta cuenta con una batería de \texttt{detectors} que registran event
 Estos \texttt{detectors} se encuentran apagados por defecto, al igual que por defecto se descartan caminos que incluyan el rollback de una transacción.
 Esto significa que, por ejemplo, para realizar una simple búsqueda de incumplimiento de una aserción (la instrucción \textcolor{blue}{\texttt{assert}} en Solidity), es preciso activar el modo detallado (\texttt{--thorough-mode}) de la herramienta.
 
-\subsection{Manticore-Verifier}
+\section{Manticore-Verifier}
 Manticore cuenta con otra herramienta por consola de comandos de análisis de smart contracts denominada \texttt{manticore-verifier}.
 Permite marcar ciertos métodos externos como ``invariantes'' que la herramienta luego busca falsificar.
 Una fortaleza de esta herramienta es que la sintaxis para marcar los invariantes es la misma que la utilizada por \texttt{Echidna}, un fuzzer desarollado también por \texttt{TrailOfBits}, permitiendo el análisis por ambas herramientas con una única intervención manual.
 
-\subsection{Arquitectura de Manticore}
+\section{Arquitectura de Manticore}
 La arquitectura de Manticore se organiza en tres partes:
 \begin{itemize}
     \item El mecanismo central de ejecución simbólica
@@ -57,7 +55,7 @@ Los \textcolor{cyan}{\texttt{state}} son responsables de conocer cuáles son los
 Asimismo, cada \textcolor{cyan}{\texttt{state}} individual cuenta con una instancia entera emulada del programa (en el caso de Ethereum, la blockchain).
 Por otro lado, el estado global de la aplicación (mantenido por el módulo \texttt{\textbf{manticorebase}}) consiste simplemente en una colección de \textcolor{cyan}{\texttt{state}}s.
 
-\subsection{API programable}
+\section{API programable}
 La principal API presentada al usuario permite manejar el conjunto global de \textcolor{cyan}{\texttt{state}}s, siempre ``entre medio'' de la ejecución de métodos del contrato (es decir, antes de comenzar a ejecutarlos o después de que terminen, pero no durante).
 Los principales métodos de la API permiten realizar acciones globales como introducir nuevas constraints, ejecutar métodos de un smart contract, deployear un contrato nuevo, o iniciar la generación de casos de test a partir de los \textcolor{cyan}{\texttt{state}}.
 Además, permiten acceder a \textcolor{cyan}{\texttt{state}} individuales (siempre y cuando no estén corriendo) y leer y/o modificar los elementos simbólicos de su estado.

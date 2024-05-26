@@ -52,7 +52,6 @@ En general, por optimizaciones de gas, es común que en los métodos externos lo
 Dado que los inputs externos nunca garantizan estar bien formados, resulta menos costoso para el contrato abortar estas ejecuciones lo antes posible en lugar de hacerlas avanzar hasta llegar a un estado de error.
 Sin embargo, debido a que no se espera que sea posible generar instancias que no satisfagan el invariante, por el mismo motivo de ahorro de gas no es usual contar con una implementación explícita del invariante en el código fuente del contrato.
 Tenerlo implicaría ejecutar código que se espera que dé siempre el mismo resultado, por lo que resulta más eficiente no hacerlo.
-\input{manticore.tex}
 
 \section{Algoritmo alternativo}
 Implementar el invariante del contrato, además de no ser una práctica estándar, es a menudo exigente para el programador, y es también una actividad propensa a errores.
