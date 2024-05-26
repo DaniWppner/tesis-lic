@@ -43,99 +43,22 @@ El algoritmo es el siguiente:
     \end{algorithmic}
 \end{algorithm}
 
-Aquí, calcular los conjuntos $\mathcal{M}^-$, $\mathcal{M}^+$, $\mathcal{N}^-$ y $\mathcal{N}^+$ es una optimización que permite reducir la cantidad de transiciones canidadatas de la EPA \cite{de-caso-epa}.
+Aquí, calcular los conjuntos $\mathcal{M}^-$, $\mathcal{M}^+$, $\mathcal{N}^-$ y $\mathcal{N}^+$ es una optimización que permite reducir la cantidad de transiciones candidatas de la EPA \cite{de-caso-epa}.
 
 Decidir si una transición pertenece o no la EPA, como está planteado en el algoritmo, es resolver problemas de validez de fórmulas de primer orden.
 Esto en general es indecidible, sin embargo la sugerencia principal consiste en transformar estas preguntas de validez de fórmulas de primer orden en problemas de alcanzabilidad de código, dado que se espera que las precondiciones y los invariantes definidos en la formalización~\ref{definicion-smart-contract} estén debidamente implementados en el contrato.
 
-En general, por optimizaciones de gas, es común que en los métodos externos los contratos definan las precondiciones explícitamente en mediante instrucciones \textcolor{blue}{\texttt{require}}, como en el contrato ejemplo \ref{fig:solidity-example} \texttt{SimpleMarketplace}.
+En general, por optimizaciones de gas, es común que en los métodos externos los contratos definan las precondiciones explícitamente mediante instrucciones \textcolor{magenta}{\texttt{require}}, como en el contrato ejemplo \ref{fig:solidity-example} \texttt{SimpleMarketplace}.
 Dado que los inputs externos nunca garantizan estar bien formados, resulta menos costoso para el contrato abortar estas ejecuciones lo antes posible en lugar de hacerlas avanzar hasta llegar a un estado de error.
 Sin embargo, debido a que no se espera que sea posible generar instancias que no satisfagan el invariante, por el mismo motivo de ahorro de gas no es usual contar con una implementación explícita del invariante en el código fuente del contrato.
 Tenerlo implicaría ejecutar código que se espera que dé siempre el mismo resultado, por lo que resulta más eficiente no hacerlo.
-
-\section{Manticore}
-
-Toda esta sección se refiere a la versión de \texttt{Manticore 0.3.7}.
-
-\texttt{Manticore} es un proyecto desarrollado por \texttt{TrailOfBits} lanzado en 2017.
-Es una herramienta de ejecución simbólica, implementada en Python, que soporta análisis para diversas plataformas: EVM, bytecode nativo (arquitecturas \texttt{x86}, \texttt{x86\_64}, \texttt{aarch64} y \texttt{ARMv7}) y WASM.
-Principalmente funciona como un motor de ejecución simbólica programable (mediante APIs externas en Python), aunque también incluye una herramienta plug-and-play por línea de comandos, y existe un proyecto que intenta integrar la herramienta con una interfaz gráfica, \texttt{ManticoreUI} \cite{manticoreUI} que nunca se lanzó.
-
-\subsection{Command Line Tool}
-
-El comportamiento por defecto de la herramienta de línea de comandos varía mucho dependiendo de la plataforma a la que es aplicada, pero en general busca explorar todos los caminos de ejecución factibles en el código fuente provisto, utilizando valores simbólicos para cada valor generalmente introducido por usuarios.
-Luego, por cada camino explorado, genera un caso de test (es decir, para cada valor ``input'' simbólico genera un valor concreto que fuerze el camino).
-Además, la exploración de los caminos incluye el seguimiento de algunas propiedades interesantes por defecto, dependientes de la plataforma.
-Para los binarios nativos, por ejemplo, registra el conjunto (total) de instrucciones visitadas, y registra para cada caso de test el número y la traza exacta de instrucciones ejecutadas.
-
-En el caso de la EVM, la herramienta por consola funciona con código fuente Solidity (no acepta precompilados).
-Para explorar caminos de ejecución la herramienta toma los métodos externos del contrato y los ejecuta (en cualquier orden) hasta alcanzar 100\% de line coverage o, dentro de un límite si es que se introdujo uno, hasta cubrir todo el espacio de secuencias de llamados a métodos externos.
-De no alcanzar ninguno de los dos criterios, termina el análisis por time out.
-La herramienta cuenta con una batería de \texttt{detectors} que registran eventos de  interés específico a Ethereum, como la presencia de integer overflows, la ejecución de opcodes inválidos, la lectura de memoria o storage no inicializado, bugs de reentrancy o la ejecución de ciertas instrucciones específicas con parámetros controlados por el usuario.
-Estos \texttt{detectors} se encuentran apagados por defecto, al igual que por defecto se descartan caminos que incluyan el rollback de una transacción.
-Esto significa que, por ejemplo, para realizar una simple búsqueda de incumplimiento de una aserción (la instrucción \textcolor{blue}{\texttt{assert}} en Solidity), es preciso activar el modo detallado (\texttt{--thorough-mode}) de la herramienta.
-
-\subsection{Manticore-Verifier}
-Manticore cuenta con otra herramienta por consola de comandos de análisis de smart contracts denominada \texttt{manticore-verifier}.
-Permite marcar ciertos métodos externos como ``invariantes'' que la herramienta luego busca falsificar.
-Una fortaleza de esta herramienta es que la sintaxis para marcar los invariantes es la misma que la utilizada por \texttt{Echidna}, un fuzzer desarollado también por \texttt{TrailOfBits}, permitiendo el análisis por ambas herramientas con una única intervención manual.
-
-\subsection{Arquitectura de Manticore}
-La arquitectura de Manticore se organiza en tres partes:
-\begin{itemize}
-    \item El mecanismo central de ejecución simbólica
-    \item Los módulos que implementan la simulación de cada una de las plataformas soportadas (Ethereum, \texttt{x86}, etc)
-    \item SMT solvers externos
-\end{itemize}
-
-Por defecto, la instalación de Manticore incluye una instalación del \texttt{Z3 Theorem Prover}, un SMT solver desarrollado por Microsoft Research desde 2012 \cite{z3TheoremProver}.
-Sin embargo, Manticore puede integrarse con cualquier SMT solver que se conforme a la interfaz definida por \texttt{SMTLIB2} \cite{smtlib2}, como lo es por ejemplo también \texttt{Yices} \cite{yices}, otro SMT solver open source.
-
-El mecanismo central de ejecución simbólica de Manticore está compuesto por varios módulos de Python: \texttt{\textbf{smtlib}}, \texttt{\textbf{manticorebase}}, \texttt{\textbf{plugin}}, \texttt{\textbf{state}}, \texttt{\textbf{worker}} y \texttt{\textbf{workspace}}, representados en la figura \ref{fig:core-modules}.
-
-\begin{figure}
-    \centering
-    {\includegraphics {figs/core-architecture-manticore.png}}
-    \caption{Módulos que componen el mecanismo central de ejecución simbólica de Manticore}
-    \label{fig:core-modules}
-\end{figure}
-
-\texttt{\textbf{smtlib}} provee a los demás módulos de la aplicación APIs para generar y manipular variables, expresiones y constraints simbólicas, y para realizar consultas de (in)satisfacibilidad sobre las expresiones simbólicas generadas, delegando estas consultas en última instancia al SMT solver externo.
-Los módulos \texttt{\textbf{manticorebase}} y \texttt{\textbf{state}} implementan en conjunto el mecanismo central de ejecución simbólica de Manticore asumiendo muy poco sobre las instrucciones emuladas.
-Por último, \texttt{\textbf{worker}} y \texttt{\textbf{workspace}} sirven de auxiliares que soportan los aspectos de perstistencia, entrada/salida y multithreading, entre otros, de la aplicación.
-El módulo \texttt{\textbf{plugin}} provee una API de \textit{callbacks} que otorgan acceso al estado interno emulado en distintos momentos de la ejecución.
-Este módulo es una parte central de la API programable accesible al usuario de Manticore, pero también es la manera en la que la aplicación base puede realizar sus análisis de coverage, etc.
-
-La abstracción principal para la ejecución simbólica utilizada por Manticore es la del objeto \textcolor{cyan}{\texttt{state}}.
-Un \textcolor{cyan}{\texttt{state}} representa, habiendo realizado un camino de ejecución particular, el estado del programa emulado hasta cierto punto.
-Los \textcolor{cyan}{\texttt{state}} son responsables de conocer cuáles son los próximos pasos en su ejecución, cuál es el conjunto de variables simbólicas que existieron en su ejecución, y que conjunto de fórmulas deben satisfacerse.
-Asimismo, cada \textcolor{cyan}{\texttt{state}} individual cuenta con una instancia entera emulada del programa (en el caso de Ethereum, la blockchain).
-Por otro lado, el estado global de la aplicación (mantenido por el módulo \texttt{\textbf{manticorebase}}) consiste simplemente en una colección de \textcolor{cyan}{\texttt{state}}s.
-
-\subsection{API programable}
-La principal API presentada al usuario permite manejar el conjunto global de \textcolor{cyan}{\texttt{state}}s, siempre ``entre medio'' de la ejecución de métodos del contrato (es decir, antes de comenzar a ejecutarlos o después de que terminen, pero no durante).
-Los principales métodos de la API permiten realizar acciones globales como introducir nuevas constraints, ejecutar métodos de un smart contract, deployear un contrato nuevo, o iniciar la generación de casos de test que a partir de todos los \textcolor{cyan}{\texttt{state}}.
-Además, permiten acceder a \textcolor{cyan}{\texttt{state}} individuales (siempre y cuando no estén corriendo) y leer y/o modificar los elementos simbólicos de su estado.
-En particular, no es posible, al menos mediante la API expuesta, expandir el camino de ejecución de solo algunos \textcolor{cyan}{\texttt{state}}.
-
-Por otro lado los callbacks como los del módulo
-\texttt{\textbf{plugin}} permiten interactuar con los \textcolor{cyan}{\texttt{state}} mientras estos se ejecutan.
-Los callbacks pueden subcribirse a cualquiera de los eventos publicados nativamente por la aplicación, que son mucho más amplios que simplemente el estado de los \textcolor{cyan}{\texttt{state}}.
-Algunos de los eventos pueden categorizarse en:
-\begin{itemize}
-    \item eventos de estado (\texttt{will\textbackslash did\_fork\_state, will\textbackslash did\_terminate\_state})
-    \item eventos de smt (\texttt{will\textbackslash did\_solve})
-    \item eventos de plataforma (\texttt{will\textbackslash did\_open\_transaction},\\ \texttt{will\textbackslash did\_evm\_read\_storage})
-\end{itemize}
-Estos pueden utilizarse para debugear o mantener el registro de propiedades, pero también para modificar el estado de la ejecución en vivo.
-
-
+\input{manticore.tex}
 
 \section{Algoritmo alternativo}
 Implementar el invariante del contrato, además de no ser una práctica estándar, es a menudo exigente para el programador, y es también una actividad propensa a errores.
 Sin embargo, es importante en la definición~\ref{definicion-lts} de la semántica de un contrato inteligente la  presencia del invariante.
 Intentar construir EPAs incluyendo estados que no satisfagan el invariante suele producir abstracciones demasiado sobreaproximadas \cite{de-caso-epa}.
-Por eso, en continuación del trabajo presentado por Godoy et al. \cite{predicate-abstraction-for-smart-contract-validation}, trabajaremos construyendo las EPAs a partir de las precondiciones explícitas dadas por las declaraciones \textcolor{blue}{\texttt{require}} al comienzo de los métodos, y haciendo uso  del invariante implícito dado por los métodos mismos del contrato.
+Por eso, en continuación del trabajo presentado por Godoy et al. \cite{predicate-abstraction-for-smart-contract-validation}, trabajaremos construyendo las EPAs a partir de las precondiciones explícitas dadas por las declaraciones \textcolor{magenta}{\texttt{require}} al comienzo de los métodos, y haciendo uso  del invariante implícito dado por los métodos mismos del contrato.
 
 La idea es, tomando la definición de que un contrato es correcto si la ejecución de todos sus métodos preservan el invariante si se satisfacen las precondiciones del método, entonces bajo la asunción de que un contrato es correcto, ejecutar cualquier sucesión de métodos del contrato con parámetros válidos (es decir, que satisfagan las precondiciones), genera instancias que satisfacen el invariante.
 Esto significa que explorar cadenas de transacciones que comienzen por el constructor siempre considera estados que satisfacen el invariante, siempre y cuando cada llamado individual a métodos cumpla las precondiciones correspondientes.
@@ -183,7 +106,7 @@ Podremos decir que para un camino de ejecución $p$ de las funciones $R_{m\_1},R
 Consideremos el siguiente ejemplo para el contrato \texttt{SimpleMarketplace}:
 Sean $\mathcal{M} = \{MakeOffer, Reject\}$ y $p_1$ que representa un camino realizado en llamados a métodos anteriores en \texttt{SimpleMarketplace}.
 Por otro lado sean $p_2 \in \texttt{paths\_of}(R_{MakeOffer}; R_{AcceptOffer}; R_{Reject})$ que representa un camino posible de ejecutar las precondiciones del contrato y $sy = \texttt{symb\_res\_of}(p_1;p_2)$ tal que los resultados de las precondiciones en $sy$ son $\{R_{MakeOffer} = r_1$, $R_{AcceptOffer} = r_2$, $R_{Reject} = r_3\}$.
-La fórmula de compatibilidad entre $\mathcal{M}$ y $sy$ será $\Phi = (r_1 = \textbf{true} \land r_2 = \textbf{false} \land r_3 = \textbf{true} \land sy)$ y significa que en la ejecución de $(R_{MakeOffer}; R_{AcceptOffer}; R_{Reject})$ existen valores de entrada que recorren $p_1;p_2$ y que los resultados dan \textbf{true} para \texttt{MakeOffer} y \texttt{Reject} y false para \texttt{AcceptOffer}.
+La fórmula de compatibilidad entre $\mathcal{M}$ y $sy$ será $\Phi = (r_1 = \textbf{true} \land r_2 = \textbf{false} \land r_3 = \textbf{true} \land sy)$ y significa que en la ejecución de $(R_{MakeOffer}; R_{AcceptOffer}; R_{Reject})$ existen valores de entrada que recorren $p_1;p_2$ y que los resultados dan \textbf{true} para \textcolor{orange}{\texttt{MakeOffer}} y \textcolor{orange}{\texttt{Reject}} y false para \textcolor{orange}{\texttt{AcceptOffer}}.
 Dicho de otra manera, esto es que existen parámetros de entrada que generan un estado que se abstrae a $\mathcal{M}$ luego de la ejecución de $p_1$.
 Luego, esto quiere decir que si la fórmula $\Phi$ es satisfacible, entonces tenemos garantía de que luego de ejecutar $p_1$ el contrato \textit{puede} encontrarse en un estado que se abstrae a $\mathcal{M}$.
 Por otro lado la no satisfacibildad de $\Phi$ indicaría que es imposible llegar al estado de la epa $\mathcal{M}$ luego de ejecutar $p1$.
@@ -211,9 +134,9 @@ El algoritmo para expresar la fórmula de compatibilidad entre $p_1$ y $sy$ es e
 \end{algorithm}
 
 Utilizando estas notaciones, podemos presentar el algoritmo que explora la porción de la EPA que es alcanzable desde $P_0$, sin acceso al invariante y haciendo uso de ejecución simbólica.
-Este algoritmo realiza una versión	modificada de textit{Depth-First-Search} en el grafo de las transiciones, explorando varias aristas del grafo a la vez.
-En particular, en cada iteración del ciclo prinicipal este algoritmo agrega múltiples transiciones a la EPA etiquetadas por el mismo método.
-La exploración siempre se realiza a partir del conjunto de estados de la EPA ``$S_{current}$'' que se actualiza en cada iteración con el conjunto de estados en los que puede resultar la ejecución del siguiente método.
+Este algoritmo realiza una versión	modificada de \textit{Depth-First-Search} en el grafo de las transiciones, explorando varias aristas del grafo a la vez.
+En particular, en cada iteración del ciclo prinicipal este algoritmo agrega múltiples transiciones a la EPA etiquetadas por un mismo método.
+La exploración siempre se realiza a partir del conjunto de estados de la EPA ``$S_{current}$'' que se actualiza en cada iteración con el conjunto de estados en los que puede resultar la ejecución del último método.
 Cuando esta exploración llega a un punto muerto, se retrocede usando la pila del \textit{DFS} hasta otro punto en el que queden llamados de métodos sin explorar.
 El algoritmo es el siguiente:
 
@@ -226,7 +149,8 @@ El algoritmo es el siguiente:
 %        bottom=-0.8cm]
 %    \input{epa-algoritmo}
 %\end{tcolorbox}
-Explorar los estados de la EPA de esta manera conjunta se debe a las capacidades de la API programable de Manticore (al ejecutar un método, debemos ejecutarlo en todos los caminos hasta el momento).
+La decisión de explorar los estados de la EPA de esta manera conjunta se debe a las capacidades de la API programable de Manticore.
+Al ejecutar un método, debemos ejecutarlo en todos los caminos hasta el momento.
 
 Por último, podemos señalar que para garantizar \textit{soundess} de las EPAs generadas, lo tradicional es consultar por la insatisfacibilidad de que una transición pertenezca a la EPA, e incluirla en el resultado en cualquier caso en el que no se pueda demostrar esto.
 Sin embargo, en este caso sólo estamos incluyendo las transiciones para las que tengamos una demostración de su existencia.

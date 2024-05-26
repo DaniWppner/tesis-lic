@@ -1,5 +1,5 @@
 Las redes de blockchain siguen un protocolo para manejar un registro distribuido ``confiable'' de los hechos.
-La participación en estas redes es por diseño anónima y descentralizada, y hace gran hincapié en la resistencia del sistema a ataques criptográficos (ataques que busquen eludir  
+La participación en estas redes es por diseño anónima y descentralizada, y hace gran hincapié en la resistencia del sistema a ataques criptográficos.
 Una vez registrada, resulta casi imposible  alterar información introducida en una blockchain.
 A fines prácticos, una transacción en una de estas bases de datos suele ser considerada eterna e inmutable.
 Adicionalmente, la cadena de bloques propiamente dicha, es decir, el historial completo de la información registrada, es transparente y pública \cite{bitcoin-overview}.
@@ -11,7 +11,7 @@ Para la ejecución de sus contratos inteligentes o \textit{smart contracts} (que
 Otro ejemplo es Algorand, que provee la \textit{Algorand Virtual Machine} \cite{algorand-avm}, otra máquina de pila junto con TEAL, un lenguaje tipo assembly.
 
 %El código y estado de los programas es parte de la información guardada en la blockchain.
-El modo en el que los contratos inteligentes son incluidos en la blockchain garantiza su ``correcta ejecución'' \cite{??}.
+Una propiedad de las blockchains como sistema de cómputo distribuido es el modo en el que los contratos inteligentes son incluidos en la blockchain, que garantiza la seguridad de su ejecución \cite{??}.
 La inmutabilidad de las transacciones registradas en la red asegura que los contratos no puedan ser modificados, otorgando garantía a los usuarios de que el comportamiento de los contratos se mantendrá siempre estable.
 Además, dado que los cambios en el estado del programa por transacciones son registrados en la blockchain, estos también se consideran irreversibles.
 Esto, a pesar de las garantías de estabilidad que les garantiza a los usuarios, significa que los defectos en la implementación de los contratos inteligentes no pueden ser reparados, y las transacciones no deseadas originadas de estos defectos no pueden ser revertidas.
@@ -21,8 +21,8 @@ De hecho, los ataques a contratos inteligentes para abusar \textit{bugs} han cau
 Por esto, es común en la industria contratar a auditores independientes para la validación de contratos inteligentes,
 quienes a menudo usan herramientas para facilitar su trabajo y a menudo cuentan sólo con especificaciones informales del comportamiento deseado.
 En estas situaciones, una de las tantas técnicas útiles para la validación es  la construcción de una máquina de estados finita que abstraiga el comportamiento del contrato, destacando sólo ciertas propiedades interesantes \cite{predicate-abstraction-for-smart-contract-validation}.
-Estas máquinas abstraen al nivel de ``llamado a función'', y están fuertemente basadas en las \textit{EPAs} (Enabledness Preserving Abstraction) \cite{de-caso-epa} que son máquinas de estado que describen las posibles secuencias de llamados a funciones del contrato. 
-En 2022 Godoy et al. \cite{predicate-abstraction-for-smart-contract-validation} las construyen a partir de código fuente traduciendo manualmente las pre y post condiciones de los contratos inteligentes a un lenguaje intermedio, Alloy \cite{alloy}. 
+Estas máquinas abstraen al nivel de ``llamado a función'', y están fuertemente basadas en las \textit{EPAs} (Enabledness Preserving Abstraction) \cite{de-caso-epa} que son máquinas de estado que describen las posibles secuencias de llamados a funciones del contrato.
+En 2022 Godoy et al. \cite{predicate-abstraction-for-smart-contract-validation} las construyen a partir de código fuente traduciendo manualmente las pre y post condiciones de los contratos inteligentes a un lenguaje intermedio, Alloy \cite{alloy}.
 En 2023, Torres at al. \cite{??} desarrolló un prototipo que genera las abstracciones a partir de contratos inteligentes programados en Solidity \footnote{El prototipo funciona para versiones de Solidity anteriores a ¿?} de manera automática mediante model checking.
 
 \section{Objetivos}
@@ -38,4 +38,4 @@ Buscamos aprovechar estas cualidades para detectar comportamientos más complejo
 
 \section{Ejemplo motivador}
 
-Supongamos que un 
+Supongamos que un
