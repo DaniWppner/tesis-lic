@@ -1,5 +1,9 @@
-El prototipo implementado \cite{manticore-predicate-abstraction} utiliza Manticore para llevar a cabo el algoritmo [1].
-Para esto genera una simulación de la blockchain en la que se despliega el contrato, y luego realiza ejecución simbólica de sus métodos llamándolos desde \textit{accounts} externas en la blockchain.
+La mayor evidente diferencia entre el algoritmo presentado en la seccion \ref{sec:algoritmo-aternativo} y el algoritmo clásico es que la manera en la que explora las transiciones de la EPA lo obliga a considerar solo ciertos caminos (a alto nivel) de transacciones para generar transiciones en la EPA, en lugar de transiciones entre estados completamente abstractos.
+Consideremos el siguiente ejemplo:
+
+
+
+
 %A pesar de que Manticore permita el uso de valores simbólicos para el parámetro \texttt{(msg.sender)} las limitaciones de la herramienta exigen que se defina cada account individualmente para que sea considerada en el estado de la blockchain.
 Las limitaciones de la herramienta exigen que el parámetro \texttt{(msg.sender)}, a pesar de que pueda ser simbólico, se corresponda con una \textit{account} definida explícitamente por el usuario.
 Por esto en la simulación contamos con un número fijo de \textit{accounts}, asignando variables simbólicas únicamente la información asociada a ellas (Dirección, Balance, etc).
@@ -13,7 +17,7 @@ Para responder estas preguntas, pusimos el prototipo a prueba contra algunos con
 Este conjunto de contratos había sido utilizado anteriormente por Godoy et al. \cite{predicate-abstraction-for-smart-contract-validation}, por lo que convenientemente ya contamos con las EPAs correspondientes.
 Ejecutamos el prototipo cinco veces, obteniendo el promedio de su tiempo de ejecución sobre los contratos seleccionados y luego corroboramos que la EPA generada fuera isomórfica a la obtenida en los estudios anteriores.
 %Además, pusimos a prueba la cantidad de accounts necesarias para el funcionamiento del prototipo.
-Los resultados intermedios indicaron que para los contratos propuestos era suficiente realizar la simulación con dos \textit{accounts}, por lo que utilizamos esa cantidad para los experimentos. 
+Los resultados intermedios indicaron que para los contratos propuestos era suficiente realizar la simulación con dos \textit{accounts}, por lo que utilizamos esa cantidad para los experimentos.
 Los resultados de esta experimentación se ven resumidos en la tabla \ref{tab:resultados}.
 El prototipo generó EPAs correctas en todos los casos.
 Sin embargo, el tiempo de cálculo es de entre media y casi tres horas, considerando incluso que los ejemplos utilizados son relativmente pequeños.
@@ -23,17 +27,17 @@ Debido a la rigurosidad con la que emula Manticore el comportamiento de la block
 \vspace{-2.2em}
 
 \begin{table}
-%\begin{adjustwidth}{-0.5in}{-0.5in}% adjust the L and R margins by 1 inch
-\caption{Resumen de la experimentación. \textbf{LOC} es cantidad de lineas de código, \textbf{Tiempo de ejecución} es el promedio del tiempo de ejecución medido en minutos, $\boldsymbol{\sigma}$ es el desvío estandard medido en segundos y \textbf{¿Es correcto?} indica si la EPA generada es isomorfa con la provista anteriormente.}\label{tab:resultados}
-\begin{tabular}{|l|l|l|l|l|}
-\hline
-Contrato & LOC & Tiempo de ejecución (min)& $\sigma$ (s)& ¿Es correcto?\\
-\hline
-DefectiveComponentCounter & 33 & $29$ & $7$ & Sí\\
-SimpleMarketplace & 66 & $186$ & $800$ & Sí\\
-BasicProvenance & 48 & $40$ & $6$ & Sí\\
-RoomThermostat & 48 & $138$ & $600$ & Sí\\
-\hline
-\end{tabular}
-%\end{adjustwidth}
+    %\begin{adjustwidth}{-0.5in}{-0.5in}% adjust the L and R margins by 1 inch
+    \caption{Resumen de la experimentación. \textbf{LOC} es cantidad de lineas de código, \textbf{Tiempo de ejecución} es el promedio del tiempo de ejecución medido en minutos, $\boldsymbol{\sigma}$ es el desvío estandard medido en segundos y \textbf{¿Es correcto?} indica si la EPA generada es isomorfa con la provista anteriormente.}\label{tab:resultados}
+    \begin{tabular}{|l|l|l|l|l|}
+        \hline
+        Contrato                  & LOC & Tiempo de ejecución (min) & $\sigma$ (s) & ¿Es correcto? \\
+        \hline
+        DefectiveComponentCounter & 33  & $29$                      & $7$          & Sí            \\
+        SimpleMarketplace         & 66  & $186$                     & $800$        & Sí            \\
+        BasicProvenance           & 48  & $40$                      & $6$          & Sí            \\
+        RoomThermostat            & 48  & $138$                     & $600$        & Sí            \\
+        \hline
+    \end{tabular}
+    %\end{adjustwidth}
 \end{table}
