@@ -23,7 +23,7 @@ quienes a menudo usan herramientas para facilitar su trabajo y a menudo cuentan 
 En estas situaciones, una de las tantas técnicas útiles para la validación es  la construcción de una máquina de estados finita que abstraiga el comportamiento del contrato, destacando sólo ciertas propiedades interesantes \cite{predicate-abstraction-for-smart-contract-validation}.
 Estas máquinas abstraen al nivel de ``llamado a función'', y están fuertemente basadas en las \textit{EPAs} (Enabledness Preserving Abstraction) \cite{de-caso-epa} que son máquinas de estado que describen las posibles secuencias de llamados a funciones del contrato.
 En 2022 Godoy et al. \cite{predicate-abstraction-for-smart-contract-validation} las construyen a partir de código fuente traduciendo manualmente las pre y post condiciones de los contratos inteligentes a un lenguaje intermedio, Alloy \cite{alloy}.
-En 2023, Torres at al. \cite{??} desarrolló un prototipo que genera las abstracciones a partir de contratos inteligentes programados en Solidity \footnote{El prototipo funciona para versiones de Solidity anteriores a ¿?} de manera automática mediante model checking.
+En 2023, Torres at al. \cite{torres} desarrolló un prototipo que genera las abstracciones a partir de contratos inteligentes programados en Solidity \footnote{El prototipo funciona para versiones de Solidity anteriores a ¿?} de manera automática mediante model checking.
 
 \section{Objetivos}
 

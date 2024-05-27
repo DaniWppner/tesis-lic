@@ -56,6 +56,7 @@ Asimismo, cada \textcolor{cyan}{\texttt{state}} individual cuenta con una instan
 Por otro lado, el estado global de la aplicación (mantenido por el módulo \texttt{\textbf{manticorebase}}) consiste simplemente en una colección de \textcolor{cyan}{\texttt{state}}s.
 
 \section{API programable}
+\label{sec:api-manticore}
 La principal API presentada al usuario permite manejar el conjunto global de \textcolor{cyan}{\texttt{state}}s, siempre ``entre medio'' de la ejecución de métodos del contrato (es decir, antes de comenzar a ejecutarlos o después de que terminen, pero no durante).
 Los principales métodos de la API permiten realizar acciones globales como introducir nuevas constraints, ejecutar métodos de un smart contract, deployear un contrato nuevo, o iniciar la generación de casos de test a partir de los \textcolor{cyan}{\texttt{state}}.
 Además, permiten acceder a \textcolor{cyan}{\texttt{state}} individuales (siempre y cuando no estén corriendo) y leer y/o modificar los elementos simbólicos de su estado.

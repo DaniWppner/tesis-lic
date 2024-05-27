@@ -1,5 +1,6 @@
 
 \section{Construcción clásica de \textit{EPAs}}
+\label{sec:algoritmo-clasico}
 Tradicionalmente, existe un algoritmo genérico para la construcción de \textit{EPAs} de artefactos de código.
 Por cuestiones de notación, para ver el algoritmo de generación de EPAs es conveniente definir el siguiente predicado presentado por De Caso et. al \cite{de-caso-epa} sobre las configuraciones dado un conjunto de precondiciones de un contrato:
 
@@ -54,6 +55,7 @@ Sin embargo, debido a que no se espera que sea posible generar instancias que no
 Tenerlo implicaría ejecutar código que se espera que dé siempre el mismo resultado, por lo que resulta más eficiente no hacerlo.
 
 \section{Algoritmo alternativo}
+\label{sec:algoritmo-aternativo}
 Implementar el invariante del contrato, además de no ser una práctica estándar, es a menudo exigente para el programador, y es también una actividad propensa a errores.
 Sin embargo, es importante en la definición~\ref{definicion-lts} de la semántica de un contrato inteligente la  presencia del invariante.
 Intentar construir EPAs incluyendo estados que no satisfagan el invariante suele producir abstracciones demasiado sobreaproximadas \cite{de-caso-epa}.

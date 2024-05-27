@@ -1,1 +1,70 @@
-No sé que más decir más allá de como implementamos el algoritmo clásico y que la solución implementada pide agregar manualmante las precondiciones en métodos aparte, etc.
+Toda esta sección queda anémica y siento que dice cosas o no muy interesantes o de las que no tenemos tanto que decir.
+Me parece más bien un punteo de temas que se podrían mencionar que un draft de una versión a incluir verdaderamente.
+
+\section{Algoritmo clásico}
+Para implementar el algoritmo clásico de construcción de EPAs necesitamos lo siguiente:
+\begin{itemize}
+    \item Obtener la lista de métodos y de precondiciones de un contrato
+    \item Poder definir estados de un contrato que sean totalmente genéricos y garantizen el invariante
+    \item Poder ejecutar los métodos y precondiciones del contrato de manera aislada
+    \item Realizar consultas sobre el resultado de la ejecución de estos
+\end{itemize}
+Afortunadamente, la API de Manticore de los contratos inteligentes deployeados ofrece acceso a la lista de sus métodos de manera nativa.
+Sin embargo, dado que la abstracción de estos es a nivel bytecode, no resultaba posible extraer de manera automática las precondiciones.
+Por otro lado, como mencionamos en la sección \ref{sec:api-manticore} la API programable sólo nos permite generar estados a partir de la ejecución directa de métodos a instancias desde el constructor inicial.
+Estas dos limitaciones significaron que tuvimos que introducir las precondiciones como métodos explícitos a los contratos de manera manual, y que necesitamos introducir alguna forma de simular la ejecución de los métodos en el vacío.
+
+Debido al alcance previsto para la experimentación con la herramienta, y para mantener el tiempo de desarrollo al mínimo, optamos por no automatizar la extracción de precondiciones de los métodos en métodos independientes, sino que se realizó de manera totalmente manual en los contratos con los que experimentamos.
+De todas formas, debido a que los contratos inteligentes incluyen sus precondiciones de manera explícita al comienzo de los métodos, esta traducción manual consistió en copiar las secciones relevantes y reemplazar las apariciones de \textcolor{magenta}{\texttt{require}} por \textcolor{magenta}{\texttt{return}}.
+Luego, para identificar estos métodos automáticamente desde Manticore, establecimos la convención de nomenclatura de introducirles el sufijo \textcolor{orange}{\texttt{\_precondition}}.
+Por ejemplo, el método que implementara la preconidición explícita de \textcolor{orange}{\texttt{MakeOffer}} se llamaría \textcolor{orange}{\texttt{MakeOffer\_precondition}}, patrón que luego podría ser parseado.
+
+Para poder emular la ejecución de los métodos de manera aislada, era necesario poder construir dentro de Manticore estados (es decir, valores para las variables de la blockchain y las variables de estado) completamente genéricos.
+Dado que la API de Manticore sobre los contratos no provee acceso directo a las variables o el storage de los contratos (sólo permite interacturar con los métodos y el estado de la blockchain), decidimos solucionarlo modificando los valores de las variables externamente mediante métodos.
+Para esto, también consideramos que lo más veloz en tiempo de desarrollo sería introducir manualmente un método externo, ``\textcolor{orange}{\texttt{setter}}'', al contrato que recibe un parámetro por cada variable de estado en el contrato, y que asigna el valor recibido a esta.
+De esta manera, ejecutar \textcolor{orange}{\texttt{setter}} con parámetros simbólicos genera un estado genérico del contrato.
+
+Los estados resultantes de este proceso, al ser totalmente genéricos, no garantizaban el invariante.
+Para reintroducir esta propiedad luego de llamar al \textcolor{orange}{\texttt{setter}} del contrato, aprovechamos la interfaz del módulo \texttt{\textbf{smtlib}} de Manticore.
+Lo más sencillo fue introducir el invariante como método explícito de manera manual sólo en el código fuente de los contratos.
+Luego usamos este método para restringir los estados genéricos sobre su resultado, de manera análoga a como usamos las implementaciones de las precondiciones.
+Los invariantes a lo largo del desarrollo fueron producidos de manera manual para cada contrato, razonando artesanalmente sobre las variables de estado del contrato y como sus métodos las modificaban.
+
+\section{Algoritmo alternativo}
+No tengo mucho para decir más allá de lo que ya dijimos hasta ahora.
+Cómo pudimos hacer snapshots del estado de un programa en Manticore para poder rollbackear sin tener que generar todo el estado de vuelta no lo mencioné en ningún lado.
+La funcionalidad de agregar predicados custom también siento que va acá.
+
+\section{Otros acercamientos}
+\subsection{Manticore como caja negra}
+En 2023 torres et al. utilizó verisol, una herramienta de bounded model checking sobre contratos Solidity, como caja negra para la construcción de EPAs de smart contracts \cite{torres} \cite{verisol}.
+Este approach consiste en codificar las queries de cada transición de la epa en métodos de un smart contract.
+Como mencionamos en la seccion \ref{sec:algoritmo-clasico}, esta query puede traducirse a una consulta de alcanzabilidad de código.
+Por ejemplo, en un contrato con tres métodos: \textcolor{magenta}{\texttt{A}}, \textcolor{magenta}{\texttt{B}} y \textcolor{magenta}{\texttt{C}} sin parámetros, para consultar si se puede transicionar desde $\mathcal{M}=\{\textcolor{magenta}{\texttt{A}}, \textcolor{magenta}{\texttt{B}}\}$ a $\mathcal{N} = \{\textcolor{magenta}{\texttt{A}}, \textcolor{magenta}{\texttt{C}}\}$ mediante un llamado a \textcolor{magenta}{\texttt{A}}, el método construido era el siguiente:
+\begin{lstlisting}[language=Solidity]
+function ABnotC_AnotBC_viaA() public returns (bool) {
+    if(A_precondition() && B_precondition() && !C_precondition()){
+        A();
+        if(A_precondition() && !B_precondition() && C_precondition()){
+            assert(false);
+        }
+    }
+}
+\end{lstlisting}
+
+Aquí, la alcanzabilidad del \texttt{\textcolor{cyan}{\textbf{assert}}(\textcolor{cyan}{\textbf{false}})} significaba la existencia de esta transición.
+Intentamos utilizar el mismo procedimiento para encontrar las transiciones en la EPA con Manticore, utilizando la herramienta por línea de comandos y la herramienta \texttt{manticore-verifier}.
+Sin embargo, la estrategia de exploración de estas dos herramientas era muy poco sofisticada, y no resultaba capaz de encontrar transiciones incluso para contratos muy simples.
+Además, la herramienta \texttt{manticore-verifier} tenía comportamiento \textit{buggy} para contratos simples.
+
+\subsection{Abstracción de los contratos por combinación de enums}
+Otro método que intentamos para construir las abstracciones de los contratos inteligentes fue no construir las abstracciones en base a predicados sobre las precondiciones, como las EPAs, sino en seccionar los estados del contrato en base a los valores que tomaran sus variables de instancia de tipo \textcolor{cyan}{\texttt{enum}}.
+A menudo los contratos inteligentes están diseñados considerando una cantidad finita de estados posibles, como si se abstrayeran a una máquina de estados finita particular.
+Estos contratos están programados haciendo uso de variables de estado de tipo \textcolor{cyan}{\texttt{enum}} que indican el estado en el que se encuentra el contrato con respecto a diversas propiedades, a menudo indicando propiedades independientes con distintas variables.
+
+Para implementar la generación de estas abstracciones, consideramos la abstracción de los estados concretos en estados definidos por las posibles combinaciones de las variables de estado de tipo \textcolor{cyan}{\texttt{enum}}.
+Luego, consideramos las transiciones en esta máquina abstracta por los métodos externos del contrato, al igual que en la EPA.
+Para poder utilizar el mismo mecanismo de generación de abstracciones que utilizamos para las EPAs, era necesario conocer el valor de las variables de instancia de tipo \textcolor{cyan}{\texttt{enum}}.
+Aquí, nuevamente por consideraciones en el tiempo de desarrollo, lo mas sencillo fue tratar la introspección de estas variables de manera similar a los valores de las precondiciones de los métodos.
+Lo que hicimos fue definir métodos externos para cada una de las variables de instancia de tipo \textcolor{cyan}{\texttt{enum}}, que permitían observar el valor de esta variable.
+Luego, podíamos detectar estos métodos introduciendo un nuevo tipo sufijo ``\textcolor{orange}{\texttt{\_enum}}''.
