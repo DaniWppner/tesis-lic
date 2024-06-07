@@ -52,14 +52,14 @@ function ABnotC_AnotBC_viaA() public returns (bool) {
 }
 \end{lstlisting}
 
-Aquí, la alcanzabilidad del \texttt{\textcolor{cyan}{\textbf{assert}}(\textcolor{cyan}{\textbf{false}})} significaba la existencia de esta transición.
+Aquí, la alcanzabilidad del \texttt{\textcolor{blue}{\textbf{assert}}(\textcolor{blue}{\textbf{false}})} significaba la existencia de esta transición.
 Intentamos utilizar el mismo procedimiento para encontrar las transiciones en la EPA con Manticore, utilizando la herramienta por línea de comandos y la herramienta \texttt{manticore-verifier}.
 Sin embargo, la estrategia de exploración de estas dos herramientas era muy poco sofisticada, y no resultaba capaz de encontrar transiciones incluso para contratos muy simples.
 Además, la herramienta \texttt{manticore-verifier} tenía comportamiento \textit{buggy} para contratos simples.
 
 \subsection{Abstracción de los contratos por combinación de enums}
 Otro método que intentamos para construir las abstracciones de los contratos inteligentes fue no construir las abstracciones en base a predicados sobre las precondiciones, como las EPAs, sino en seccionar los estados del contrato en base a los valores que tomaran sus variables de instancia de tipo \textcolor{cyan}{\texttt{enum}}.
-A menudo los contratos inteligentes están diseñados considerando una cantidad finita de estados posibles, como si se abstrayeran a una máquina de estados finita particular.
+A menudo los contratos inteligentes están diseñados considerando una cantidad finita de configuraciones posibles, como si se abstrayeran a una máquina de estados finita particular.
 Estos contratos están programados haciendo uso de variables de estado de tipo \textcolor{cyan}{\texttt{enum}} que indican el estado en el que se encuentra el contrato con respecto a diversas propiedades, a menudo indicando propiedades independientes con distintas variables.
 
 Para implementar la generación de estas abstracciones, consideramos la abstracción de los estados concretos en estados definidos por las posibles combinaciones de las variables de estado de tipo \textcolor{cyan}{\texttt{enum}}.
