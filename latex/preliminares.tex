@@ -1,14 +1,17 @@
+\section{Ejecución simbólica dinámica}
+
 \section{Contratos Inteligentes y Solidity}
-Una blockchain es una base de datos distribuida pública inmutable.
-En Ethereum, cada transacción registrada se refiere a propiedades sobre \textit{direcciones} en la base de datos, como el balance de criptomonedas o el estado de un contrato inteligente.
+Una blockchain es una base de datos pública, distribuida e inmutable.
+En Ethereum cada transacción registrada se refiere a propiedades sobre \textit{direcciones} en la base de datos como el balance de criptomonedas o el estado de un contrato inteligente.
 Las transacciones se agrupan en conjuntos de \textit{bloques}, que son la unidad mínima con la que se actualiza el estado de la blockchain.
 El historial de bloques agregados a la blockchain (y por ende, las transacciones ejecutadas) es público, y el estado actual de la red puede calcularse a partir de este historial.
 Además, los protocolos de consenso utilizados por la red le otorgan garantías de seguridad de que ningún actor podrá forzar el ingreso de información falsificada a ella \cite{protocolos-consenso}.
 
 Como ya dijimos, Ethereum y otras blockchain mantienen un estado de cómputo distribuido, y permiten modificar este estado mediante aplicaciones programadas llamadas contratos inteligentes.
-Los contratos inteligentes se corresponden con direcciones dentro de la base de datos de la blockchain, de la misma forma que se corresponden con direcciones los usuarios tradicionales.
-En Ethereum, en el caso de los usuarios humanos el almacenamiento que le corresponde a cada dirección guarda sólo información sobre el balance de criptomonedas, mientras que un contrato inteligente utiliza dos campos adicionales: el \textit{codeHash}, que es utilizado para obener el código ejectuable del contrato y el \textit{storageRoot}, que es necesario para conocer una especie de memoria persistente exclusiva del contrato.
-Ambos tipos de \textit{accounts} pueden recibir o enviar mensajes y Ether\footnote{Ether es la criptomoneda utilizada por Ethereum}.
+Los contratos inteligentes se corresponden con direcciones dentro de la base de datos que es la blockchain, de la misma forma que se corresponden con direcciones los usuarios tradicionales.
+De hecho, en Ethereum los contratos inteligentes y los usuarios tradicionales cuentan con dos tipos de \textit{accounts} distintas.
+En el caso de los usuarios humanos el almacenamiento que le corresponde a cada dirección guarda sólo información sobre el balance de criptomonedas, mientras que un contrato inteligente utiliza dos campos adicionales: el \textit{codeHash}, que es utilizado para obener el código ejectuable del contrato y el \textit{storageRoot}, que es necesario para conocer una especie de memoria persistente exclusiva del contrato.
+Ambos tipos pueden recibir o enviar mensajes y Ether\footnote{Ether es la criptomoneda utilizada por Ethereum}.
 La diferencia en los dos tipos de accounts radica en qué ocurre cuando la account es seleccionada como destinataria de una transferencia de fondos o mensaje.
 Mientras que para un usuario humano simplemente se registra el suceso en la blockchain, en el caso de un contrato inteligente, este es el momento en el que el programa se ejecuta, agregando el mensaje que disparó la ejecución al contexto de la misma.
 Para poder incluir la transacción en el próximo estado de la blockchain, el minero\footnote{Los ``mineros'' son quienes participan en el protocolo de la blockchain y registran las transacciones publicadas por usuarios en bloques} que registre la transacción debe levantar la EVM y simular la ejecución del contrato para conocer su  resultado y estado final.
