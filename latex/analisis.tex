@@ -31,12 +31,37 @@ Estas se deben a que en este momento todos los estados concretos que estamos con
 Sin embargo, el algoritmo no presta atención a cuál fue la traza de métodos ejecutada para llegar hasta acá, por lo que marca a ambas tuplas $(\textbf{\_push\_pop},\textcolor{orange}{\texttt{pop}})$ y $(\textbf{\_pop},\textcolor{orange}{\texttt{pop}})$ como ya exploradas.
 Esto significa que la función de transición $\Delta$ quedará definida en $\Delta(\textbf{\_push\_pop},\textcolor{orange}{\texttt{pop}}) = \textbf{\_push}$ y $\Delta(\textbf{\_pop},\textcolor{orange}{\texttt{pop}}) = \textbf{\_push}$ y luego procedirá con la ejecución hasta finalizar el algoritmo con (al menos) esas dos transiciones faltantes.
 
-\begin{figure}
-    \centering
-    {\includegraphics[width=\textwidth]{figs/bounded-stack.png}}
-    \caption{Contrato Inteligente \texttt{BoundedStack} en Solidity}
-    \label{fig:bounded-stack}
-\end{figure}
+\begin{lstlisting}[language=Solidity, label={fig:bounded-stack}, caption={Contrato Inteligente \texttt{BoundedStack} en Solidity},captionpos=b]
+pragma solidity ^0.5.17;
+contract SizedStack {
+    uint256 public size;
+    uint256 public maxSize;
+    uint256[] internal_arr;
+    constructor() public {
+        maxSize = 10;
+        size = 0;
+    }
+    function isEmpty() public view returns (bool) {
+        return size == 0;
+    }
+    function top() public view returns (uint256) {
+        require(!isEmpty());
+        return internal_arr[size - 1];
+    }
+    function push(uint256 new_elem) public {
+        require(size < maxSize);
+        internal_arr.push(new_elem);
+        size += 1;
+    }
+    function pop() public returns (uint256) {
+        require(!isEmpty());
+        uint256 was = top();
+        internal_arr.pop();
+        size -= 1;
+        return was;
+    }
+}
+\end{lstlisting}
 
 \begin{figure}
     \centering
