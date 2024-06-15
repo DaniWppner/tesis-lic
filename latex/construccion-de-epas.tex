@@ -50,8 +50,8 @@ Decidir si una transición pertenece o no la EPA, como está planteado en el alg
 Esto en general es indecidible, sin embargo la sugerencia principal consiste en transformar estas preguntas de validez de fórmulas de primer orden en problemas de alcanzabilidad de código, dado que se espera que las precondiciones y los invariantes definidos en la formalización~\ref{definicion-smart-contract} estén debidamente implementados en el contrato.
 
 En general, por optimizaciones de gas, es común que en los métodos externos los contratos definan las precondiciones explícitamente mediante instrucciones \textcolor{magenta}{\texttt{require}}, como en el contrato ejemplo \ref{fig:solidity-example} \texttt{SimpleMarketplace}.
-Dado que los inputs externos nunca garantizan estar bien formados, resulta menos costoso para el contrato abortar estas ejecuciones lo antes posible en lugar de hacerlas avanzar hasta llegar a un estado de error.
-Sin embargo, debido a que no se espera que sea posible generar instancias que no satisfagan el invariante, por el mismo motivo de ahorro de gas no es usual contar con una implementación explícita del invariante en el código fuente del contrato.
+Dado que los inputs externos nunca garantizan estar bien formados \footnote{La sugerencia es decirlo distinto, pero no se me ocurre como. Se dice así.}, resulta menos costoso para el contrato abortar estas ejecuciones lo antes posible en lugar de hacerlas avanzar hasta llegar a un estado de error.
+Sin embargo, debido a que no se espera que sea posible generar instancias que no satisfagan el invariante, por el mismo motivo de ahorro de gas, no es usual contar con una implementación explícita del invariante en el código fuente del contrato.
 Tenerlo implicaría ejecutar código que se espera que dé siempre el mismo resultado, por lo que resulta más eficiente no hacerlo.
 
 \section{Algoritmo alternativo}
@@ -61,12 +61,13 @@ Sin embargo, es importante en la definición~\ref{definicion-lts} de la semánti
 Intentar construir EPAs incluyendo estados que no satisfagan el invariante suele producir abstracciones demasiado sobreaproximadas \cite{de-caso-epa}.
 Por eso, en continuación del trabajo presentado por Godoy et al. \cite{predicate-abstraction-for-smart-contract-validation}, trabajaremos construyendo las EPAs a partir de las precondiciones explícitas dadas por las declaraciones \textcolor{magenta}{\texttt{require}} al comienzo de los métodos, y haciendo uso  del invariante implícito dado por los métodos mismos del contrato.
 
-La idea es, tomando la definición de que un contrato es correcto si la ejecución de todos sus métodos preservan el invariante si se satisfacen las precondiciones del método, entonces bajo la asunción de que un contrato es correcto, ejecutar cualquier sucesión de métodos del contrato con parámetros válidos (es decir, que satisfagan las precondiciones), genera instancias que satisfacen el invariante.
+Trabajemos con la acepción de que un contrato es correcto si la ejecución de todos sus métodos preservan el invariante si se satisfacen las precondiciones del método.
+La idea es que bajo la asunción de que un contrato es correcto, ejecutar cualquier sucesión de métodos del contrato con parámetros válidos (es decir, que satisfagan las precondiciones) genera instancias que satisfacen el invariante.
 Esto significa que explorar cadenas de transacciones que comienzen por el constructor siempre considera estados que satisfacen el invariante, siempre y cuando cada llamado individual a métodos cumpla las precondiciones correspondientes.
 Entonces, es posible asumir que se satisface el invariante si se presenta una traza de llamados válidos a métodos que comienza por el constructor.
 
 Por otro lado, si todos los métodos de un contrato implementan explícitamente sus precondiciones, podemos decir aún mas.
-Si todos los métodos de un contrato implementan explícitamente sus precondiciones, entonces es imposible que cualquier llamado a un método genere un estado inválido.
+Si este es el caso entonces es imposible que ningún llamado a un método genere un estado inválido.
 En su lugar, un llamado que no satisfaga las precondiciones del método será revertido.
 De esta manera, \textit{cualquier} traza de métodos que comienze por el constructor genera una instancia del contrato que satisface el invariante, si los métodos implementan explícitamente sus precondiciones.
 
@@ -83,7 +84,7 @@ Dado que trabajaremos asumiendo que no hay acceso explícito al invariante, la n
     \end{itemize}
 \end{definition}
 El LTS concreto (la semántica) y el LTS abstracto (la EPA) de smart contracts que usan esta definición pueden formalizarse de manera análoga a las secciones anteriores.
-Por cuestiones de notación, nos gustaría introducir algunas funciones sobre sobre los caminos posibles en los métodos de un contrato:
+Por cuestiones de notación, introduciremos algunas funciones sobre los caminos posibles en los métodos de un contrato:
 \begin{definition}[Posibles caminos de ejecución de una secuencia de funciones]
     Dados un contrato $SC = \langle M, F, R, Constructor \rangle$ definimos la función \texttt{paths\_of} que opera en el dominio de las secuencias de funciones $f_1, f_2, \cdots f_k$ tales que $\forall i, f_i \in F \cup R$:
     \begin{multline}
@@ -100,7 +101,8 @@ Es decir, no se consideran caminos de ejecución para los que no exista una seri
     \end{multline}
 \end{definition}
 
-Luego, cuando notamos ``$=$'' entre estados de la EPA y uno de los recién mencionados resultados simbólicos, nos estaremos refiriendo a la ``fórmula de compatibilidad'' entre estos dos.
+A continuación usaremos la notación ``$\mathcal{M}=sy$'' donde $\mathcal{M}$ es un estado abstracto de la EPA y $sy$ uno de los estados simbólicos mencionados anteriormente.
+Esta notación la usaremos para referirnos a la ``fórmula de compatibilidad'' entre estos dos.
 Brevemente, recordemos que un estado de la EPA $\mathcal{M}$ es un subconjunto de los métodos del contrato, y representa los estados concretos en los que todos los métodos contenidos en el subconjunto se encuentran habilitados, y los demás se encuentran deshabilitados.
 Podremos decir que para un camino de ejecución $p$ de las funciones $R_{m\_1},R_{m\_2} \cdots R_{m\_n}$ el resultado simbólico de $p$, $sy = \texttt{symb\_res\_of}(p)$ es compatible con $\mathcal{M}$ sí y sólo sí para cada $R_m$, el resultado de $R_{m\_i}$ en $sy$ es \textbf{true} $\iff m\_i \in \mathcal{M}$.
 
@@ -136,7 +138,7 @@ El algoritmo para expresar la fórmula de compatibilidad entre $p_1$ y $sy$ es e
 
 Utilizando estas notaciones, podemos presentar el algoritmo que explora la porción de la EPA que es alcanzable desde $P_0$, sin acceso al invariante y haciendo uso de ejecución simbólica.
 Este algoritmo realiza una versión	modificada de \textit{Depth-First-Search} en el grafo de las transiciones, explorando varias aristas del grafo a la vez.
-En particular, en cada iteración del ciclo prinicipal este algoritmo agrega múltiples transiciones a la EPA etiquetadas por un mismo método.
+En particular, en cada iteración del ciclo principal este algoritmo agrega múltiples transiciones a la EPA etiquetadas por un mismo método.
 La exploración siempre se realiza a partir del conjunto de estados de la EPA ``$S_{current}$'' que se actualiza en cada iteración con el conjunto de estados en los que puede resultar la ejecución del último método.
 Cuando esta exploración llega a un punto muerto, se retrocede usando la pila del \textit{DFS} hasta otro punto en el que queden llamados de métodos sin explorar.
 El algoritmo es el siguiente:
@@ -153,7 +155,7 @@ El algoritmo es el siguiente:
 La decisión de explorar los estados de la EPA de esta manera conjunta se debe a las capacidades de la API programable de Manticore.
 Al ejecutar un método, debemos ejecutarlo en todos los caminos hasta el momento.
 
-Por último, podemos señalar que para garantizar \textit{soundess} de las EPAs generadas, lo tradicional es consultar por la insatisfacibilidad de que una transición pertenezca a la EPA, e incluirla en el resultado en cualquier caso en el que no se pueda demostrar esto.
+Por último, podemos señalar que para garantizar \textit{soundness} de las EPAs generadas, lo tradicional es consultar por la insatisfacibilidad de que una transición pertenezca a la EPA, e incluirla en el resultado en cualquier caso en el que no se pueda demostrar esto.
 Sin embargo, en este caso sólo estamos incluyendo las transiciones para las que tengamos una demostración de su existencia.
 Esta decisión, aunque discutible, fue prinicipalmente tomada para aprovechar la funcionalidad de generación de casos de test concretos de Manticore.
 
