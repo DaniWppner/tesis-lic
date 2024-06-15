@@ -132,7 +132,7 @@ En cambio ejecutar el método \textcolor{orange}{\texttt{SetTargetTemperature}},
 
 \begin{figure}[H]
     \centering
-    {\includegraphics {figs/room-thermostate-abstraction.png}}
+    {\includegraphics[width=\textwidth]{figs/room-thermostate-abstraction.png}}
     \caption{Abstracción por estado de las variables \textcolor{cyan}{\texttt{enum} del contrato \texttt{RoomThermostat}}}
     \label{fig:room-thermostat-states}
 \end{figure}
@@ -149,4 +149,4 @@ Por ejemplo, para la variable \texttt{Mode} en el contrato \texttt{RoomThermosta
     }
 \end{lstlisting}
 
-Utilizando estos nuevos métodos externos el mecanismo era el mismo, con la diferencia de que los estados se construían tomando combinaciones de los \textcolor{cyan}{\texttt{enum}} en lugar de de las precondiciones
+Utilizando estos nuevos métodos externos el mecanismo para generar las abstracciones era el mismo que el de las EPAs, con la diferencia de que los estados se construían tomando combinaciones de los \textcolor{cyan}{\texttt{enum}} en lugar de de las precondiciones.
