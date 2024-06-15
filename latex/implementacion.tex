@@ -62,9 +62,13 @@ Además, la herramienta \texttt{manticore-verifier} tenía comportamiento \texti
 Otro método que intentamos para construir las abstracciones de los contratos inteligentes fue no construir las abstracciones en base a predicados sobre las precondiciones, como las EPAs, sino en particionar los estados del contrato en base a los valores que tomaran sus variables de instancia de tipo \textcolor{cyan}{\texttt{enum}}.
 A menudo los contratos inteligentes están diseñados considerando una cantidad finita de configuraciones posibles, como si se abstrayeran a una máquina de estados finita particular.
 Estos contratos están programados haciendo uso de variables de estado de tipo \textcolor{cyan}{\texttt{enum}} que indican el estado en el que se encuentra el contrato con respecto a diversas propiedades, a menudo indicando propiedades independientes con distintas variables.
-Consideremos el siguiente ejemplo, el contrato \texttt{RoomThermostat} del benchmark ``Microsoft Azure'' \footnote{escribir mejor esto} \cite{azure-benchmark} :
 
-\begin{lstlisting}[language=Solidity, label={fig:solidity-example}, caption={Contrato Inteligente \texttt{SimpleMarketplace} en Solidity},captionpos=b]
+Consideremos el siguiente ejemplo, el contrato \texttt{RoomThermostat} del benchmark ``Microsoft Azure Blockchain Workbench'' \cite{azure-benchmark} que podemos ver en la figura \ref{fig:rooomthermostat-solidity}.
+Como mencionamos, hace uso de las variables de tipo \textcolor{cyan}{\texttt{enum}} para indicar los estados de ejecución en los que se encuentra el contrato.
+En particular, la variable \texttt{State} controla el acceso a cada uno de los métodos del contrato, mientras que la variable \texttt{Mode} indica otras propiedades relevantes del estado contrato.
+De los métodos disponibles, podemos ver que los métodos \textcolor{orange}{\texttt{SetMode}} y \textcolor{orange}{\texttt{SetTargetTemperature}} se encuentran habilitados cuando el valor de \texttt{State} es \texttt{InUse}, mientras que el método \textcolor{orange}{\texttt{StartThermostat}} requiere que el valor de \texttt{State} sea \texttt{Created}.
+
+\begin{lstlisting}[language=Solidity, label={fig:rooomthermostat-solidity}, caption={Contrato Inteligente \texttt{RoomThermostat} en Solidity},captionpos=b]
 pragma solidity >=0.4.25 <0.6.0;
 contract RoomThermostat
 {
@@ -116,13 +120,33 @@ contract RoomThermostat
 }
 \end{lstlisting}
 
-Este contrato incluye la variable \texttt{State} con la que indica en cual de cada de uno de los estados se encuentra.
-\textbf{¿¿¿QUE MAS???}
+Siguiendo esta idea, consideramos generar abstracciones donde los estados están definidos por las posibles combinaciones de las variables de estado de tipo \textcolor{cyan}{\texttt{enum}}, confiando en cada distinta combinación	de estas variables se corresponde con un estado de ejecución único del contrato interesante.
+En estas abstracciones consideramos que las transiciones sean por los métodos externos del contrato, al igual que en las EPAs.
 
+Continuando el ejemplo del contrato \texttt{RoomThermostat}, en la figura \ref{fig:room-thermostat-states} podemos ver la abstracción resultante.
+Si prestamos atención a la variable \texttt{State}, vemos que la máquina de estados se divide en dos secciones:
+Por un lado los estados etiquetados como \texttt{InUse} presentan transiciones por los métodos \textcolor{orange}{\texttt{SetMode}} y \textcolor{orange}{\texttt{SetTargetTemperature}}.
+Por otro lado el único estado etiquetado como \texttt{Created} tiene una única transición, que ocurre por el método \textcolor{orange}{\texttt{SetMode}}.
+Además, el conjunto de estados etiquetados con \texttt{InUse} están particionados por la variable \texttt{Mode}, pudiendo transicionar entre cualquiera de los estados al ejecutar el método \textcolor{orange}{\texttt{SetMode}}.
+En cambio ejecutar el método \textcolor{orange}{\texttt{SetTargetTemperature}}, que solo afecta variables internas que no son de tipo \textcolor{cyan}{\texttt{enum}}, siempre resulta en una transición al mismo estado desde el que se lo ejecutó.
 
-Para implementar la generación de estas abstracciones, consideramos la abstracción de los estados concretos en estados definidos por las posibles combinaciones de las variables de estado de tipo \textcolor{cyan}{\texttt{enum}}.
-Luego, consideramos las transiciones en esta máquina abstracta por los métodos externos del contrato, al igual que en la EPA.
-Para poder utilizar el mismo mecanismo de generación de abstracciones que utilizamos para las EPAs, era necesario conocer el valor de las variables de instancia de tipo \textcolor{cyan}{\texttt{enum}}.
-Aquí, nuevamente por consideraciones en el tiempo de desarrollo, lo mas sencillo fue tratar la introspección de estas variables de manera similar a los valores de las precondiciones de los métodos.
-Lo que hicimos fue definir métodos externos para cada una de las variables de instancia de tipo \textcolor{cyan}{\texttt{enum}}, que permitían observar el valor de esta variable.
+\begin{figure}[H]
+    \centering
+    {\includegraphics {figs/room-thermostate-abstraction.png}}
+    \caption{Abstracción por estado de las variables \textcolor{cyan}{\texttt{enum} del contrato \texttt{RoomThermostat}}}
+    \label{fig:room-thermostat-states}
+\end{figure}
+
+A la hora de implementar la generación de estas abstracciones, para poder utilizar el mismo mecanismo de generación de abstracciones que el utilizado para las EPAs era necesario conocer el valor de las variables de instancia de tipo \textcolor{cyan}{\texttt{enum}}.
+Aquí, nuevamente por consideraciones en el tiempo de desarrollo \footnote{¿Acá también está mal hablar de eso?}, lo mas sencillo fue tratar la introspección de estas variables de manera similar a los valores de las precondiciones de los métodos.
+Lo que hicimos fue definir métodos externos para cada una de las variables de instancia de tipo \textcolor{cyan}{\texttt{enum}} que permitieran observar el valor de esta variable.
 Luego, podíamos detectar estos métodos introduciendo un nuevo tipo sufijo ``\textcolor{orange}{\texttt{\_enum}}''.
+Por ejemplo, para la variable \texttt{Mode} en el contrato \texttt{RoomThermostat}, el método generado era el siguiente:
+
+\begin{lstlisting}[language=Solidity]
+    function Mode_enum() public returns (ModeEnum) {
+        return Mode;
+    }
+\end{lstlisting}
+
+Utilizando estos nuevos métodos externos el mecanismo era el mismo, con la diferencia de que los estados se construían tomando combinaciones de los \textcolor{cyan}{\texttt{enum}} en lugar de de las precondiciones
