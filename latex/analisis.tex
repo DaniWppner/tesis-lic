@@ -6,18 +6,41 @@ Por esto en la simulación contamos con un número fijo de \textit{accounts}, as
 Como mencionamos en la sección \ref{sec:subaproximacion}, las abstracciones generadas por el algoritmo alternativo no siempre son Enabledness Preserving Abstractions de los contratos analizados \footnote{Es decir, en algunos casos no cumplen la definición presentada en la sección \ref{definicion-epa}.}, sino que son unas subaproximaciones de estas.
 Al mismo tiempo, las EPAs son sobreaproximaciones del comportamiento de los contratos, por lo que el mecanismo resultante del algoritmo alternativo yacen en algún lugar intermedio, no es ni \textit{sound} ni \textit{complete}.
 Por esto, nos interesa explorar en particular cuáles son las diferencias producidas entre el algoritmo alternativo y las generadas por el algoritmo clásico (las EPAs) para evaluar su utilidad.
-
-Para responder estas preguntas analizamos el desempeño de los prototipos implementados usando ambos algoritmos sobre dos algunos casos de prueba.
-Aquí veremos la evaluación para dos contratos inteligentes.
+Para responder estas preguntas analizamos el desempeño de los prototipos implementados usando ambos algoritmos sobre algunos casos de prueba.
 
 \subsection{Caso \texttt{RoomThermostat}}
-El primer caso que evaluamos fue el contrato \texttt{RoomThermostat} perteneciente al benchmark ``Microsoft Azure Blockchain Workbench" \cite{azure-benchmark}.
+El primer caso que evaluamos fue el contrato \texttt{RoomThermostat} perteneciente al benchmark ``Microsoft Azure Blockchain Workbench" \cite{azure-benchmark}, cuyo código fuente podemos ver en la figura \ref{fig:rooomthermostat-solidity}.
+Es un contrato pequeño, con pocos métodos y un invariante sencillo.
+Para poder emplear el algoritmo clásico sobre este contrato, el invariante propuesto fue el siguiente:
+\begin{lstlisting}[language=Solidity]
+    function invariant(StateType stateNew, address installerNew, address userNew, int targetTemperatureNew, ModeEnum modeNew) public returns(bool){
+        bool result = (stateNew == StateType.Created || stateNew == StateType.InUse);
+        result = result && (modeNew == ModeEnum.Auto || modeNew == ModeEnum.Cool || modeNew == ModeEnum.Heat || modeNew == ModeEnum.Off);
+        if(stateNew == StateType.Created){
+            result = (targetTemperatureNew == 70) && (modeNew == ModeEnum.Off);
+        }
+        return result;
+    }
+\end{lstlisting}
+
+Luego, evaluamos tanto el algoritmo clásico como el alternativo sobre el contrato.
+En ambos casos la EPA generada fue la misma, una máquina de estados sencilla de tan sólo tres estados que podemos ver en la figura \ref{fig:room-thermostat-epa}.
+
+\begin{figure}
+    \centering
+    \begin{subfigure}{0.75\textwidth}
+        \includegraphics[width=\textwidth]{figs/room-thermostate-epa.png}
+        \caption{Enabledness Preserving Abstraction del contrato \texttt{RoomThermostat} }
+        \label{fig:room-thermostat-epa}
+    \end{subfigure}
+\end{figure}
 
 \subsection{Caso \texttt{BoundedStack}}
-El primer caso que evaluamos fue el ejemplo teórico que expusimos en la sección \ref{sec:subaproximacion}, el contrato \texttt{BoundedStack} (cuyo código se encuentra en \ref{code:solidity-bounded-stack}).
-Queremos corroborar cuál es el comportamiento de la implementación producida, evaluar si se produce alguna subaproximación, y cuáles.
+El siguiente caso que evaluamos fue el ejemplo teórico que expusimos en la sección \ref{sec:subaproximacion}, el contrato \texttt{BoundedStack}, con intención de evidenciar las subaproximaiones realizadas por el algoritmo nuevo.
+El código del contrato se encuentra en la imagen \ref{code:solidity-bounded-stack}.
+Nos interesa corroborar el comportamiento de ambos algoritmos, si se produce alguna subaproximación, y cuáles.
 
-Lo primero que vimos al evaluar la abstracción generada por el prototipo sobre el contrato \texttt{BoundedStack} lo podemos ver en la imagen \ref{fig:buggy-bounded-stack-epa}.
+Lo primero que vimos al evaluar la abstracción generada por el algoritmo alternativo sobre el contrato \texttt{BoundedStack} lo podemos ver en la imagen \ref{fig:buggy-bounded-stack-epa}.
 En esa abstracción  podemos ver que faltan algunas de las transiciones presentes en la EPA del contrato, pero además podemos observar que las transiciones por \textcolor{orange}{\texttt{pop}} siempre llevan al estado desde el que se ejecutó el método.
 Cuando realizamos esta comparación generó bastante confusión, hasta que comprendimos que se debía a un error en el código fuente de \texttt{BoundedStack} que no decrementaba la variable \texttt{size} al ejecutar \textcolor{orange}{\texttt{pop}}.
 Luego de corregir el error, la abstracción generada por el prototipo fue la referenciada en la imagen \ref{fig:bounded-stack-bad-epa}.
@@ -33,6 +56,17 @@ Decidimos incluir este pequeña caso de un error en el código fuente en lugar d
     \end{subfigure}
 \end{figure}
 
+A la hora de emplear el algoritmo clásico sobre el contrato, el invariante propuesto fue el siguiente:
+\begin{lstlisting}[language=Solidity]
+    function invariant() public returns(bool){
+        bool result = (size >= 0) && (size <= maxSize);
+        result = result && (internal_arr.length == size);
+        return result;
+    }
+\end{lstlisting}
+Sin embargo el prototipo desarrollado con el algoritmo clásico no pudo analizar este contrato satisfactoriamente, sino que terminó el analisis por time out.
+Esto se debe a que el paso de restringir las instancias del contrato a aquellas que satisfagan el invariante (y ninguna otra condición) resultó demasiado difícil para el motor de ejecucion simbólica de Manticore, debido a la pobre representación de las variables de tipo \texcolor{cyan}\texttt{uint256[]} del mismo.
+Esto significó que terminamos el análisis comparando la abstracción generada por el algoritmo alternativo no con la generada por el algoritmo clásico, sino con una EPA producida manualmente.
 
 Al evaluar el funcionamiento del prototipo buscamos responder las siguientes preguntas:
 \begin{enumerate}
