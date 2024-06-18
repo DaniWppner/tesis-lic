@@ -3,8 +3,8 @@ Las limitaciones de la herramienta exigen que el parámetro \texttt{(msg.sender)
 Por esto en la simulación contamos con un número fijo de \textit{accounts}, asignando variables simbólicas únicamente la información asociada a ellas (Dirección, Balance, etc).
 
 \section{Comparación de las abstracciones generadas entre el algoritmo clásico y el alternativo}
-Como mencionamos en la sección \ref{sec:subaproximacion}, las abstracciones generadas por el algoritmo alternativo no siempre son Enabledness Preserving Abstractions de los contratos analizados \footnote{Es decir, en algunos casos no cumplen la definición presentada en la sección \ref{definicion-epa}.}, sino que son unas subaproximaciones de estas.
-Al mismo tiempo, las EPAs son sobreaproximaciones del comportamiento de los contratos, por lo que el mecanismo resultante del algoritmo alternativo yacen en algún lugar intermedio, no es ni \textit{sound} ni \textit{complete}.
+Como mencionamos en la sección \ref{sec:subaproximacion}, las abstracciones generadas por el algoritmo alternativo no siempre son Enabledness Preserving Abstractions\footnote{Es decir, en algunos casos no cumplen la definición presentada en la sección \ref{definicion-epa}.} de los contratos analizados, sino que son unas subaproximaciones de estas.
+Al mismo tiempo, las EPAs son sobreaproximaciones del comportamiento de los contratos, por lo que el mecanismo resultante del algoritmo alternativo yace en algún lugar intermedio: no es ni sound ni complete.
 Por esto, nos interesa explorar en particular cuáles son las diferencias producidas entre el algoritmo alternativo y las generadas por el algoritmo clásico (las EPAs) para evaluar su utilidad.
 Para responder estas preguntas analizamos el desempeño de los prototipos implementados usando ambos algoritmos sobre algunos casos de prueba.
 
@@ -64,9 +64,14 @@ A la hora de emplear el algoritmo clásico sobre el contrato, el invariante prop
         return result;
     }
 \end{lstlisting}
-Sin embargo el prototipo desarrollado con el algoritmo clásico no pudo analizar este contrato satisfactoriamente, sino que terminó el analisis por time out.
-Esto se debe a que el paso de restringir las instancias del contrato a aquellas que satisfagan el invariante (y ninguna otra condición) resultó demasiado difícil para el motor de ejecucion simbólica de Manticore, debido a la pobre representación de las variables de tipo \texcolor{cyan}\texttt{uint256[]} del mismo.
+
+Sin embargo, el prototipo desarrollado con el algoritmo clásico no pudo analizar este contrato satisfactoriamente, sino que terminó el analisis por time out.
+Esto se debe a que el paso de restringir las instancias del contrato a aquellas que satisfagan el invariante resultó demasiado difícil para el motor de ejecucion simbólica de Manticore
+Algunos experimentos y análisis intermedios nos hacen creer que se debe a la pobre representación de las variables de tipo \textcolor{cyan}{\texttt{uint256[]}} del mismo.
 Esto significó que terminamos el análisis comparando la abstracción generada por el algoritmo alternativo no con la generada por el algoritmo clásico, sino con una EPA producida manualmente.
+
+\section{Comparación en tiempo de ejecución entre el algoritmo clásico y el alternativo}
+Otra hipótesis generada durante el desarrollo del algoritmo alternativo fue que el evitar la ejecución de los invariantes mejoraría el tiempo de ejecución.
 
 Al evaluar el funcionamiento del prototipo buscamos responder las siguientes preguntas:
 \begin{enumerate}
