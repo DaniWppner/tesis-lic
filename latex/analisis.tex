@@ -2,6 +2,38 @@
 Las limitaciones de la herramienta exigen que el parámetro \texttt{(msg.sender)}, a pesar de que pueda ser simbólico, se corresponda con una \textit{account} definida explícitamente por el usuario.
 Por esto en la simulación contamos con un número fijo de \textit{accounts}, asignando variables simbólicas únicamente la información asociada a ellas (Dirección, Balance, etc).
 
+\section{Comparación de las abstracciones generadas entre el algoritmo clásico y el alternativo}
+Como mencionamos en la sección \ref{sec:subaproximacion}, las abstracciones generadas por el algoritmo alternativo no siempre son Enabledness Preserving Abstractions de los contratos analizados \footnote{Es decir, en algunos casos no cumplen la definición presentada en la sección \ref{definicion-epa}.}, sino que son unas subaproximaciones de estas.
+Al mismo tiempo, las EPAs son sobreaproximaciones del comportamiento de los contratos, por lo que el mecanismo resultante del algoritmo alternativo yacen en algún lugar intermedio, no es ni \textit{sound} ni \textit{complete}.
+Por esto, nos interesa explorar en particular cuáles son las diferencias producidas entre el algoritmo alternativo y las generadas por el algoritmo clásico (las EPAs) para evaluar su utilidad.
+
+Para responder estas preguntas analizamos el desempeño de los prototipos implementados usando ambos algoritmos sobre dos algunos casos de prueba.
+Aquí veremos la evaluación para dos contratos inteligentes.
+
+\subsection{Caso \texttt{RoomThermostat}}
+El primer caso que evaluamos fue el contrato \texttt{RoomThermostat} perteneciente al benchmark ``Microsoft Azure Blockchain Workbench" \cite{azure-benchmark}.
+
+\subsection{Caso \texttt{BoundedStack}}
+El primer caso que evaluamos fue el ejemplo teórico que expusimos en la sección \ref{sec:subaproximacion}, el contrato \texttt{BoundedStack} (cuyo código se encuentra en \ref{code:solidity-bounded-stack}).
+Queremos corroborar cuál es el comportamiento de la implementación producida, evaluar si se produce alguna subaproximación, y cuáles.
+
+Lo primero que vimos al evaluar la abstracción generada por el prototipo sobre el contrato \texttt{BoundedStack} lo podemos ver en la imagen \ref{fig:buggy-bounded-stack-epa}.
+En esa abstracción  podemos ver que faltan algunas de las transiciones presentes en la EPA del contrato, pero además podemos observar que las transiciones por \textcolor{orange}{\texttt{pop}} siempre llevan al estado desde el que se ejecutó el método.
+Cuando realizamos esta comparación generó bastante confusión, hasta que comprendimos que se debía a un error en el código fuente de \texttt{BoundedStack} que no decrementaba la variable \texttt{size} al ejecutar \textcolor{orange}{\texttt{pop}}.
+Luego de corregir el error, la abstracción generada por el prototipo fue la referenciada en la imagen \ref{fig:bounded-stack-bad-epa}.
+Es decir, la misma que elaboramos durante el ejemplo teórico del comportamiento del algoritmo alternativo.
+Decidimos incluir este pequeña caso de un error en el código fuente en lugar de omitirlo para ejemplificar que, a pesar de que quede evidenciado que el algoritmo nuevo genere subaproximaciones de las EPAs en la práctica, las abstracciones generadas pueden seguir resultando útiles a la hora de atrapar errores.
+
+\begin{figure}[H]
+    \centering
+    \begin{subfigure}{0.45\textwidth}
+        \includegraphics[width=\textwidth]{figs/buggy-bounded-stack-epa.png}
+        \caption{Enabledness Preserving Abstraction del contrato \texttt{BoundedStack} con un error que no decrementa el tamaño luego de ejecutar \textcolor{orange}{\texttt{pop}} }
+        \label{fig:buggy-bounded-stack-epa}
+    \end{subfigure}
+\end{figure}
+
+
 Al evaluar el funcionamiento del prototipo buscamos responder las siguientes preguntas:
 \begin{enumerate}
     \item ¿Son correctas las EPAs que genera el prototipo?
