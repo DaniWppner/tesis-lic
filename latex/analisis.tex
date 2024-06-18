@@ -72,7 +72,22 @@ Esto significó que terminamos el análisis comparando la abstracción generada 
 
 \section{Comparación en tiempo de ejecución entre el algoritmo clásico y el alternativo}
 Otra hipótesis generada durante el desarrollo del algoritmo alternativo fue que el evitar la ejecución de los invariantes mejoraría el tiempo de ejecución.
+Esto se debe a que son propiedades relativamente complejas, comparadas con las precondiciones de los métodos externos, que pueden predicar sobre el estado de variables internas de tipos complejos como arrays, mappings, etc.
+Para evaluar esta hipótesis estudiamos el tiempo de ejecución empleado por los prototipos que implementan el algoritmo alternativo y el clásico en Manticore sobre algunos de los contratos pertenecientes al benchmark Microsoft Azure Blockchain Workbench \cite{azure-benchmark}.
 
+Ya que este mismo benchmark había sido utilizado por Godoy et al. en 2022 \cite{predicate-abstraction-for-smart-contract-validation}, a la hora de experimentar contamos con EPAs de todos los contratos involucrados, lo que pudimos usar para corroborar la correctitud de las abstracciones generadas.
+Para realizar el análisis, ejecutamos ambos prototipos sobre cada contrato cinco veces en una máquina \textbf{DESCRIPCION MAQUINA} y tomamos el promedio del tiempo empleado.
+
+En la figura \ref{fig:classic-vs-alternativo} podemos ver
+
+\begin{figure}
+    \centering
+    \begin{subfigure}{0.65\textwidth}
+        \includegraphics[width=\textwidth]{figs/classic_vs_alternativo.png}
+        \caption{Tiempo de ejecución (en promedio) de la generación de abstracciones del prototipo que implementa el algoritmo alternativo y el algoritmo clásico}
+        \label{fig:classic-vs-alternativo}
+    \end{subfigure}
+\end{figure}
 Al evaluar el funcionamiento del prototipo buscamos responder las siguientes preguntas:
 \begin{enumerate}
     \item ¿Son correctas las EPAs que genera el prototipo?
