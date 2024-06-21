@@ -72,13 +72,22 @@ Esto significó que terminamos el análisis comparando la abstracción generada 
 
 \section{Comparación en tiempo de ejecución entre el algoritmo clásico y el alternativo}
 Otra hipótesis generada durante el desarrollo del algoritmo alternativo fue que el evitar la ejecución de los invariantes mejoraría el tiempo de ejecución.
-Esto se debe a que son propiedades relativamente complejas, comparadas con las precondiciones de los métodos externos, que pueden predicar sobre el estado de variables internas de tipos complejos como arrays, mappings, etc.
+Esto se debe a que los invariantes, comparadas con las precondiciones de los métodos externos, son propiedades relativamente complejas que además pueden hablar sobre el estado de variables internas de tipos complejos como arrays, mappings, etc.
 Para evaluar esta hipótesis estudiamos el tiempo de ejecución empleado por los prototipos que implementan el algoritmo alternativo y el clásico en Manticore sobre algunos de los contratos pertenecientes al benchmark Microsoft Azure Blockchain Workbench \cite{azure-benchmark}.
 
-Ya que este mismo benchmark había sido utilizado por Godoy et al. en 2022 \cite{predicate-abstraction-for-smart-contract-validation}, a la hora de experimentar contamos con EPAs de todos los contratos involucrados, lo que pudimos usar para corroborar la correctitud de las abstracciones generadas.
-Para realizar el análisis, ejecutamos ambos prototipos sobre cada contrato cinco veces en una máquina \textbf{DESCRIPCION MAQUINA} y tomamos el promedio del tiempo empleado.
+Ya que este mismo benchmark había sido utilizado por Godoy et al. en 2022 \cite{predicate-abstraction-for-smart-contract-validation}, a la hora de experimentar contamos con EPAs de todos los contratos involucrados, por lo que además pudimos usarlas para corroborar la correctitud de las abstracciones generadas.
+Los experimentos fueron realizados ejecutando ambos prototipos sobre cada contrato cinco veces y luego tomando el promedio del tiempo total de ejecución.
+Todas las mediciones fueron realizadas en una máquina en una máquina \textcolor{red}{\textbf{DESCRIPCION MAQUINA}}.
 
-En la figura \ref{fig:classic-vs-alternativo} podemos ver
+En la figura \ref{fig:classic-vs-alternativo} podemos ver los resultados del experimento realizado.
+Las mediciones fueron solo realizadas para los contratos \texttt{DefectiveComponentCounter}, \texttt{RoomThermostat}, \texttt{BasicProvenance} y \texttt{SimpleMarketplace} porque como podemos ver el tiempo de ejecución de la implementación del algoritmo clásico nunca fue menor a diez horas.
+A pesar de que en todos los contratos analizados podamos ver una diferencia significativa al emplear el algoritmo alternativo, es importante destacar que los tiempos de ejecución de esta técnica aún se mantuvieron muy altos.
+La mejora en tiempo parecería ser relativamente constante a lo largo de los cuatro contratos analizados, habiendo tardado el algoritmo alternativo alrededor de diez horas menos que el clásico.
+Esta diferencia cercana a constante posiblemente se deba a que todos los contratos eran muy simples (recordemos la baja cantidad de métodos externos en \texttt{SimpleMarketplace} y \texttt{RoomThermostat}), por lo que no se pudo observar la diferencia en comportamiento que habría en contratos más complejos.
+
+A pesar de que la mejora del algoritmo alternativo frente al clásico fuese tan grande, los valores obtenidos con el algoritmo alternativo siguieron sin resultar razonables.
+Si observamos los valores obtenidos, el tiempo de cómputo en promedio fue de entre media hasta casi tres horas, lo que no resulta aplicable para un usuario de la herramienta que pretenda generar las abstracciones en tiempo real.
+Por este motivo decidimos realizar los experimentos que mostraremos a continuación, en los que buscamos conseguir mejoras en el tiempo de ejecución o claridad en la razón de que tarde tanto.
 
 \begin{figure}
     \centering
@@ -88,6 +97,62 @@ En la figura \ref{fig:classic-vs-alternativo} podemos ver
         \label{fig:classic-vs-alternativo}
     \end{subfigure}
 \end{figure}
+
+\section{Evaluación más detallada del tiempo de ejecución del algoritmo alternativo}
+Para mejorar el tiempo de ejecución del prototipo buscamos identificar en qué partes del análisis era que se consumía la mayor parte del tiempo empleado.
+Lo primero que hicimos fue identificar ``etapas'' en el algoritmo alternativo que pudimos diferenciar para medir el tiempo empleado en cada una de ellas.
+Por otro lado analizamos el código fuente de Manticore y diferenciamos en distintos niveles de abstracción las funcionalidades que estábamos usando.
+
+Separamos la ejecución del prototipo en tres etapas:
+\begin{enumerate}
+    \item El desplegado simbólico del contrato
+    \item La ejecución simbólica de los métodos
+    \item La solución de queries de satisfacibilidad sobre las transiciones en la EPA
+\end{enumerate}
+Donde notoriamente el algoritmo alternativo comienza en la etapa 1., y luego alterna entre la etapa 3. y la 2. hasta finalizar.
+
+A continuación indicamos cuál fue la división en niveles de abstracción que hicimos de las funcionalidades de Manticore.
+En particular, por como es la arquitectura de multithreading y \textbf{\texttt{workers}} de Manticore, solo pudimos hacer esta distinción en los métodos relacionados a la resolución de valores simbólicos.
+La manera en la que se realizaba la ejecución simbólica y la generación de las path conditions era demasiado dependiente de objetos creados dinámicamente como para poder recibir el mismo tipo de análisis.
+\begin{enumerate}
+    \item \textbf{Nivel Externo}\footnote{En el momento de realizar las mediciones, los valores para este nivel se registraron bajo el nombre de  ``Nivel 3''} : utilizado para medir el tiempo que consumían las funciones de la API de manticore que nuestro prototipo llamaba directamente.
+          La única función cuyo tiempo medimos en este nivel fue \texttt{generateTestcases}.
+    \item \textbf{Nivel \texttt{state}} : Utilizado en las funciones del módulo \textbf{\texttt{state}} que identificamos que eran llamadas.
+          Los métodos registrados bajo este nivel fueron \texttt{can\_be\_true} y \texttt{solve\_\allowbreak one\_\allowbreak n\_\allowbreak batched}.
+    \item \textbf{Nivel SMT solver} : Utilizado en alrededor de cada llamado directo al SMT solver en los métodos del módulo \textbf{\texttt{smtlib}}.
+          Los métodos registrados bajo este nivel fueron \texttt{\_is\_sat}, \texttt{\_get\_value} y \texttt{\_\_get\_value\_all}.
+\end{enumerate}
+Cada uno de los métodos fue modificado para medir el tiempo desde el principio de la zona de interés hasta el fin de la misma.
+Por ejemplo, en la figura \ref{code:getvalueall-modification} podemos ver los cambios introducidos al método \texttt{\_\_get\_value\_all} para registrar el tiempo.
+
+\begin{lstlisting}[language=Python,
+    label={code:getvalueall-modification},
+    caption=\text{Método \texttt{\_\_get\_value\_all} del modulo \textbf{\texttt{smtlib}} modificado para registrar el tiempo empleado por la llamada al SMT solver. El resaltado indica las líneas agregadas para registrar el tiempo.},
+    captionpos=b]
+def __getvalue_all(self, expressions_str: List[str], is_bv: List[bool]) -> Dict[str, int]:
+    (*@| \hl{start = time.time()} |@*)
+    all_expressions_str = " ".join(expressions_str)
+    self._smtlib.send(f"(get-value ({all_expressions_str}))")
+    ret_solver: Optional[str] = self._smtlib.recv()
+    (*@| \hl{print}|@*)(f"(level _getvalue_all_z3_call) took {time.time()- start} seconds")
+    assert ret_solver is not None
+    return_values = re.findall(RE_GET_EXPR_VALUE_ALL, ret_solver)
+    
+    return {value[0]: _convert(value[1]) for value in return_values}
+\end{lstlisting}
+
+De  entre los métodos a los que les registramos el tiempo de ejecución, sabíamos que los métodos en \textbf{Nivel Externo} solo eran ejecutados cuando el prototipo implementado los llamaba explícitamente.
+Por otro lado, los métodos en \textbf{Nivel \texttt{state}} eran métodos que a veces eran llamados dsde la implementación directamente, pero además eran ejecutados como métodos internos de otros procesos durante el análisis.
+Por último, los métodos del \textbf{Nivel SMT solver} eran ejecutados en diversos momentos del análisis.
+
+Una vez hecha esta separación en etapas del algoritmo y niveles de abstracción que nos resultaba de interés investigar, medimos el tiempo total en promedio empleado por cada etapa y cada nivel de abstracción en una ejecución del prototipo.
+Para esto, al igual que antes, analizamos el rendimiento en los contratos \texttt{DefectiveComponentCounter}, \texttt{RoomThermostat}, \texttt{BasicProvenance} y \texttt{SimpleMarketplace} del benchmark Microsoft Azure Blockchain Workbench \cite{azure-benchmark}.
+Por otro lado, además, calculamos para cada uno de los niveles de abstracción diferenciados la cantidad de veces que este mismo fue registrado y el tiempo total empleado.
+Esto fue para intentar percibir discrepancias entre los niveles que espérabamos que consumieran la mayoría del tiempo y lo que pudiéramos medir.
+
+En la figura \textcolor{red}{\textbf{dani hace la figura escribila}} podemos ver los resultados obtenidos de estas mediciones.
+
+
 Al evaluar el funcionamiento del prototipo buscamos responder las siguientes preguntas:
 \begin{enumerate}
     \item ¿Son correctas las EPAs que genera el prototipo?

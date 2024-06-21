@@ -1,0 +1,19 @@
+\definecolor{deepgreen}{rgb}{0,0.5,0}
+
+\lstdefinelanguage{Python}{
+    alsoletter=0123456789,
+    keywords=[1]{def,\(,\),\[,\],is,not,None,0,1},
+    keywordstyle=[1]\color{blue}\bfseries,
+    keywords=[2]{bool, Optional, List, int, Dict, str, days, hours, minutes, seconds, weeks, years},% types
+    keywordstyle=[2]\color{teal}\bfseries,
+    keywords=[3]{assert,return,for,in},
+    keywordstyle=[3]\color{violet}\bfseries,
+    identifierstyle=\color{black},
+    sensitive=true,
+    comment=[l]{\#},
+    morecomment=[s]{'''}{'''},
+    commentstyle=\color{gray}\ttfamily,
+    stringstyle=\color{deepgreen}\ttfamily,
+    morestring=[b]',
+    morestring=[b]",
+}
