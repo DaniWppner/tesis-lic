@@ -2,7 +2,7 @@ La mayor evidente diferencia entre el algoritmo presentado en la seccion \ref{se
 Esto se debe a que en cada paso selecciona un par (método, estado abstracto) que no haya explorado ya, pero la exploración considera todos los estados posibles que puedan abstraerse al estado abstracto.
 En cambio, sólo puede considerarse un subconjunto de los estados que la herramienta pudo alcanzar hasta ese momento.
 
-Consideremos el siguiente ejemplo, el contrato \texttt{BoundedStack}, cuyo código podemos ver en la figura \ref{code:solidity-bounded-stack}.
+Consideremos el siguiente ejemplo, el contrato \texttt{BoundedStack}, cuyo código podemos ver en el fragmento de código \ref{code:solidity-bounded-stack}.
 Este contrato consiste en una simple implementación de una pila como estructura de datos, con la peculiaridad de que la pila cuenta con un tamaño máximo.
 El contrato tiene sólo dos métodos externos: \textcolor{orange}{\texttt{push}} y \textcolor{orange}{\texttt{pop}}.
 La EPA de este contrato por otro lado también es bastante sencilla, y la podemos ver en la imagen \ref{fig:bounded-stack-epa}.

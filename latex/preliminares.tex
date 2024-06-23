@@ -5,7 +5,7 @@ Una blockchain es una base de datos pública, distribuida e inmutable.
 En Ethereum cada transacción registrada se refiere a propiedades sobre \textit{direcciones} en la base de datos como el balance de criptomonedas o el estado de un contrato inteligente.
 Las transacciones se agrupan en conjuntos de \textit{bloques}, que son la unidad mínima con la que se actualiza el estado de la blockchain.
 El historial de bloques agregados a la blockchain (y por ende, las transacciones ejecutadas) es público, y el estado actual de la red puede calcularse a partir de este historial.
-Además, los protocolos de consenso utilizados por la red le otorgan garantías de seguridad de que ningún actor podrá forzar el ingreso de información falsificada a ella \cite{protocolos-consenso}.
+Además, los protocolos de consenso utilizados por la red le otorgan garantías de seguridad de que ningún actor podrá forzar el ingreso de información falsificada a ella \cite{survey-of-blockchain-security}.
 
 Como ya dijimos, Ethereum y otras blockchain mantienen un estado de cómputo distribuido, y permiten modificar este estado mediante aplicaciones programadas llamadas contratos inteligentes.
 Los contratos inteligentes se corresponden con direcciones dentro de la base de datos que es la blockchain, de la misma forma que se corresponden con direcciones los usuarios tradicionales.
@@ -28,7 +28,7 @@ La sintaxis empleada para definir los contratos incluye variables de estado, un 
 La ejecución de los métodos externos es disparada cuando los contratos son receptores de un mensaje en la blockchain, eligiendo cuál método ejecutar en base al contenido del mensaje \cite{??}. %Algo de documentación de Solidity
 
 \subsection{Ejemplo}
-En la figura \ref{fig:solidity-example} presentamos un ejemplo de un programa escrito en Solidity, \texttt{SimpleMarketplace}\footnote{Este contrato es extraido de los contratos de ejemplo ``Mircrosoft Azure Blockchain Workbench'' \cite{azure-benchmark}}, el cual implementa un mecanismo simple para vender un bien.
+En el fragmento de código \ref{fig:solidity-example} presentamos un ejemplo de un programa escrito en Solidity, \texttt{SimpleMarketplace}\footnote{Este contrato es extraido de los contratos de ejemplo ``Mircrosoft Azure Blockchain Workbench'' \cite{azure-benchmark}}, el cual implementa un mecanismo simple para vender un bien.
 Analizando línea a línea del contrato, se define en la línea 2 un tipo que tiene tres valores posibles (``\texttt{StateType}'') que representa estados de completitud de la venta.
 Las líneas 3 a 8 definen las variables de estado del contrato, entre las que tenemos variables de tipo \texttt{int}, \texttt{StateType} y \texttt{address}, indicando además mediante la palabra clave \textcolor{blue}{\texttt{public}} que resultan accesibles por contratos externos.
 El tipo \texttt{address} utilizado en \texttt{InstanceOwner} y \texttt{InstanceBuyer} consiste en valores enteros de 20 bytes de tamaño, y se utiliza para representar direcciones en la blockchain.

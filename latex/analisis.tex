@@ -5,7 +5,7 @@ Por esto, nos interesa explorar en particular cuáles son las diferencias produc
 Para responder estas preguntas analizamos el desempeño de los prototipos implementados usando ambos algoritmos sobre algunos casos de prueba.
 
 \subsection{Caso \texttt{RoomThermostat}}
-El primer caso que evaluamos fue el contrato \texttt{RoomThermostat} perteneciente al benchmark ``Microsoft Azure Blockchain Workbench" \cite{azure-benchmark}, cuyo código fuente podemos ver en la figura \ref{fig:rooomthermostat-solidity}.
+El primer caso que evaluamos fue el contrato \texttt{RoomThermostat} perteneciente al benchmark ``Microsoft Azure Blockchain Workbench" \cite{azure-benchmark}, cuyo código fuente podemos ver en el fragmento de código \ref{fig:rooomthermostat-solidity}.
 Es un contrato pequeño, con pocos métodos y un invariante sencillo.
 Para poder emplear el algoritmo clásico sobre este contrato, el invariante propuesto fue el siguiente:
 \begin{lstlisting}[language=Solidity]
@@ -33,7 +33,7 @@ En ambos casos la EPA generada fue la misma, una máquina de estados sencilla de
 
 \subsection{Caso \texttt{BoundedStack}}
 El siguiente caso que evaluamos fue el ejemplo teórico que expusimos en la sección \ref{sec:subaproximacion}, el contrato \texttt{BoundedStack}, con intención de evidenciar las subaproximaiones realizadas por el algoritmo nuevo.
-El código del contrato se encuentra en la imagen \ref{code:solidity-bounded-stack}.
+El código del contrato se encuentra en el fragmento de código \ref{code:solidity-bounded-stack}.
 Nos interesa corroborar el comportamiento de ambos algoritmos, si se produce alguna subaproximación, y cuáles.
 
 Lo primero que vimos al evaluar la abstracción generada por el algoritmo alternativo sobre el contrato \texttt{BoundedStack} lo podemos ver en la imagen \ref{fig:buggy-bounded-stack-epa}.
@@ -83,9 +83,7 @@ Esta diferencia cercana a constante posiblemente se deba a que todos los contrat
 
 \begin{figure}[h]
     \centering
-    \begin{subfigure}{0.65\textwidth}
-        \includegraphics[width=\textwidth]{figs/classic_vs_alternativo.png}
-    \end{subfigure}
+    \includegraphics[width=0.65\textwidth]{figs/classic_vs_alternativo.png}
     \label{fig:classic-vs-alternativo}
     \caption{Tiempo promediado para 5 ejecuciones (en horas) de la generación de abstracciones del prototipo que implementa el algoritmo alternativo y el algoritmo clásico}
 \end{figure}
@@ -106,7 +104,7 @@ La separación de la ejecución del algoritmo en etapas la hicimos en estas dos:
     \item La solución de queries de satisfacibilidad sobre las transiciones en la EPA
 \end{enumerate}
 Donde notoriamente incluimos el desplegado simbólico del contrato en la misma etapa que la ejecución de los métodos.
-Refiriéndonos al algoritmo alternativo \ref{alg:alternativo}, podemos ver que este alterna entre estas dos etapas.
+Refiriéndonos al algoritmo alternativo, podemos ver que este alterna entre estas dos etapas.
 Nos resulta de interés ver cuál, si alguna, consume la mayor parte del tiempo de ejecución.
 
 A continuación indicamos cuál fue la división en niveles de abstracción que hicimos de las funcionalidades de Manticore.
@@ -121,7 +119,7 @@ La manera en la que se realizaba la ejecución simbólica y la generación de la
           Los métodos registrados bajo este nivel fueron \texttt{\_is\_sat}, \texttt{\_get\_value} y \texttt{\_\_get\_value\_all}.
 \end{enumerate}
 Cada uno de los métodos fue modificado para medir el tiempo empleado entre el principio y el fin de la zona delimitada de interés.
-Por ejemplo, en la figura \ref{code:getvalueall-modification} podemos ver los cambios introducidos en el método \texttt{\_\_get\_value\_all} del \textbf{Nivel SMT solver} para registrar el tiempo.
+Por ejemplo, en el fragmento de códgio \ref{code:getvalueall-modification} podemos ver los cambios introducidos en el método \texttt{\_\_get\_value\_all} del \textbf{Nivel SMT solver} para registrar el tiempo.
 
 \begin{lstlisting}[language=Python,
     label={code:getvalueall-modification},
@@ -163,7 +161,7 @@ La resolución de predicados para consultar por la presencia de transiciones en 
 Por ejemplo, para el contrato \texttt{HelloBlockchain}, podemos ver que a pesar que el tiempo total promedió cercano los 94 minutos, la etapa de resolución de queries demoró tan sólo valores cercanos a los 12 minutos.
 Por otro lado, la suma del tiempo empleado en promedio por ambas etapas resulta a simple vista idéntico al tiempo total promedio que se pudo medir, por lo que tampoco observamos un consumo inusualmente alto de tiempo por algún otro aspecto del análisis sin considerar.
 
-En la figura \ref{tab:performance} podemos ver un caso de estudio de los resultados obtenidos en las mediciones del tiempo empleado en cada nivel de abstracción de los métodos de Manticore.
+En la tabla \ref{tab:performance} podemos ver un caso de estudio de los resultados obtenidos en las mediciones del tiempo empleado en cada nivel de abstracción de los métodos de Manticore.
 Nos limitamos a analizar los valores obtenidos para el contrato \texttt{HelloBlockchain} para no mezclar los valores de distintos contratos, debido a que nos interesa señalar las relaciones entre los valores para algunos de los métodos.
 Haciendo memoria sobre el análisis de la figura \ref{fig:tiempo-categorias}, podemos ver que los aproximadamente 713 segundos empleados por el método \texttt{generateTestCases}, que es el más externo de todos, representan casi la totalidad (12 minutos) del tiempo empleado por la etapa de solución de queries del programa.
 De hecho, los métodos \texttt{solve\_one\_n\_batched} y \texttt{get\_value\_in\_batch}, que pertenecen a un nivel de abstracción menor, siguen siendo responsables por la mayoría del tiempo empleado (y si observamos el número de veces que cada uno fue llamado, a fines del análisis que estamos haciendo ambos métodos resultan prácticamente iguales).
