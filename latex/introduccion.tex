@@ -2,19 +2,20 @@ Las redes de blockchain siguen un protocolo para manejar un registro distribuido
 La participación en estas redes es por diseño anónima y descentralizada, y hace gran hincapié en la resistencia del sistema a ataques criptográficos.
 Una vez registrada, resulta casi imposible  alterar información introducida en una blockchain.
 A fines prácticos, una transacción en una de estas bases de datos suele ser considerada eterna e inmutable.
-Adicionalmente, la cadena de bloques propiamente dicha, es decir, el historial completo de la información registrada, es transparente y pública \cite{bitcoin-overview}.
+Adicionalmente, la cadena de bloques propiamente dicha, es decir, el historial de la información registrada, es transparente y pública \cite{bitcoin-overview} \cite{survey-of-blockchain-security}.
 
-Desde sus orígenes, estas tecnologías se utilizaron para construir un ``libro contable'' distribuido  de transacciones financieras, como lo hace la red de bitcoin \cite{??}.
-Desde hace un tiempo, otras redes utilizan su blockchain para emular de manera distribuida la ejecución de software.
-Esta capacidad de cómputo está íntimimamente integrada al diseño de la blockchain, y suele estar atada a un modelo de cómputo particular.
-Para la ejecución de sus contratos inteligentes o \textit{smart contracts} (que son los programas que se ejecutan en la blockchain), Ethereum provee la \emph{Ethereum Virtual Machine}\cite{ethereum-yellow-paper}, una máquina de pila de profundidad finita, junto con Solidity\cite{solidity}, un lenguaje de programación compilado curly-brace.
-Otro ejemplo es Algorand, que provee la \textit{Algorand Virtual Machine} \cite{algorand-avm}, otra máquina de pila junto con TEAL, un lenguaje tipo assembly.
+Desde el origen de Bitcoin en 2009, estas tecnologías se utilizaron para construir un ``libro contable'' distribuido  de transacciones financieras \cite{survey-of-blockchain-security}.
+Más adelante, Ethereum es pionera en 2014 \cite{ethereum-white-paper} y se torna desde entonces la más popular de las redes que utilizan su blockchain para soportar de manera distribuida la ejecución de software.
+A los programas que se ejecutan en las blockchain se los conoce como contratos inteligentes o \textit{smart contracts} y la capacidad de computarlos se integra íntimiamente al diseño de las mismas.
+De hecho, los protocolos de consenso de las blockchains que soportan smart contracts quedan firmemente atados al modelo de cómputo elegido.
+Como ejemplo, la red Ethereum provee la \emph{Ethereum Virtual Machine}\cite{ethereum-yellow-paper}, una máquina de pila de profundidad finita, y para su programación desarrolló Solidity\cite{solidity}, un lenguaje de programación compilado curly-brace.
+Otra blockchain popular que soporta smart contracts es Algorand, mediante la \textit{Algorand Virtual Machine} \cite{algorand-avm}, otra máquina de pila junto a TEAL, el lenguaje de programación tipo assembly correspondiente.
 
 %El código y estado de los programas es parte de la información guardada en la blockchain.
-Una propiedad de las blockchains como sistema de cómputo distribuido es el modo en el que los contratos inteligentes son incluidos en la blockchain, que garantiza la seguridad de su ejecución \cite{??}.
-La inmutabilidad de las transacciones registradas en la red asegura que los contratos no puedan ser modificados, otorgando garantía a los usuarios de que el comportamiento de los contratos se mantendrá siempre estable.
-Además, dado que los cambios en el estado del programa por transacciones son registrados en la blockchain, estos también se consideran irreversibles.
-Esto, a pesar de las garantías de estabilidad que les garantiza a los usuarios, significa que los defectos en la implementación de los contratos inteligentes no pueden ser reparados, y las transacciones no deseadas originadas de estos defectos no pueden ser revertidas.
+Una propiedad de las blockchains como sistema de cómputo distribuido es que el modo en el que los contratos inteligentes son incluidos en la blockchain garantiza la seguridad de su ejecución, en el sentido de que puede asegurarse que el resultado obtenido será el mismo que el generado por un código fuente que los usuarios pueden conocer \cite{survey-of-blockchain-security}.
+La inmutabilidad de las transacciones registradas asegura que los contratos no pueden ser modificados, lo que además garantiza a los usuarios que el comportamiento de los contratos se mantendrá siempre estable.
+Por otro lado, dado que los cambios en el estado del programa son registrados en la blockchain, estos también se consideran irreversibles.
+Esto, a pesar de ciertas garantías de estabilidad que les otorga a los usuarios, significa que los defectos en la implementación de los contratos inteligentes no pueden ser reparados, y las transacciones no deseadas originadas de estos defectos no pueden ser revertidas.
 Si se quieren evitar defectos, la verificación y validación de los contratos antes de publicarlos en la red es de suma importancia.
 De hecho, los ataques a contratos inteligentes para abusar \textit{bugs} han causado históricamente pérdidas materiales a miles de personas \cite{DAO}.
 
