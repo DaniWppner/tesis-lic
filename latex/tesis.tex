@@ -1,4 +1,5 @@
 %!LW recipe=pdflatex -> bibtex -> pdflatex * 2
+\PassOptionsToPackage{table}{xcolor} % to go around conflict in the options used somewhere else
 
 \documentclass[11pt,a4paper,twoside]{tesis}
 % SI NO PENSAS IMPRIMIRLO EN FORMATO LIBRO PODES USAR
@@ -23,6 +24,7 @@
 \usepackage{caption}
 \usepackage{subcaption}
 \usepackage{svg}
+\usepackage{booktabs} % For better table rules
 \newcommand{\pluseq}{\mathrel{+}=}
 \usepackage{chngpage}
 \usepackage[skins]{tcolorbox}

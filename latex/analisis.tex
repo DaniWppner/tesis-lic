@@ -85,49 +85,51 @@ A pesar de que en todos los contratos analizados podamos ver una diferencia sign
 La mejora en tiempo parecería ser relativamente constante a lo largo de los cuatro contratos analizados, habiendo tardado el algoritmo alternativo alrededor de diez horas menos que el clásico.
 Esta diferencia cercana a constante posiblemente se deba a que todos los contratos eran muy simples (recordemos la baja cantidad de métodos externos en \texttt{SimpleMarketplace} y \texttt{RoomThermostat}), por lo que no se pudo observar la diferencia en comportamiento que habría en contratos más complejos.
 
+\begin{figure}[h]
+    \centering
+    \begin{subfigure}{0.65\textwidth}
+        \includegraphics[width=\textwidth]{figs/classic_vs_alternativo.png}
+        \label{fig:classic-vs-alternativo}
+    \end{subfigure}
+    \caption{Tiempo promediado para 5 ejecuciones (en horas) de la generación de abstracciones del prototipo que implementa el algoritmo alternativo y el algoritmo clásico}
+\end{figure}
+
 A pesar de que la mejora del algoritmo alternativo frente al clásico fuese tan grande, los valores obtenidos con el algoritmo alternativo siguieron sin resultar razonables.
 Si observamos los valores obtenidos, el tiempo de cómputo en promedio fue de entre media hasta casi tres horas, lo que no resulta aplicable para un usuario de la herramienta que pretenda generar las abstracciones en tiempo real.
 Por este motivo decidimos realizar los experimentos que mostraremos a continuación, en los que buscamos conseguir mejoras en el tiempo de ejecución o claridad en la razón de que tarde tanto.
 
-\begin{figure}
-    \centering
-    \begin{subfigure}{0.65\textwidth}
-        \includegraphics[width=\textwidth]{figs/classic_vs_alternativo.png}
-        \caption{Tiempo de ejecución (en promedio) de la generación de abstracciones del prototipo que implementa el algoritmo alternativo y el algoritmo clásico}
-        \label{fig:classic-vs-alternativo}
-    \end{subfigure}
-\end{figure}
 
 \section{Evaluación más detallada del tiempo de ejecución del algoritmo alternativo}
 Para mejorar el tiempo de ejecución del prototipo buscamos identificar en qué partes del análisis era que se consumía la mayor parte del tiempo empleado.
 Lo primero que hicimos fue identificar ``etapas'' en el algoritmo alternativo que pudimos diferenciar para medir el tiempo empleado en cada una de ellas.
 Por otro lado analizamos el código fuente de Manticore y diferenciamos en distintos niveles de abstracción las funcionalidades que estábamos usando.
 
-Separamos la ejecución del prototipo en tres etapas:
+La separación de la ejecución del algoritmo en etapas la hicimos en estas dos:
 \begin{enumerate}
-    \item El desplegado simbólico del contrato
     \item La ejecución simbólica de los métodos
     \item La solución de queries de satisfacibilidad sobre las transiciones en la EPA
 \end{enumerate}
-Donde notoriamente el algoritmo alternativo comienza en la etapa 1., y luego alterna entre la etapa 3. y la 2. hasta finalizar.
+Donde notoriamente incluimos el desplegado simbólico del contrato en la misma etapa que la ejecución de los métodos.
+Refiriéndonos al algoritmo alternativo \ref{alg:alternativo}, podemos ver que este alterna entre estas dos etapas.
+Nos resulta de interés ver cuál, si alguna, consume la mayor parte del tiempo de ejecución.
 
 A continuación indicamos cuál fue la división en niveles de abstracción que hicimos de las funcionalidades de Manticore.
 En particular, por como es la arquitectura de multithreading y \textbf{\texttt{workers}} de Manticore, solo pudimos hacer esta distinción en los métodos relacionados a la resolución de valores simbólicos.
-La manera en la que se realizaba la ejecución simbólica y la generación de las path conditions era demasiado dependiente de objetos creados dinámicamente como para poder recibir el mismo tipo de análisis.
+La manera en la que se realizaba la ejecución simbólica y la generación de las path conditions era demasiado dependiente de objetos creados dinámicamente como para poder ser analizada de la misma manera.
 \begin{enumerate}
     \item \textbf{Nivel Externo}\footnote{En el momento de realizar las mediciones, los valores para este nivel se registraron bajo el nombre de  ``Nivel 3''} : utilizado para medir el tiempo que consumían las funciones de la API de manticore que nuestro prototipo llamaba directamente.
-          La única función cuyo tiempo medimos en este nivel fue \texttt{generateTestcases}.
+          La única función cuyo tiempo medimos en este nivel fue \texttt{generateTestCases}.
     \item \textbf{Nivel \texttt{state}} : Utilizado en las funciones del módulo \textbf{\texttt{state}} que identificamos que eran llamadas.
           Los métodos registrados bajo este nivel fueron \texttt{can\_be\_true} y \texttt{solve\_\allowbreak one\_\allowbreak n\_\allowbreak batched}.
-    \item \textbf{Nivel SMT solver} : Utilizado en alrededor de cada llamado directo al SMT solver en los métodos del módulo \textbf{\texttt{smtlib}}.
+    \item \textbf{Nivel SMT solver} : Utilizado alrededor de cada llamado directo al SMT solver en los métodos del módulo \textbf{\texttt{smtlib}}.
           Los métodos registrados bajo este nivel fueron \texttt{\_is\_sat}, \texttt{\_get\_value} y \texttt{\_\_get\_value\_all}.
 \end{enumerate}
-Cada uno de los métodos fue modificado para medir el tiempo desde el principio de la zona de interés hasta el fin de la misma.
-Por ejemplo, en la figura \ref{code:getvalueall-modification} podemos ver los cambios introducidos al método \texttt{\_\_get\_value\_all} para registrar el tiempo.
+Cada uno de los métodos fue modificado para medir el tiempo empleado entre el principio y el fin de la zona delimitada de interés.
+Por ejemplo, en la figura \ref{code:getvalueall-modification} podemos ver los cambios introducidos en el método \texttt{\_\_get\_value\_all} del \textbf{Nivel SMT solver} para registrar el tiempo.
 
 \begin{lstlisting}[language=Python,
     label={code:getvalueall-modification},
-    caption=\text{Método \texttt{\_\_get\_value\_all} del modulo \textbf{\texttt{smtlib}} modificado para registrar el tiempo empleado por la llamada al SMT solver. El resaltado indica las líneas agregadas para registrar el tiempo.},
+    caption={Método \texttt{\_\_get\_value\_all} del modulo \textbf{\texttt{smtlib}} modificado para registrar el tiempo empleado por la llamada al SMT solver. El resaltado indica las líneas agregadas para registrar el tiempo.},
     captionpos=b]
 def __getvalue_all(self, expressions_str: List[str], is_bv: List[bool]) -> Dict[str, int]:
     (*@| \hl{start = time.time()} |@*)
@@ -142,47 +144,62 @@ def __getvalue_all(self, expressions_str: List[str], is_bv: List[bool]) -> Dict[
 \end{lstlisting}
 
 De  entre los métodos a los que les registramos el tiempo de ejecución, sabíamos que los métodos en \textbf{Nivel Externo} solo eran ejecutados cuando el prototipo implementado los llamaba explícitamente.
-Por otro lado, los métodos en \textbf{Nivel \texttt{state}} eran métodos que a veces eran llamados dsde la implementación directamente, pero además eran ejecutados como métodos internos de otros procesos durante el análisis.
+Por otro lado, los métodos en \textbf{Nivel \texttt{state}} eran métodos que a veces eran llamados desde la implementación directamente, pero además eran ejecutados como métodos internos de otros procesos durante el análisis.
 Por último, los métodos del \textbf{Nivel SMT solver} eran ejecutados en diversos momentos del análisis.
 
-Una vez hecha esta separación en etapas del algoritmo y niveles de abstracción que nos resultaba de interés investigar, medimos el tiempo total en promedio empleado por cada etapa y cada nivel de abstracción en una ejecución del prototipo.
-Para esto, al igual que antes, analizamos el rendimiento en los contratos \texttt{DefectiveComponentCounter}, \texttt{RoomThermostat}, \texttt{BasicProvenance} y \texttt{SimpleMarketplace} del benchmark Microsoft Azure Blockchain Workbench \cite{azure-benchmark}.
-Por otro lado, además, calculamos para cada uno de los niveles de abstracción diferenciados la cantidad de veces que este mismo fue registrado y el tiempo total empleado.
+Una vez hecha esta separación en etapas del algoritmo y niveles de abstracción, medimos el tiempo total en promedio empleado por cada etapa y cada nivel de abstracción.
+Para esto, al igual que antes, analizamos el rendimiento en los contratos \texttt{DefectiveComponent\allowbreak Counter}, \texttt{RoomThermostat}, \texttt{BasicProvenance}, \texttt{SimpleMarketplace} y \texttt{HelloBlockchain} del benchmark Microsoft Azure Blockchain Workbench \cite{azure-benchmark}.
+Por otro lado, además, calculamos para cada uno de los niveles de abstracción la cantidad de veces que este mismo fue registrado y el tiempo total empleado.
 Esto fue para intentar percibir discrepancias entre los niveles que espérabamos que consumieran la mayoría del tiempo y lo que pudiéramos medir.
 
-En la figura \textcolor{red}{\textbf{dani hace la figura escribila}} podemos ver los resultados obtenidos de estas mediciones.
+\subsection{Resultados}
+
+\begin{figure}
+    \includegraphics[width=\textwidth]{figs/categories-bar-graph.png}
+    \caption{Proporción del tiempo de ejecución promediado entre 5 (en horas) del algoritmo alternativo.
+        En naranja el tiempo empleado por la ejecución simbólica de los métodos, en violeta por la resolución de queries de predicados y en líneas punteadas el tiempo total (medido) empleado por el algoritmo.}
+    \label{fig:tiempo-categorias}
+\end{figure}
+
+En la figura \ref{fig:tiempo-categorias} podemos ver las mediciones obtenidas sobre el tiempo empleado por las dos etapas del algoritmo.
+Se ve que la gran mayoría del tiempo empleado durante la generación de EPAs con el algoritmo involucrado fue consumido por la ejecución simbólica de los métodos.
+La resolución de predicados para consultar por la presencia de transiciones en la EPA, en cambio, fue comparativamente pequeña.
+Por ejemplo, para el contrato \texttt{HelloBlockchain}, podemos ver que a pesar que el tiempo total promedió cercano los 94 minutos, la etapa de resolución de queries demoró tan sólo valores cercanos a los 12 minutos.
+Por otro lado, la suma del tiempo empleado en promedio por ambas etapas resulta a simple vista idéntico al tiempo total promedio que se pudo medir, por lo que tampoco observamos un consumo inusualmente alto de tiempo por algún otro aspecto del análisis sin considerar.
+
+En la figura \ref{tab:performance} podemos ver un caso de estudio de los resultados obtenidos en las mediciones del tiempo empleado en cada nivel de abstracción de los métodos de Manticore.
+Nos limitamos a analizar los valores obtenidos para el contrato \texttt{HelloBlockchain} para no mezclar los valores de distintos contratos, debido a que nos interesa señalar las relaciones entre los valores para algunos de los métodos.
+Haciendo memoria sobre el análisis de la figura \ref{fig:tiempo-categorias}, podemos ver que los aproximadamente 713 segundos empleados por el método \texttt{generateTestCases}, que es el más externo de todos, representan casi la totalidad (12 minutos) del tiempo empleado por la etapa de solución de queries del programa.
+De hecho, los métodos \texttt{solve\_one\_n\_batched} y \texttt{get\_value\_in\_batch}, que pertenecen a un nivel de abstracción menor, siguen siendo responsables por la mayoría del tiempo empleado (y si observamos el número de veces que cada uno fue llamado, a fines del análisis que estamos haciendo ambos métodos resultan prácticamente iguales).
+Sin embargo, al realizar el salto a los métodos de \textbf{Nivel SMT solver}, vemos que comparativamente estos casi ni aportaron al tiempo empleado.
+Los tres métodos \texttt{\_getvalue\_all}, \texttt{\_is\_sat} y \textt{\_getvalue}, todos llamados de manera directa por los métodos del nivel superior, apenas aportan 4 segundos de los 12 minutos involucrados.
+
+De aquí podemos intentar obtener dos conclusiones.
+O bien las llamadas al SMT solver funcionan de una manera asincrónica, que no pudimos capturar en nuestras mediciones, o bien en efecto la mayoría del tiempo consumido por consultas a Manticore es empleado no en tiempo de procesamiento del SMT solver, sino en alguna etapa de la aplicación misma (que no fuimos capaces de medir).
+Considerando ya que la mayor parte del tiempo de ejecución de la aplicación fue consumido por la etapa de ejecución simbólica, y no por la de resolución de queries, es posible que el preprocesamiento de las condiciones simbólicas de Manticore, construido durante la etapa de ejecución simbólica, sea extraordinariamente complejo y por ende caro en tiempo de ejecución.
+Además, un rudimentario y primer análisis del código involucrado sugiere que los llamados realizados al SMT solver son completamente sincrónicos, aunque no se pudo realizar un experimento para corroborar ninguna de estas dos hipótesis.
 
 
-Al evaluar el funcionamiento del prototipo buscamos responder las siguientes preguntas:
-\begin{enumerate}
-    \item ¿Son correctas las EPAs que genera el prototipo?
-    \item ¿Cuál es su performance en contratos inteligentes reales?
-\end{enumerate}
-Para responder estas preguntas, pusimos el prototipo a prueba contra algunos contratos provenientes de Microsoft Azure Blockchain Workbench \cite{azure-benchmark}.
-Este conjunto de contratos había sido utilizado anteriormente por Godoy et al. \cite{predicate-abstraction-for-smart-contract-validation}, por lo que convenientemente ya contamos con las EPAs correspondientes.
-Ejecutamos el prototipo cinco veces, obteniendo el promedio de su tiempo de ejecución sobre los contratos seleccionados y luego corroboramos que la EPA generada fuera isomórfica a la obtenida en los estudios anteriores.
-%Además, pusimos a prueba la cantidad de accounts necesarias para el funcionamiento del prototipo.
-Los resultados intermedios indicaron que para los contratos propuestos era suficiente realizar la simulación con dos \textit{accounts}, por lo que utilizamos esa cantidad para los experimentos.
-Los resultados de esta experimentación se ven resumidos en la tabla \ref{tab:resultados}.
-El prototipo generó EPAs correctas en todos los casos.
-Sin embargo, el tiempo de cálculo es de entre media y casi tres horas, considerando incluso que los ejemplos utilizados son relativmente pequeños.
-Algunos resultados intermedios indican que este tiempo es consumido principalmente por Manticore para la generación de \textit{path conditions}.
-Debido a la rigurosidad con la que emula Manticore el comportamiento de la blockchain, la herramienta demora incluso para la ejecución simbólica de transiciones sencillas.
+% Define custom colors
+\definecolor{color1}{rgb}{0.9, 0.9, 0.9} % Light gray
+\definecolor{color2}{rgb}{0.8, 0.8, 0.8} % Medium gray
+\definecolor{color3}{rgb}{0.7, 0.7, 0.7} % Dark gray
 
-\vspace{-2.2em}
-
-\begin{table}
-    %\begin{adjustwidth}{-0.5in}{-0.5in}% adjust the L and R margins by 1 inch
-    \caption{Resumen de la experimentación. \textbf{LOC} es cantidad de lineas de código, \textbf{Tiempo de ejecución} es el promedio del tiempo de ejecución medido en minutos, $\boldsymbol{\sigma}$ es el desvío estandard medido en segundos y \textbf{¿Es correcto?} indica si la EPA generada es isomorfa con la provista anteriormente.}\label{tab:resultados}
-    \begin{tabular}{|l|l|l|l|l|}
-        \hline
-        Contrato                  & LOC & Tiempo de ejecución (min) & $\sigma$ (s) & ¿Es correcto? \\
-        \hline
-        DefectiveComponentCounter & 33  & $29$                      & $7$          & Sí            \\
-        SimpleMarketplace         & 66  & $186$                     & $800$        & Sí            \\
-        BasicProvenance           & 48  & $40$                      & $6$          & Sí            \\
-        RoomThermostat            & 48  & $138$                     & $600$        & Sí            \\
-        \hline
+\begin{table}[ht]
+    \centering
+    \begin{tabular}{l @{\hskip 30pt} r @{\hskip 30pt} r}
+        \toprule
+        \textbf{Método de Manticore}                      & \textbf{Número de llamados} & \textbf{Tiempo empleado (s)} \\
+        \midrule
+        \rowcolor{color1} \texttt{\_getvalue}             & 6                           & 0.00458                      \\
+        \rowcolor{color1} \texttt{\_is\_sat}              & 92                          & 0.52989                      \\
+        \rowcolor{color2} \texttt{state.can\_be\_true}    & 24                          & 0.13410                      \\
+        \rowcolor{color1} \texttt{\_getvalue\_all}        & 32                          & 3.73966                      \\
+        \rowcolor{color2} \texttt{get\_value\_in\_batch}  & 54                          & 712.47606                    \\
+        \rowcolor{color2} \texttt{solve\_one\_n\_batched} & 54                          & 713.05950                    \\
+        \rowcolor{color3} \texttt{generateTestCases}      & 3                           & 713.35846                    \\
+        \bottomrule
     \end{tabular}
-    %\end{adjustwidth}
+    \caption{Tiempo empleado por los métodos de Manticore involucrados en las queries por transiciones en la EPA para el contrato \texttt{HelloBlockchain}. En el color más oscuro los métodos del \textbf{Nivel Externo}, en el color intermedio los del \textbf{Nivel \texttt{state}} y en el más claro los del \textbf{Nivel SMT solver}.}
+    \label{tab:performance}
 \end{table}
