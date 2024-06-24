@@ -119,11 +119,9 @@ Este último, etiquetado ``\texttt{vacio}'' indica que ningún método se encuen
 
 \begin{figure}
     \centering
-    \begin{subfigure}{0.45\textwidth}
-        \includegraphics{figs/simple-merketplace-epa.png}
-        \caption{EPA de \texttt{SimpleMarketplace}. Las etiquetas en los estados indican los métodos que se encuentran habilitados. Las etiquetas en las transiciones indican el método por el que ocurre la transición.}
-        \label{fig:epa-example}
-    \end{subfigure}
+    \includegraphics[width=0.45\textwidth]{figs/simple-merketplace-epa.png}
+    \caption{EPA de \texttt{SimpleMarketplace}. Las etiquetas en los estados indican los métodos que se encuentran habilitados. Las etiquetas en las transiciones indican el método por el que ocurre la transición.}
+    \label{fig:epa-example}
 \end{figure}
 
 \section{Modelo Formal}
@@ -150,7 +148,7 @@ Dicho eso, llamaremos \textit{configuraciones} a las posibles combinaciones de l
 \end{definition}
 
 Una particularidad presente en los métodos de los contratos inteligentes es que algunas instrucciones como \textcolor{magenta}{\texttt{msg.sender}}, \textcolor{magenta}{\texttt{msg.value}}, \textcolor{magenta}{\texttt{tx.gasprice}} o \textcolor{magenta}{\texttt{tx.origin}}
-\footnote{\textcolor{magenta}{\texttt{msg.value}} indica cuánto Ether está recibiendo el contrato. \textcolor{magenta}{\texttt{tx.gasprice}} indica cuánto Ether se le cobra al remitente por cada unidad de gas (cómputo) utilizada y \textcolor{magenta}{\texttt{tx.origin}} se refiere a el usuario humano que haya enviado el mensaje que disparó la ejecución actual.} hacen referencia a variables de la blockchain.
+\footnote{\textcolor{magenta}{\texttt{msg.value}} indica cuánto Ether está recibiendo el contrato. \textcolor{magenta}{\texttt{tx.gasprice}} indica cuánto Ether se le cobra al remitente por cada unidad de gas utilizada y \textcolor{magenta}{\texttt{tx.origin}} se refiere a el usuario humano que haya enviado el mensaje que disparó la ejecución actual.} hacen referencia a variables de la blockchain.
 Sin embargo podemos modelar estas variables, junto con los parámetros explícitos como input codificable en $\mathds{Z}$ (los números enteros) sin pérdida de generalidad \cite{de-caso-epa}.
 La semántica de un contrato la definimos como el siguiente Labeled Transition System:
 
@@ -172,9 +170,9 @@ Incluso para contratos donde las configuraciones de las variables internas es fi
 
 A la EPA (es decir, el LTS abstracto) la definimos entonces de la siguiente manera:
 
-\begin{definition}\label{definicion-epa}(Enabledness-Preserving-Abstraction) Dado $SC = \langle M, F, R, inv, init \rangle$ un contrato inteligente y $L_c = \langle \sigma , S_c, S_{0c}, \Delta _c \rangle$ su LTS concreto, entonces el LTS asbtracto $L_A = \langle M \cup \hat{\tau} , 2^M, P_0, \Delta _A \rangle$ es una EPA del contrato y $\alpha : S_c \rightarrow 2^M$ es la función de abstracción, donde se cumple que:
+\begin{definition}\label{definicion-epa}(Enabledness-Preserving-Abstraction) Dado $SC = \langle M, F, R, inv, init \rangle$ un contrato inteligente y $L_c = \langle \sigma , S_c, S_{0c}, \Delta _c \rangle$ su LTS concreto, entonces el LTS asbtracto $L_A = \langle M \cup \hat{\tau} , \text{\#M}, P_0, \Delta _A \rangle$ es una EPA del contrato y $\alpha : S_c \rightarrow \text{\#M}$ es la función de abstracción, donde se cumple que:
     \begin{itemize}
-        \item $2^M$ es el conjunto de partes de $M$
+        \item $\text{\#M}$ es el conjunto de partes de $M$
         \item $\forall s \in S_c \: . \:
                   \alpha(s) = \{m | m \in M \land \exists z \in \mathds{Z} . R_m(s,z) = \textbf{true}\}$
         \item $P_0 = \{\alpha(s_0) | s_0 \in S_{0c} \}$
@@ -183,7 +181,7 @@ A la EPA (es decir, el LTS abstracto) la definimos entonces de la siguiente mane
     \end{itemize}
 \end{definition}
 
-El conjunto de estados de la \textit{EPA} es $2^M$ (el conjunto de partes de las precondiciones).
+El conjunto de estados de la \textit{EPA} es $\text{\#M}$ (el conjunto de partes de los métodos).
 La \textit{función de abstracción} de los estados $s_c$ del LTS concreto a los estados abstractos es $\alpha (s_c) = $ ``el conjunto de métodos cuyas precondiciones son satisfechas por $s_c$''.
 Una transición en la EPA entre los estados $s$ y $s'$ etiquetada con el método $m$ significa que existen algún estado concreto $s_c$ y un valor de entrada $z$ para los que $\alpha(s_c) = s$ y  $F_m(s,z)=s_c'$ con $\alpha(s_c') = s'$.
 Es decir que algún llamado de $m$ a un estado que se abstrae a $s$ nos da de resultado otro estado que se abstrae a $s'$.

@@ -1,3 +1,7 @@
+En las últimas dos secciones vimos las formalizaciones relacionadas con las EPAs y las capacidades de Manticore.
+A continuación, presentaremos dos algoritmos para la construcción de EPAs.
+El algoritmo clásico es presentado, con algunas diferencias de notación, como fue presentado por De Caso et. al en 2013 \cite{de-caso-epa}.
+El algoritmo novedoso hace uso específicamente de ejecución simbólica y, al haber sido diseñado para Manticore, se adapta a las peculiaridades mencionadas en la sección anterior.
 
 \section{Construcción clásica de EPAs}
 \label{sec:algoritmo-clasico}
@@ -8,9 +12,7 @@ Por cuestiones de notación, para ver el algoritmo de generación de EPAs es con
     Dados un contrato $SC = \langle M, F, R, inv, init \rangle$ y un conjunto de metodos, $\mathcal{M} \subseteq M$, definimos $pred_\mathcal{M} : \mathcal{C} \rightarrow \{\textbf{true}, \textbf{false}\}$ como
     \[pred_\mathcal{M}(c) \iff inv(c) \land \bigwedge\limits_{m \in \mathcal{M}} \exists p \in \mathds{Z} . R_m(c,p) \land \bigwedge\limits_{   m \notin \mathcal{M}} \nexists p \in \mathds{Z} . R_m(c,p)\]
 \end{definition}
-Este algoritmo genera la porción de la EPA que es alcanzable desde $P_0$ (los estados iniciales), realizando \textit{Breadth-First-Search} en el grafo de las transiciones \cite{de-caso-epa}.
-El algoritmo es el siguiente:
-
+El algoritmo, que presentamos a continuación, genera la porción de la EPA que es alcanzable desde $P_0$ (los estados iniciales), realizando \textit{Breadth-First-Search} en el grafo de las transiciones \cite{de-caso-epa}.
 
 \begin{algorithm}[H]
     \caption{Construcción de EPAs}
@@ -21,7 +23,7 @@ El algoritmo es el siguiente:
         \State $\Delta(s,m) = \emptyset \quad \forall s \in 2^R, m \in M$
         \State $\mathcal{M}^- = \{m \in M | \forall c \: . \: init(c) \Rightarrow \nexists p \in \mathds{Z} \: . \: R_m(c,p)\}$
         \State $\mathcal{M}^+ = \{m \in M | \forall c \: . \: init(c) \Rightarrow \exists p \in \mathds{Z} \: . \: R_m(c,p)\}$
-        \State $P_0^c = \{\mathcal{M} \in 2^M | \mathcal{M}^+ \subseteq \mathcal{M} \land \mathcal{M}^- \cap \mathcal{M} = \emptyset \}$
+        \State $P_0^c = \{\mathcal{M} \in \#M | \mathcal{M}^+ \subseteq \mathcal{M} \land \mathcal{M}^- \cap \mathcal{M} = \emptyset \}$
         \State $P_0 = \{\mathcal{M} \in P_0^c | \exists c . init(c) \land pred_\mathcal{M}(c) \}$
         \State $W =$ Cola con los elementos de $P_0$
         \While{hay un conjunto $\mathcal{M}$ en la cabeza de $W$}
@@ -29,7 +31,7 @@ El algoritmo es el siguiente:
         \For{$m \in \mathcal{M}$}
         \State $\mathcal{N}^- = \{n \in M | \forall c \in \mathcal{C}, p \in \mathds{Z} \: . \: pred_\mathcal{M}(c) \land R_m(c,p) \Rightarrow \nexists p^\prime \in \mathds{Z} \: . \: R_n(F_m(c,p),p^\prime)\}$
         \State $\mathcal{N}^+ = \{n \in M | \forall c \in \mathcal{C}, p \in \mathds{Z} \: . \: pred_\mathcal{M}(c) \land R_m(c,p) \Rightarrow \exists p^\prime \in \mathds{Z} \: . \: R_n(F_m(c,p),p^\prime)\}$
-        \State $S^C = \{\mathcal{N} \in 2^M | \mathcal{N}^+ \subseteq \mathcal{N} \land \mathcal{N}^- \cap \mathcal{N} = \emptyset\}$
+        \State $S^C = \{\mathcal{N} \in \#M | \mathcal{N}^+ \subseteq \mathcal{N} \land \mathcal{N}^- \cap \mathcal{N} = \emptyset\}$
         \For{$\mathcal{N} \in S^C$}
         \If{$ \exists c \in \mathcal{C} \: . \: pred_\mathcal{M} (c) \land \exists p \in \mathds{Z} \: . \: R_m(c,p) \land pred_\mathcal{N}(F_m(c,p)) $}
             \State $\Delta (\mathcal{M},m) = \Delta (\mathcal{M},m) \cup \mathcal{N}$
@@ -50,7 +52,7 @@ Decidir si una transición pertenece o no la EPA, como está planteado en el alg
 Esto en general es indecidible, sin embargo la sugerencia principal consiste en transformar estas preguntas de validez de fórmulas de primer orden en problemas de alcanzabilidad de código, dado que se espera que las precondiciones y los invariantes definidos en la formalización~\ref{definicion-smart-contract} estén debidamente implementados en el contrato.
 
 En general, por optimizaciones de gas, es común que en los métodos externos los contratos definan las precondiciones explícitamente mediante instrucciones \textcolor{magenta}{\texttt{require}}, como en el contrato ejemplo \ref{fig:solidity-example} \texttt{SimpleMarketplace}.
-Dado que los inputs externos nunca garantizan estar bien formados \footnote{La sugerencia es decirlo distinto, pero no se me ocurre como. Se dice así.}, resulta menos costoso para el contrato abortar estas ejecuciones lo antes posible en lugar de hacerlas avanzar hasta llegar a un estado de error.
+Dado que los inputs externos nunca garantizan estar bien formados, resulta menos costoso para el contrato abortar estas ejecuciones lo antes posible en lugar de hacerlas avanzar hasta llegar a un estado de error.
 Sin embargo, debido a que no se espera que sea posible generar instancias que no satisfagan el invariante, por el mismo motivo de ahorro de gas, no es usual contar con una implementación explícita del invariante en el código fuente del contrato.
 Tenerlo implicaría ejecutar código que se espera que dé siempre el mismo resultado, por lo que resulta más eficiente no hacerlo.
 
@@ -85,14 +87,14 @@ Dado que trabajaremos asumiendo que no hay acceso explícito al invariante, la n
 \end{definition}
 El LTS concreto (la semántica) y el LTS abstracto (la EPA) de smart contracts que usan esta definición pueden formalizarse de manera análoga a las secciones anteriores.
 Por cuestiones de notación, introduciremos algunas funciones sobre los caminos posibles en los métodos de un contrato:
-\begin{definition}[Posibles caminos de ejecución de una secuencia de funciones]
+\begin{definition}[Conjunto de posibles caminos de ejecución de una secuencia de funciones]
     Dados un contrato $SC = \langle M, F, R, Constructor \rangle$ definimos la función \texttt{paths\_of} que opera en el dominio de las secuencias de funciones $f_1, f_2, \cdots f_k$ tales que $\forall i, f_i \in F \cup R$:
     \begin{multline}
         \texttt{paths\_of}(f_1, f_2, \cdots f_k) = \{p \: | \: p \text{ es una secuencia de instrucciones del código fuente de SC} \\
         \text{que podría ser un camino que toma la ejecución de } f_1, f_2, \cdots f_k \}
     \end{multline}
 \end{definition}
-En particular, esto se refiere a los caminos que son efectivamente factibles.
+En particular, \texttt{paths\_of} se refiere al conjunto de caminos que son efectivamente factibles.
 Es decir, no se consideran caminos de ejecución para los que no exista una serie de inputs que obligan a recorrerlos.
 \begin{definition}[Resultado simbólico del camino de ejecución en una secuencia de funciones]
     Dados un contrato $SC = \langle M, F, R, Constructor \rangle$ definimos la función \texttt{sym\_res\_of} que opera en el dominio de los caminos de secuencias de funciones:
@@ -103,12 +105,13 @@ Es decir, no se consideran caminos de ejecución para los que no exista una seri
 
 A continuación usaremos la notación ``$\mathcal{M}=sy$'' donde $\mathcal{M}$ es un estado abstracto de la EPA y $sy$ uno de los estados simbólicos mencionados anteriormente.
 Esta notación la usaremos para referirnos a la ``fórmula de compatibilidad'' entre estos dos.
-Brevemente, recordemos que un estado de la EPA $\mathcal{M}$ es un subconjunto de los métodos del contrato, y representa los estados concretos en los que todos los métodos contenidos en el subconjunto se encuentran habilitados, y los demás se encuentran deshabilitados.
+Brevemente, recordemos que un estado de la EPA $\mathcal{M}$ es un subconjunto de los métodos del contrato, y representa los estados concretos en los que los métodos contenidos en el subconjunto se encuentran habilitados, y los demás se encuentran deshabilitados.
 Podremos decir que para un camino de ejecución $p$ de las funciones $R_{m\_1},R_{m\_2} \cdots R_{m\_n}$ el resultado simbólico de $p$, $sy = \texttt{symb\_res\_of}(p)$ es compatible con $\mathcal{M}$ sí y sólo sí para cada $R_m$, el resultado de $R_{m\_i}$ en $sy$ es \textbf{true} $\iff m\_i \in \mathcal{M}$.
 
-Consideremos el siguiente ejemplo para el contrato \texttt{SimpleMarketplace}:
-Sean $\mathcal{M} = \{MakeOffer, Reject\}$ y $p_1$ que representa un camino realizado en llamados a métodos anteriores en \texttt{SimpleMarketplace}.
-Por otro lado sean $p_2 \in \texttt{paths\_of}(R_{MakeOffer}; R_{AcceptOffer}; R_{Reject})$ que representa un camino posible de ejecutar las precondiciones del contrato y $sy = \texttt{symb\_res\_of}(p_1;p_2)$ tal que los resultados de las precondiciones en $sy$ son $\{R_{MakeOffer} = r_1$, $R_{AcceptOffer} = r_2$, $R_{Reject} = r_3\}$.
+Consideremos el siguiente ejemplo para el contrato \texttt{Simple\allowbreak Marketplace}:
+Sean $\mathcal{M} = \{MakeOffer, Reject\}$ y $p_1$ que representa un camino hasta cierto punto de \texttt{SimpleMarketplace}.
+Sea $p_2 \in \texttt{paths\_of}(R_{MakeOffer}; R_{AcceptOffer}; R_{Reject})$ que representa un camino posible de ejecutar las precondiciones del contrato.
+Además, sea $sy = \texttt{symb\_res\_of}(p_1;p_2)$, donde con ``$;$'' notamos la concatenación de caminos, tal que los resultados de las precondiciones en $sy$ son $\{R_{MakeOffer} = r_1$, $R_{AcceptOffer} = r_2$, $R_{Reject} = r_3\}$.
 La fórmula de compatibilidad entre $\mathcal{M}$ y $sy$ será $\Phi = (r_1 = \textbf{true} \land r_2 = \textbf{false} \land r_3 = \textbf{true} \land sy)$ y significa que en la ejecución de $(R_{MakeOffer}; R_{AcceptOffer}; R_{Reject})$ existen valores de entrada que recorren $p_1;p_2$ y que los resultados dan \textbf{true} para \textcolor{orange}{\texttt{MakeOffer}} y \textcolor{orange}{\texttt{Reject}} y false para \textcolor{orange}{\texttt{AcceptOffer}}.
 Dicho de otra manera, esto es que existen parámetros de entrada que generan un estado que se abstrae a $\mathcal{M}$ luego de la ejecución de $p_1$.
 Luego, esto quiere decir que si la fórmula $\Phi$ es satisfacible, entonces tenemos garantía de que luego de ejecutar $p_1$ el contrato \textit{puede} encontrarse en un estado que se abstrae a $\mathcal{M}$.
@@ -118,7 +121,7 @@ El algoritmo para expresar la fórmula de compatibilidad entre $p_1$ y $sy$ es e
 \begin{algorithm}[H]
     \captionsetup{belowskip=0pt}
     \caption{Operador ``$=$'' entre estados de una EPA y resultados simbólicos (ecuación de compatibilidad)}
-    \hspace*{\algorithmicindent} \textbf{Input} $SC = \langle M, F, R \rangle$ contrato \\
+    \hspace*{\algorithmicindent} \textbf{Input} $SC = \langle M, F, R, Constructor \rangle$ contrato \\
     \hspace*{\algorithmicindent} \textbf{Input} $\mathcal{M}$ un estado de la EPA de $SC$ \\
     \hspace*{\algorithmicindent} \textbf{Input} $sy$ resultado simbolico de una ejecución de $SC$ \\
     \hspace*{\algorithmicindent} \textbf{Output} La fórmula de compatibilidad $\Phi$
@@ -136,13 +139,11 @@ El algoritmo para expresar la fórmula de compatibilidad entre $p_1$ y $sy$ es e
     \end{algorithmic}
 \end{algorithm}
 
-Utilizando estas notaciones, podemos presentar el algoritmo que explora la porción de la EPA que es alcanzable desde $P_0$, sin acceso al invariante y haciendo uso de ejecución simbólica.
+Utilizando estas notaciones, podemos presentar el algoritmo\ref{alg:alternativo} que explora la porción de la EPA que es alcanzable desde $P_0$, sin acceso al invariante y haciendo uso de ejecución simbólica.
 Este algoritmo realiza una versión	modificada de \textit{Depth-First-Search} en el grafo de las transiciones, explorando varias aristas del grafo a la vez.
 En particular, en cada iteración del ciclo principal este algoritmo agrega múltiples transiciones a la EPA etiquetadas por un mismo método.
-La exploración siempre se realiza a partir del conjunto de estados de la EPA ``$S_{current}$'' que se actualiza en cada iteración con el conjunto de estados en los que puede resultar la ejecución del último método.
+La exploración siempre se realiza a partir del conjunto de estados de la EPA ``$S_{current}$'' que en cada iteración se actualiza con el conjunto de estados en los que puede resultar la ejecución del último método.
 Cuando esta exploración llega a un punto muerto, se retrocede usando la pila del \textit{DFS} hasta otro punto en el que queden llamados de métodos sin explorar.
-El algoritmo es el siguiente:
-
 \input{epa-algoritmo.tex}
 %\begin{tcolorbox}[blanker,
 %        float=htb!,
@@ -152,8 +153,10 @@ El algoritmo es el siguiente:
 %        bottom=-0.8cm]
 %    \input{epa-algoritmo}
 %\end{tcolorbox}
+
 La decisión de explorar los estados de la EPA de esta manera conjunta se debe a las capacidades de la API programable de Manticore.
 Al ejecutar un método, debemos ejecutarlo en todos los caminos hasta el momento.
+Por este motivo es que exploramos las transiciones desde todos los estados del conjunto ``$S_{current}$'' cada vez, en lugar de realizar una exploración más tradicional en el grafo de transiciones.
 
 Por último, podemos señalar que para garantizar \textit{soundness} de las EPAs generadas, lo tradicional es consultar por la insatisfacibilidad de que una transición pertenezca a la EPA, e incluirla en el resultado en cualquier caso en el que no se pueda demostrar esto.
 Sin embargo, en este caso sólo estamos incluyendo las transiciones para las que tengamos una demostración de su existencia.

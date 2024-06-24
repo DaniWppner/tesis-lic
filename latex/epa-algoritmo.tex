@@ -12,10 +12,10 @@
     \hspace*{\algorithmicindent} \textbf{Output} La \textit{EPA} $L_A =\langle \Sigma, S, P_0, \Delta \rangle$
     \begin{algorithmic}[1]
         \State $\Sigma = M; S = \emptyset$
-        \State $\Delta(s,m) = \emptyset \quad \forall s \in 2^M, m \in M$
+        \State $\Delta(s,m) = \emptyset \quad \forall s \in \#M, m \in M$
         \State $Paths_{pre} = $ \texttt{ paths\_of}($F_{Constructor};R_1;R_2; \dots R_n$)
         \State $Symb_{pre} = \{$\texttt{sym\_res\_of}$(p) | p \in Paths_{pre} \}$
-        \State $P_0 = \{s \in 2^M | \exists sy \in Symb_{pre}$ \textbf{tal que} $SAT(sy= s)\}$
+        \State $P_0 = \{s \in \#M | \exists sy \in Symb_{pre}$ \textbf{tal que} $SAT(sy= s)\}$
         \State $S_{current } = P_0$
         \State $W =$ Pila de tuplas con ($S_{current},Symb_{pre}$)
         \While{hay un elemento en la cabeza de $W$}
@@ -26,7 +26,7 @@
         \State $S_{next} = \emptyset$
         \For{$\{\mathcal{M} \in S_{current } | m \in \mathcal{M} \land (\mathcal{M},m)$ no está marcado\}}
         \State marcar $\{(\mathcal{M},m)\}$
-        \For{$\mathcal{N} \in 2^M $}
+        \For{$\mathcal{N} \in \#M $}
         \If{$\exists sy_1 \in Symb_{pre}, sy_2 \in Symb_{post\_m}$ \textbf{tales que}\\ $SAT(sy_1= \mathcal{M} \land sy_2 = \mathcal{N})$}
         \State $\Delta(\mathcal{M},m) = \Delta(\mathcal{M},m) \cup \mathcal{N} $
         \EndIf

@@ -38,18 +38,16 @@ Nos interesa corroborar el comportamiento de ambos algoritmos, si se produce alg
 
 Lo primero que vimos al evaluar la abstracción generada por el algoritmo alternativo sobre el contrato \texttt{BoundedStack} lo podemos ver en la imagen \ref{fig:buggy-bounded-stack-epa}.
 En esa abstracción  podemos ver que faltan algunas de las transiciones presentes en la EPA del contrato, pero además podemos observar que las transiciones por \textcolor{orange}{\texttt{pop}} siempre llevan al estado desde el que se ejecutó el método.
-Cuando realizamos esta comparación generó bastante confusión, hasta que comprendimos que se debía a un error en el código fuente de \texttt{BoundedStack} que no decrementaba la variable \texttt{size} al ejecutar \textcolor{orange}{\texttt{pop}}.
-Luego de corregir el error, la abstracción generada por el prototipo fue la referenciada en la imagen \ref{fig:bounded-stack-bad-epa}.
-Es decir, la misma que elaboramos durante el ejemplo teórico del comportamiento del algoritmo alternativo.
+Cuando realizamos esta comparación, esta observación generó bastante confusión, hasta que comprendimos que se debía a un defecto en el código fuente de \texttt{BoundedStack} que no decrementaba la variable \texttt{size} al ejecutar \textcolor{orange}{\texttt{pop}}.
+Luego de corregir el defecto, la abstracción generada por el prototipo fue la referenciada en la imagen \ref{fig:bounded-stack-bad-epa}.
+Es decir, la misma que elaboramos durante el ejemplo teórico del comportamiento del algoritmo alternativo, y la que evidenciaba la falencia del algoritmo alternativo para este ejemplo.
 Decidimos incluir este pequeña caso de un error en el código fuente en lugar de omitirlo para ejemplificar que, a pesar de que quede evidenciado que el algoritmo nuevo genere subaproximaciones de las EPAs en la práctica, las abstracciones generadas pueden seguir resultando útiles a la hora de atrapar errores.
 
 \begin{figure}[H]
     \centering
-    \begin{subfigure}{0.45\textwidth}
-        \includegraphics[width=\textwidth]{figs/buggy-bounded-stack-epa.png}
-        \caption{Enabledness Preserving Abstraction del contrato \texttt{BoundedStack} con un error que no decrementa el tamaño luego de ejecutar \textcolor{orange}{\texttt{pop}} }
-        \label{fig:buggy-bounded-stack-epa}
-    \end{subfigure}
+    \includegraphics[width=0.45\textwidth]{figs/buggy-bounded-stack-epa.png}
+    \caption{Enabledness Preserving Abstraction del contrato \texttt{BoundedStack} con un error que no decrementa el tamaño luego de ejecutar \textcolor{orange}{\texttt{pop}} }
+    \label{fig:buggy-bounded-stack-epa}
 \end{figure}
 
 A la hora de emplear el algoritmo clásico sobre el contrato, el invariante propuesto fue el siguiente:
@@ -62,13 +60,13 @@ A la hora de emplear el algoritmo clásico sobre el contrato, el invariante prop
 \end{lstlisting}
 
 Sin embargo, el prototipo desarrollado con el algoritmo clásico no pudo analizar este contrato satisfactoriamente, sino que terminó el analisis por time out.
-Esto se debe a que el paso de restringir las instancias del contrato a aquellas que satisfagan el invariante resultó demasiado difícil para el motor de ejecucion simbólica de Manticore
+Esto se debe a que el paso de restringir las instancias del contrato a aquellas que satisfagan el invariante resultó demasiado difícil para el motor de ejecucion simbólica de Manticore.
 Algunos experimentos y análisis intermedios nos hacen creer que se debe a la pobre representación de las variables de tipo \textcolor{cyan}{\texttt{uint256[]}} del mismo.
 Esto significó que terminamos el análisis comparando la abstracción generada por el algoritmo alternativo no con la generada por el algoritmo clásico, sino con una EPA producida manualmente.
 
 \section{Comparación en tiempo de ejecución entre el algoritmo clásico y el alternativo}
 Otra hipótesis generada durante el desarrollo del algoritmo alternativo fue que el evitar la ejecución de los invariantes mejoraría el tiempo de ejecución.
-Esto se debe a que los invariantes, comparadas con las precondiciones de los métodos externos, son propiedades relativamente complejas que además pueden hablar sobre el estado de variables internas de tipos complejos como arrays, mappings, etc.
+Esto se debe a que los invariantes, comparados con las precondiciones de los métodos externos, son propiedades relativamente complejas que además pueden hablar sobre el estado de variables internas de tipos complejos como arrays, mappings, etc.
 Para evaluar esta hipótesis estudiamos el tiempo de ejecución empleado por los prototipos que implementan el algoritmo alternativo y el clásico en Manticore sobre algunos de los contratos pertenecientes al benchmark Microsoft Azure Blockchain Workbench \cite{azure-benchmark}.
 
 Ya que este mismo benchmark había sido utilizado por Godoy et al. en 2022 \cite{predicate-abstraction-for-smart-contract-validation}, a la hora de experimentar contamos con EPAs de todos los contratos involucrados, por lo que además pudimos usarlas para corroborar la correctitud de las abstracciones generadas.
@@ -84,12 +82,12 @@ Esta diferencia cercana a constante posiblemente se deba a que todos los contrat
 \begin{figure}[h]
     \centering
     \includegraphics[width=0.65\textwidth]{figs/classic_vs_alternativo.png}
-    \label{fig:classic-vs-alternativo}
     \caption{Tiempo promediado para 5 ejecuciones (en horas) de la generación de abstracciones del prototipo que implementa el algoritmo alternativo y el algoritmo clásico}
+    \label{fig:classic-vs-alternativo}
 \end{figure}
 
 A pesar de que la mejora del algoritmo alternativo frente al clásico fuese tan grande, los valores obtenidos con el algoritmo alternativo siguieron sin resultar razonables.
-Si observamos los valores obtenidos, el tiempo de cómputo en promedio fue de entre media hasta casi tres horas, lo que no resulta aplicable para un usuario de la herramienta que pretenda generar las abstracciones en tiempo real.
+Si observamos los valores obtenidos, el tiempo de cómputo en promedio fue de entre media hasta casi ocho horas, lo que no resulta aplicable para un usuario de la herramienta que pretende generar las abstracciones en tiempo real.
 Por este motivo decidimos realizar los experimentos que mostraremos a continuación, en los que buscamos conseguir mejoras en el tiempo de ejecución o claridad en la razón de que tarde tanto.
 
 
