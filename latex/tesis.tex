@@ -1,4 +1,4 @@
-%!LW recipe=pdflatex -> bibtex -> pdflatex * 2
+%!LW recipe=xelatex -> biber -> xelatex*2
 \PassOptionsToPackage{table}{xcolor} % to go around conflict in the options used somewhere else
 
 \documentclass[11pt,a4paper,twoside]{tesis}
@@ -34,6 +34,7 @@
 \usepackage{xcolor}
 \usepackage{listings}
 \usepackage{soul} 
+\usepackage{hyperref}
 
 %SOLIDITY SYNTAX
 \input{solidity-highlighting.tex}
@@ -44,6 +45,7 @@
 \newtheorem{definition}{Definition}[section]
 
 \addbibresource{bibliografia.bib}
+
 \begin{document}
 
 %%%% CARATULA

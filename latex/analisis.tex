@@ -164,7 +164,7 @@ Nos limitamos a analizar los valores obtenidos para el contrato \texttt{HelloBlo
 Haciendo memoria sobre el análisis de la figura \ref{fig:tiempo-categorias}, podemos ver que los aproximadamente 713 segundos empleados por el método \texttt{generateTestCases}, que es el más externo de todos, representan casi la totalidad (12 minutos) del tiempo empleado por la etapa de solución de queries del programa.
 De hecho, los métodos \texttt{solve\_one\_n\_batched} y \texttt{get\_value\_in\_batch}, que pertenecen a un nivel de abstracción menor, siguen siendo responsables por la mayoría del tiempo empleado (y si observamos el número de veces que cada uno fue llamado, a fines del análisis que estamos haciendo ambos métodos resultan prácticamente iguales).
 Sin embargo, al realizar el salto a los métodos de \textbf{Nivel SMT solver}, vemos que comparativamente estos casi ni aportaron al tiempo empleado.
-Los tres métodos \texttt{\_getvalue\_all}, \texttt{\_is\_sat} y \textt{\_getvalue}, todos llamados de manera directa por los métodos del nivel superior, apenas aportan 4 segundos de los 12 minutos involucrados.
+Los tres métodos \texttt{\_getvalue\_all}, \texttt{\_is\_sat} y \texttt{\_getvalue}, todos llamados de manera directa por los métodos del nivel superior, apenas aportan 4 segundos de los 12 minutos involucrados.
 
 De aquí podemos intentar obtener dos conclusiones.
 O bien las llamadas al SMT solver funcionan de una manera asincrónica, que no pudimos capturar en nuestras mediciones, o bien en efecto la mayoría del tiempo consumido por consultas a Manticore es empleado no en tiempo de procesamiento del SMT solver, sino en alguna etapa de la aplicación misma (que no fuimos capaces de medir).

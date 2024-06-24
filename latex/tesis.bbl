@@ -1,0 +1,758 @@
+% $ biblatex auxiliary file $
+% $ biblatex bbl format version 3.1 $
+% Do not modify the above lines!
+%
+% This is an auxiliary file used by the 'biblatex' package.
+% This file may safely be deleted. It will be recreated by
+% biber as required.
+%
+\begingroup
+\makeatletter
+\@ifundefined{ver@biblatex.sty}
+  {\@latex@error
+     {Missing 'biblatex' package}
+     {The bibliography requires the 'biblatex' package.}
+      \aftergroup\endinput}
+  {}
+\endgroup
+
+
+\refsection{0}
+  \datalist[entry]{nty/global//global/global}
+    \entry{algorand-avm}{misc}{}
+      \field{sortinit}{A}
+      \field{sortinithash}{a3dcedd53b04d1adfd5ac303ecd5e6fa}
+      \field{labeltitlesource}{title}
+      \field{title}{Algorand Virtual Machine}
+      \verb{urlraw}
+      \verb https://developer.algorand.org/docs/get-details/dapps/avm/
+      \endverb
+      \verb{url}
+      \verb https://developer.algorand.org/docs/get-details/dapps/avm/
+      \endverb
+    \endentry
+    \entry{echidna}{misc}{}
+      \name{author}{1}{}{%
+        {{hash=2af8f7be0643a7513a2c87bdcbc9751f}{%
+           family={Bits},
+           familyi={B\bibinitperiod},
+           given={Trail},
+           giveni={T\bibinitperiod},
+           prefix={of},
+           prefixi={o\bibinitperiod}}}%
+      }
+      \strng{namehash}{2af8f7be0643a7513a2c87bdcbc9751f}
+      \strng{fullhash}{2af8f7be0643a7513a2c87bdcbc9751f}
+      \strng{bibnamehash}{2af8f7be0643a7513a2c87bdcbc9751f}
+      \strng{authorbibnamehash}{2af8f7be0643a7513a2c87bdcbc9751f}
+      \strng{authornamehash}{2af8f7be0643a7513a2c87bdcbc9751f}
+      \strng{authorfullhash}{2af8f7be0643a7513a2c87bdcbc9751f}
+      \field{extraname}{1}
+      \field{sortinit}{B}
+      \field{sortinithash}{8de16967003c7207dae369d874f1456e}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{title}{Echidna: A Fast Smart Contract Fuzzer}
+      \verb{urlraw}
+      \verb https://github.com/crytic/echidna
+      \endverb
+      \verb{url}
+      \verb https://github.com/crytic/echidna
+      \endverb
+    \endentry
+    \entry{manticore}{misc}{}
+      \name{author}{1}{}{%
+        {{hash=2af8f7be0643a7513a2c87bdcbc9751f}{%
+           family={Bits},
+           familyi={B\bibinitperiod},
+           given={Trail},
+           giveni={T\bibinitperiod},
+           prefix={of},
+           prefixi={o\bibinitperiod}}}%
+      }
+      \strng{namehash}{2af8f7be0643a7513a2c87bdcbc9751f}
+      \strng{fullhash}{2af8f7be0643a7513a2c87bdcbc9751f}
+      \strng{bibnamehash}{2af8f7be0643a7513a2c87bdcbc9751f}
+      \strng{authorbibnamehash}{2af8f7be0643a7513a2c87bdcbc9751f}
+      \strng{authornamehash}{2af8f7be0643a7513a2c87bdcbc9751f}
+      \strng{authorfullhash}{2af8f7be0643a7513a2c87bdcbc9751f}
+      \field{extraname}{2}
+      \field{sortinit}{B}
+      \field{sortinithash}{8de16967003c7207dae369d874f1456e}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{title}{Manticore: Symbolic Execution for Humans}
+      \verb{urlraw}
+      \verb https://github.com/trailofbits/manticore
+      \endverb
+      \verb{url}
+      \verb https://github.com/trailofbits/manticore
+      \endverb
+    \endentry
+    \entry{gasper-protocol}{article}{}
+      \name{author}{1}{}{%
+        {{hash=aad1df1eaf8202bd8dda5cb125b5c4ab}{%
+           family={Buterin},
+           familyi={B\bibinitperiod},
+           given={V},
+           giveni={V\bibinitperiod}}}%
+      }
+      \strng{namehash}{aad1df1eaf8202bd8dda5cb125b5c4ab}
+      \strng{fullhash}{aad1df1eaf8202bd8dda5cb125b5c4ab}
+      \strng{bibnamehash}{aad1df1eaf8202bd8dda5cb125b5c4ab}
+      \strng{authorbibnamehash}{aad1df1eaf8202bd8dda5cb125b5c4ab}
+      \strng{authornamehash}{aad1df1eaf8202bd8dda5cb125b5c4ab}
+      \strng{authorfullhash}{aad1df1eaf8202bd8dda5cb125b5c4ab}
+      \field{extraname}{1}
+      \field{sortinit}{B}
+      \field{sortinithash}{8de16967003c7207dae369d874f1456e}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{month}{05}
+      \field{title}{Combining GHOST and Casper}
+      \field{year}{2020}
+      \verb{doi}
+      \verb 10.48550/arXiv.2003.03052
+      \endverb
+      \verb{urlraw}
+      \verb https://arxiv.org/abs/2003.03052
+      \endverb
+      \verb{url}
+      \verb https://arxiv.org/abs/2003.03052
+      \endverb
+    \endentry
+    \entry{DAO}{misc}{}
+      \name{author}{1}{}{%
+        {{hash=aad1df1eaf8202bd8dda5cb125b5c4ab}{%
+           family={Buterin},
+           familyi={B\bibinitperiod},
+           given={V.},
+           giveni={V\bibinitperiod}}}%
+      }
+      \strng{namehash}{aad1df1eaf8202bd8dda5cb125b5c4ab}
+      \strng{fullhash}{aad1df1eaf8202bd8dda5cb125b5c4ab}
+      \strng{bibnamehash}{aad1df1eaf8202bd8dda5cb125b5c4ab}
+      \strng{authorbibnamehash}{aad1df1eaf8202bd8dda5cb125b5c4ab}
+      \strng{authornamehash}{aad1df1eaf8202bd8dda5cb125b5c4ab}
+      \strng{authorfullhash}{aad1df1eaf8202bd8dda5cb125b5c4ab}
+      \field{extraname}{2}
+      \field{sortinit}{B}
+      \field{sortinithash}{8de16967003c7207dae369d874f1456e}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{title}{Critical update re: Dao vulnerability}
+      \field{year}{2016}
+      \verb{urlraw}
+      \verb https://blog.ethereum.org/2016/06/17/critical-update-re-dao-vulnerability
+      \endverb
+      \verb{url}
+      \verb https://blog.ethereum.org/2016/06/17/critical-update-re-dao-vulnerability
+      \endverb
+    \endentry
+    \entry{ethereum-white-paper}{misc}{}
+      \name{author}{1}{}{%
+        {{hash=aad1df1eaf8202bd8dda5cb125b5c4ab}{%
+           family={Buterin},
+           familyi={B\bibinitperiod},
+           given={V.},
+           giveni={V\bibinitperiod}}}%
+      }
+      \strng{namehash}{aad1df1eaf8202bd8dda5cb125b5c4ab}
+      \strng{fullhash}{aad1df1eaf8202bd8dda5cb125b5c4ab}
+      \strng{bibnamehash}{aad1df1eaf8202bd8dda5cb125b5c4ab}
+      \strng{authorbibnamehash}{aad1df1eaf8202bd8dda5cb125b5c4ab}
+      \strng{authornamehash}{aad1df1eaf8202bd8dda5cb125b5c4ab}
+      \strng{authorfullhash}{aad1df1eaf8202bd8dda5cb125b5c4ab}
+      \field{extraname}{3}
+      \field{sortinit}{B}
+      \field{sortinithash}{8de16967003c7207dae369d874f1456e}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{title}{White Paper: Ethereum: A Next-Generation Smart Contract and Decentralized Application Platform.}
+      \field{year}{2014}
+    \endentry
+    \entry{de-caso-epa}{article}{}
+      \name{author}{4}{}{%
+        {{hash=433fcaa4f299536658dafbdedfa5aa41}{%
+           family={Caso},
+           familyi={C\bibinitperiod},
+           given={Guido\bibnamedelima De},
+           giveni={G\bibinitperiod\bibinitdelim D\bibinitperiod}}}%
+        {{hash=a393103bd8942b522507831d3b9d9626}{%
+           family={Braberman},
+           familyi={B\bibinitperiod},
+           given={Victor},
+           giveni={V\bibinitperiod}}}%
+        {{hash=41ac0d8bfffd92de85098740c95f24ba}{%
+           family={Garbervetsky},
+           familyi={G\bibinitperiod},
+           given={Diego},
+           giveni={D\bibinitperiod}}}%
+        {{hash=e32184d7b20645f5857e1a2633f36f50}{%
+           family={Uchitel},
+           familyi={U\bibinitperiod},
+           given={Sebastian},
+           giveni={S\bibinitperiod}}}%
+      }
+      \list{location}{1}{%
+        {New York, NY, USA}%
+      }
+      \list{publisher}{1}{%
+        {Association for Computing Machinery}%
+      }
+      \strng{namehash}{ae928b7e35ba015e0238361409a49b51}
+      \strng{fullhash}{2fa962da6879777bf1dc0c7d0f2846e4}
+      \strng{bibnamehash}{ae928b7e35ba015e0238361409a49b51}
+      \strng{authorbibnamehash}{ae928b7e35ba015e0238361409a49b51}
+      \strng{authornamehash}{ae928b7e35ba015e0238361409a49b51}
+      \strng{authorfullhash}{2fa962da6879777bf1dc0c7d0f2846e4}
+      \field{sortinit}{C}
+      \field{sortinithash}{4c244ceae61406cdc0cc2ce1cb1ff703}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{abstract}{Code artifacts that have nontrivial requirements with respect to the ordering in which their methods or procedures ought to be called are common and appear, for instance, in the form of API implementations and objects. This work addresses the problem of validating if API implementations provide their intended behavior when descriptions of this behavior are informal, partial, or nonexistent. The proposed approach addresses this problem by generating abstract behavior models which resemble typestates. These models are statically computed and encode all admissible sequences of method calls. The level of abstraction at which such models are constructed has shown to be useful for validating code artifacts and identifying findings which led to the discovery of bugs, adjustment of the requirements expected by the engineer to the requirements implicit in the code, and the improvement of available documentation.}
+      \field{issn}{1049-331X}
+      \field{journaltitle}{ACM Trans. Softw. Eng. Methodol.}
+      \field{month}{6}
+      \field{number}{3}
+      \field{title}{Enabledness-Based Program Abstractions for Behavior Validation}
+      \field{volume}{22}
+      \field{year}{2013}
+      \verb{doi}
+      \verb 10.1145/2491509.2491519
+      \endverb
+      \verb{urlraw}
+      \verb https://doi.org/10.1145/2491509.2491519
+      \endverb
+      \verb{url}
+      \verb https://doi.org/10.1145/2491509.2491519
+      \endverb
+      \keyw{enabledness abstractions,Source-code validation}
+    \endentry
+    \entry{evm-opcodes}{misc}{}
+      \field{sortinit}{C}
+      \field{sortinithash}{4c244ceae61406cdc0cc2ce1cb1ff703}
+      \field{labeltitlesource}{title}
+      \field{howpublished}{\url{https://github.com/wolflo/evm-opcodes}}
+      \field{note}{Accedido: 2023--30-10}
+      \field{title}{Conjunto de instrucciones de la EVM}
+    \endentry
+    \entry{the-ethereum-merge}{misc}{}
+      \name{author}{1}{}{%
+        {{hash=94195b7b439ec3bda396c8df3d53e0c0}{%
+           family={Ethereum},
+           familyi={E\bibinitperiod}}}%
+      }
+      \strng{namehash}{94195b7b439ec3bda396c8df3d53e0c0}
+      \strng{fullhash}{94195b7b439ec3bda396c8df3d53e0c0}
+      \strng{bibnamehash}{94195b7b439ec3bda396c8df3d53e0c0}
+      \strng{authorbibnamehash}{94195b7b439ec3bda396c8df3d53e0c0}
+      \strng{authornamehash}{94195b7b439ec3bda396c8df3d53e0c0}
+      \strng{authorfullhash}{94195b7b439ec3bda396c8df3d53e0c0}
+      \field{sortinit}{E}
+      \field{sortinithash}{c554bd1a0b76ea92b9f105fe36d9c7b0}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{title}{What was The Merge?}
+      \field{year}{2024}
+      \verb{urlraw}
+      \verb https://ethereum.org/en/roadmap/merge/
+      \endverb
+      \verb{url}
+      \verb https://ethereum.org/en/roadmap/merge/
+      \endverb
+    \endentry
+    \entry{bitcoin-backbone-protocol}{inproceedings}{}
+      \name{author}{3}{}{%
+        {{hash=a6c476f4d86bcfd8e2acd4ea73596371}{%
+           family={Garay},
+           familyi={G\bibinitperiod},
+           given={Juan},
+           giveni={J\bibinitperiod}}}%
+        {{hash=a788bdbaf3b805cdc29e079c1e4ae908}{%
+           family={Kiayias},
+           familyi={K\bibinitperiod},
+           given={Aggelos},
+           giveni={A\bibinitperiod}}}%
+        {{hash=d56abeee20ce8d40e6008b43de2ee381}{%
+           family={Leonardos},
+           familyi={L\bibinitperiod},
+           given={Nikos},
+           giveni={N\bibinitperiod}}}%
+      }
+      \name{editor}{2}{}{%
+        {{hash=cf7c0382045f06385a28d0235a0bbc97}{%
+           family={Oswald},
+           familyi={O\bibinitperiod},
+           given={Elisabeth},
+           giveni={E\bibinitperiod}}}%
+        {{hash=23091f1713beeb72d7a1d501b5d5923e}{%
+           family={Fischlin},
+           familyi={F\bibinitperiod},
+           given={Marc},
+           giveni={M\bibinitperiod}}}%
+      }
+      \list{location}{1}{%
+        {Berlin, Heidelberg}%
+      }
+      \list{publisher}{1}{%
+        {Springer Berlin Heidelberg}%
+      }
+      \strng{namehash}{ebaa69400e4a52b245e04905608d5743}
+      \strng{fullhash}{ebaa69400e4a52b245e04905608d5743}
+      \strng{bibnamehash}{ebaa69400e4a52b245e04905608d5743}
+      \strng{authorbibnamehash}{ebaa69400e4a52b245e04905608d5743}
+      \strng{authornamehash}{ebaa69400e4a52b245e04905608d5743}
+      \strng{authorfullhash}{ebaa69400e4a52b245e04905608d5743}
+      \strng{editorbibnamehash}{9ea6fcd5ce4fef03eedf71c589ed1bb3}
+      \strng{editornamehash}{9ea6fcd5ce4fef03eedf71c589ed1bb3}
+      \strng{editorfullhash}{9ea6fcd5ce4fef03eedf71c589ed1bb3}
+      \field{sortinit}{G}
+      \field{sortinithash}{62eb2aa29549e4fdbd3cb154ec5711cb}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{abstract}{Bitcoin is the first and most popular decentralized cryptocurrency to date. In this work, we extract and analyze the core of the Bitcoin protocol, which we term the Bitcoin backbone, and prove two of its fundamental properties which we call common prefix and chain quality in the static setting where the number of players remains fixed. Our proofs hinge on appropriate and novel assumptions on the ``hashing power'' of the adversary relative to network synchronicity; we show our results to be tight under high synchronization.}
+      \field{booktitle}{Advances in Cryptology - EUROCRYPT 2015}
+      \field{isbn}{978-3-662-46803-6}
+      \field{title}{The Bitcoin Backbone Protocol: Analysis and Applications}
+      \field{year}{2015}
+      \field{pages}{281\bibrangedash 310}
+      \range{pages}{30}
+    \endentry
+    \entry{predicate-abstraction-for-smart-contract-validation}{inproceedings}{}
+      \name{author}{4}{}{%
+        {{hash=d2319c6877ce8777a06850a17535ac7c}{%
+           family={Godoy},
+           familyi={G\bibinitperiod},
+           given={Javier},
+           giveni={J\bibinitperiod}}}%
+        {{hash=d520924c44dc03de4275b7e12ff59c64}{%
+           family={Galeotti},
+           familyi={G\bibinitperiod},
+           given={Juan\bibnamedelima Pablo},
+           giveni={J\bibinitperiod\bibinitdelim P\bibinitperiod}}}%
+        {{hash=41ac0d8bfffd92de85098740c95f24ba}{%
+           family={Garbervetsky},
+           familyi={G\bibinitperiod},
+           given={Diego},
+           giveni={D\bibinitperiod}}}%
+        {{hash=e32184d7b20645f5857e1a2633f36f50}{%
+           family={Uchitel},
+           familyi={U\bibinitperiod},
+           given={Sebastian},
+           giveni={S\bibinitperiod}}}%
+      }
+      \list{location}{1}{%
+        {Montreal, Quebec, Canada}%
+      }
+      \list{publisher}{1}{%
+        {Association for Computing Machinery}%
+      }
+      \strng{namehash}{c99ff7056d9e99c14287eb5117b0d49c}
+      \strng{fullhash}{61e9e6c0ccacb091d7f370eaff89fe2b}
+      \strng{bibnamehash}{c99ff7056d9e99c14287eb5117b0d49c}
+      \strng{authorbibnamehash}{c99ff7056d9e99c14287eb5117b0d49c}
+      \strng{authornamehash}{c99ff7056d9e99c14287eb5117b0d49c}
+      \strng{authorfullhash}{61e9e6c0ccacb091d7f370eaff89fe2b}
+      \field{sortinit}{G}
+      \field{sortinithash}{62eb2aa29549e4fdbd3cb154ec5711cb}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{abstract}{Smart contracts are immutable programs deployed on the blockchain that can manage significant assets. Because of this, verification and validation of smart contracts is of vital importance. Indeed, it is industrial practice to hire independent specialized companies to audit smart contracts before deployment. Auditors typically rely on a combination of tools and experience but still fail to identify problems in smart contracts before deployment, causing significant losses. In this paper, we propose using predicate abstraction to construct models which can be used by auditors to explore and validate smart contact behaviour at the function call level by proposing predicates that expose different aspects of the contract. We propose predicates based on requires clauses and enum-type state variables as a starting point for contract validation and report on an evaluation on two different benchmarks.}
+      \field{booktitle}{Proceedings of the 25th International Conference on Model Driven Engineering Languages and Systems}
+      \field{isbn}{9781450394666}
+      \field{series}{MODELS '22}
+      \field{title}{Predicate Abstractions for Smart Contract Validation}
+      \field{year}{2022}
+      \field{pages}{289\bibrangedash 299}
+      \range{pages}{11}
+      \verb{doi}
+      \verb 10.1145/3550355.3552462
+      \endverb
+      \verb{urlraw}
+      \verb https://doi.org/10.1145/3550355.3552462
+      \endverb
+      \verb{url}
+      \verb https://doi.org/10.1145/3550355.3552462
+      \endverb
+    \endentry
+    \entry{ouroboros-protocol}{inproceedings}{}
+      \name{author}{4}{}{%
+        {{hash=a788bdbaf3b805cdc29e079c1e4ae908}{%
+           family={Kiayias},
+           familyi={K\bibinitperiod},
+           given={Aggelos},
+           giveni={A\bibinitperiod}}}%
+        {{hash=ddc77d8d5bf45f3970bd288d4e710e54}{%
+           family={Russell},
+           familyi={R\bibinitperiod},
+           given={Alexander},
+           giveni={A\bibinitperiod}}}%
+        {{hash=46a9d91302d8e21a332e4332503626fc}{%
+           family={David},
+           familyi={D\bibinitperiod},
+           given={Bernardo},
+           giveni={B\bibinitperiod}}}%
+        {{hash=ab59300f7d169328ea946a45dd926e4f}{%
+           family={Oliynykov},
+           familyi={O\bibinitperiod},
+           given={Roman},
+           giveni={R\bibinitperiod}}}%
+      }
+      \strng{namehash}{b133b45fc91fa791ad081cc170396549}
+      \strng{fullhash}{49c6c3ecedeeecd579155f124de951c1}
+      \strng{bibnamehash}{b133b45fc91fa791ad081cc170396549}
+      \strng{authorbibnamehash}{b133b45fc91fa791ad081cc170396549}
+      \strng{authornamehash}{b133b45fc91fa791ad081cc170396549}
+      \strng{authorfullhash}{49c6c3ecedeeecd579155f124de951c1}
+      \field{sortinit}{K}
+      \field{sortinithash}{d3edc18d54b9438a72c24c925bfb38f4}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{isbn}{978-3-319-63687-0}
+      \field{month}{07}
+      \field{title}{Ouroboros: A Provably Secure Proof-of-Stake Blockchain Protocol}
+      \field{year}{2017}
+      \field{pages}{357\bibrangedash 388}
+      \range{pages}{32}
+      \verb{doi}
+      \verb 10.1007/978-3-319-63688-7_12
+      \endverb
+    \endentry
+    \entry{alloy}{misc}{}
+      \field{sortinit}{L}
+      \field{sortinithash}{dad3efd0836470093a7b4a7bb756eb8c}
+      \field{labeltitlesource}{title}
+      \field{title}{Lenguaje de especificación Alloy}
+      \verb{urlraw}
+      \verb https://github.com/AlloyTools/org.alloytools.alloy
+      \endverb
+      \verb{url}
+      \verb https://github.com/AlloyTools/org.alloytools.alloy
+      \endverb
+    \endentry
+    \entry{solidity}{misc}{}
+      \field{sortinit}{L}
+      \field{sortinithash}{dad3efd0836470093a7b4a7bb756eb8c}
+      \field{labeltitlesource}{title}
+      \field{title}{Lenguaje Solidity}
+      \verb{urlraw}
+      \verb https://docs.soliditylang.org/en/latest/
+      \endverb
+      \verb{url}
+      \verb https://docs.soliditylang.org/en/latest/
+      \endverb
+    \endentry
+    \entry{survey-of-blockchain-security}{article}{}
+      \name{author}{5}{}{%
+        {{hash=23fabc2f7f05aee2ced2eb2686eca635}{%
+           family={Li},
+           familyi={L\bibinitperiod},
+           given={Xiaoqi},
+           giveni={X\bibinitperiod}}}%
+        {{hash=a6cd330d65a61e5776df47ea793c79e3}{%
+           family={Jiang},
+           familyi={J\bibinitperiod},
+           given={Peng},
+           giveni={P\bibinitperiod}}}%
+        {{hash=b240c653612b8157a41dd4282347398a}{%
+           family={Chen},
+           familyi={C\bibinitperiod},
+           given={Ting},
+           giveni={T\bibinitperiod}}}%
+        {{hash=7d405dc8c3ba97bdd21d7ea41fcd9b3b}{%
+           family={Luo},
+           familyi={L\bibinitperiod},
+           given={Xiapu},
+           giveni={X\bibinitperiod}}}%
+        {{hash=dacdef3c319c3d5bf8e78a6cfa56435d}{%
+           family={Wen},
+           familyi={W\bibinitperiod},
+           given={Qiaoyan},
+           giveni={Q\bibinitperiod}}}%
+      }
+      \strng{namehash}{6aa5f94f0218e2a54cfd48c18d42bddf}
+      \strng{fullhash}{75378acce9ff628e6507d18ea40b33ca}
+      \strng{bibnamehash}{6aa5f94f0218e2a54cfd48c18d42bddf}
+      \strng{authorbibnamehash}{6aa5f94f0218e2a54cfd48c18d42bddf}
+      \strng{authornamehash}{6aa5f94f0218e2a54cfd48c18d42bddf}
+      \strng{authorfullhash}{75378acce9ff628e6507d18ea40b33ca}
+      \field{sortinit}{L}
+      \field{sortinithash}{dad3efd0836470093a7b4a7bb756eb8c}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{abstract}{Since its inception, the blockchain technology has shown promising application prospects. From the initial cryptocurrency to the current smart contract, blockchain has been applied to many fields. Although there are some studies on the security and privacy issues of blockchain, there lacks a systematic examination on the security of blockchain systems. In this paper, we conduct a systematic study on the security threats to blockchain and survey the corresponding real attacks by examining popular blockchain systems. We also review the security enhancement solutions for blockchain, which could be used in the development of various blockchain systems, and suggest some future directions to stir research efforts into this area.}
+      \field{issn}{0167-739X}
+      \field{journaltitle}{Future Generation Computer Systems}
+      \field{title}{A survey on the security of blockchain systems}
+      \field{volume}{107}
+      \field{year}{2020}
+      \field{pages}{841\bibrangedash 853}
+      \range{pages}{13}
+      \verb{doi}
+      \verb https://doi.org/10.1016/j.future.2017.08.020
+      \endverb
+      \verb{urlraw}
+      \verb https://www.sciencedirect.com/science/article/pii/S0167739X17318332
+      \endverb
+      \verb{url}
+      \verb https://www.sciencedirect.com/science/article/pii/S0167739X17318332
+      \endverb
+      \keyw{Blockchain,Security,Cryptocurrency,Smart contract}
+    \endentry
+    \entry{manticoreUI}{misc}{}
+      \field{sortinit}{M}
+      \field{sortinithash}{2e5c2f51f7fa2d957f3206819bf86dc3}
+      \field{labeltitlesource}{title}
+      \field{title}{ManticoreUI}
+      \verb{urlraw}
+      \verb https://github.com/trailofbits/ManticoreUI
+      \endverb
+      \verb{url}
+      \verb https://github.com/trailofbits/ManticoreUI
+      \endverb
+    \endentry
+    \entry{azure-benchmark}{misc}{}
+      \field{sortinit}{M}
+      \field{sortinithash}{2e5c2f51f7fa2d957f3206819bf86dc3}
+      \field{labeltitlesource}{title}
+      \field{title}{Microsoft Azure Blockchain Workbench}
+      \verb{urlraw}
+      \verb https://github.com/Azure-Samples/blockchain/tree/master/blockchain-workbench/application-and-smart-contract-samples
+      \endverb
+      \verb{url}
+      \verb https://github.com/Azure-Samples/blockchain/tree/master/blockchain-workbench/application-and-smart-contract-samples
+      \endverb
+    \endentry
+    \entry{open-zeppelin-library}{misc}{}
+      \name{author}{1}{}{%
+        {{hash=467bbc367f01a6aca8e878d57a66191a}{%
+           family={OpenZeppelin},
+           familyi={O\bibinitperiod}}}%
+      }
+      \strng{namehash}{467bbc367f01a6aca8e878d57a66191a}
+      \strng{fullhash}{467bbc367f01a6aca8e878d57a66191a}
+      \strng{bibnamehash}{467bbc367f01a6aca8e878d57a66191a}
+      \strng{authorbibnamehash}{467bbc367f01a6aca8e878d57a66191a}
+      \strng{authornamehash}{467bbc367f01a6aca8e878d57a66191a}
+      \strng{authorfullhash}{467bbc367f01a6aca8e878d57a66191a}
+      \field{sortinit}{O}
+      \field{sortinithash}{ff8d4eeb5101e3cf3809959b3592d942}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{title}{OpenZeppelin: Build secure smart contracts in solidity}
+      \verb{urlraw}
+      \verb https://www.openzeppelin.com/contracts
+      \endverb
+      \verb{url}
+      \verb https://www.openzeppelin.com/contracts
+      \endverb
+    \endentry
+    \entry{manticore-tiny-changes}{misc}{}
+      \field{sortinit}{R}
+      \field{sortinithash}{b9c68a358aea118dfa887b6e902414a7}
+      \field{labeltitlesource}{title}
+      \field{title}{Repositorio con los cambios realizados sobre Manticore}
+      \verb{urlraw}
+      \verb https://github.com/DaniWppner/Manticore-tiny-changes
+      \endverb
+      \verb{url}
+      \verb https://github.com/DaniWppner/Manticore-tiny-changes
+      \endverb
+    \endentry
+    \entry{manticore-predicate-abstraction}{misc}{}
+      \field{sortinit}{R}
+      \field{sortinithash}{b9c68a358aea118dfa887b6e902414a7}
+      \field{labeltitlesource}{title}
+      \field{title}{Repositorio del prototipo implementado}
+      \verb{urlraw}
+      \verb https://github.com/DaniWppner/manticore-predicate-abstraction
+      \endverb
+      \verb{url}
+      \verb https://github.com/DaniWppner/manticore-predicate-abstraction
+      \endverb
+    \endentry
+    \entry{z3TheoremProver}{misc}{}
+      \name{author}{1}{}{%
+        {{hash=2766b3f2d6ad1844b368d1a847d0d24e}{%
+           family={Research},
+           familyi={R\bibinitperiod},
+           given={Microsoft},
+           giveni={M\bibinitperiod}}}%
+      }
+      \strng{namehash}{2766b3f2d6ad1844b368d1a847d0d24e}
+      \strng{fullhash}{2766b3f2d6ad1844b368d1a847d0d24e}
+      \strng{bibnamehash}{2766b3f2d6ad1844b368d1a847d0d24e}
+      \strng{authorbibnamehash}{2766b3f2d6ad1844b368d1a847d0d24e}
+      \strng{authornamehash}{2766b3f2d6ad1844b368d1a847d0d24e}
+      \strng{authorfullhash}{2766b3f2d6ad1844b368d1a847d0d24e}
+      \field{sortinit}{R}
+      \field{sortinithash}{b9c68a358aea118dfa887b6e902414a7}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{title}{The Z3 Theorem Prover}
+      \verb{urlraw}
+      \verb https://smt-lib.org/index.shtml
+      \endverb
+      \verb{url}
+      \verb https://smt-lib.org/index.shtml
+      \endverb
+    \endentry
+    \entry{smtlib2}{misc}{}
+      \field{sortinit}{S}
+      \field{sortinithash}{c319cff79d99c853d775f88277d4e45f}
+      \field{labeltitlesource}{title}
+      \field{title}{SMT-LIB 2: The Satisfiability Modulo Theories Library}
+      \verb{urlraw}
+      \verb https://smt-lib.org/index.shtml
+      \endverb
+      \verb{url}
+      \verb https://smt-lib.org/index.shtml
+      \endverb
+    \endentry
+    \entry{yices}{misc}{}
+      \field{sortinit}{T}
+      \field{sortinithash}{51f9faf24c60c62ca764a77f78cf5666}
+      \field{labeltitlesource}{title}
+      \field{title}{The Yices SMT Solver}
+      \verb{urlraw}
+      \verb https://yices.csl.sri.com/
+      \endverb
+      \verb{url}
+      \verb https://yices.csl.sri.com/
+      \endverb
+    \endentry
+    \entry{ethereum-yellow-paper}{misc}{}
+      \name{author}{1}{}{%
+        {{hash=9f252fbc7b8ff3c128b3e8dd806afa9b}{%
+           family={Wood},
+           familyi={W\bibinitperiod},
+           given={Gavin},
+           giveni={G\bibinitperiod}}}%
+      }
+      \strng{namehash}{9f252fbc7b8ff3c128b3e8dd806afa9b}
+      \strng{fullhash}{9f252fbc7b8ff3c128b3e8dd806afa9b}
+      \strng{bibnamehash}{9f252fbc7b8ff3c128b3e8dd806afa9b}
+      \strng{authorbibnamehash}{9f252fbc7b8ff3c128b3e8dd806afa9b}
+      \strng{authornamehash}{9f252fbc7b8ff3c128b3e8dd806afa9b}
+      \strng{authorfullhash}{9f252fbc7b8ff3c128b3e8dd806afa9b}
+      \field{sortinit}{W}
+      \field{sortinithash}{1af34bd8c148ffb32de1494636b49713}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{title}{Ethereum Yellow Paper}
+      \verb{urlraw}
+      \verb https://ethereum.github.io/yellowpaper/paper.pdf
+      \endverb
+      \verb{url}
+      \verb https://ethereum.github.io/yellowpaper/paper.pdf
+      \endverb
+    \endentry
+    \entry{survey-on-protocols}{article}{}
+      \name{author}{3}{}{%
+        {{hash=ffd0b0c3743e938ccac63525d574f0a0}{%
+           family={Xu},
+           familyi={X\bibinitperiod},
+           given={Jie},
+           giveni={J\bibinitperiod}}}%
+        {{hash=03ebb954658194d4f7fe4cd6f9a1c295}{%
+           family={Wang},
+           familyi={W\bibinitperiod},
+           given={Cong},
+           giveni={C\bibinitperiod}}}%
+        {{hash=2419eb22c35469184209a373ebc3c63e}{%
+           family={Jia},
+           familyi={J\bibinitperiod},
+           given={Xiaohua},
+           giveni={X\bibinitperiod}}}%
+      }
+      \list{location}{1}{%
+        {New York, NY, USA}%
+      }
+      \list{publisher}{1}{%
+        {Association for Computing Machinery}%
+      }
+      \strng{namehash}{8cc6c7d85f40ddd915ce7504f43c0c56}
+      \strng{fullhash}{8cc6c7d85f40ddd915ce7504f43c0c56}
+      \strng{bibnamehash}{8cc6c7d85f40ddd915ce7504f43c0c56}
+      \strng{authorbibnamehash}{8cc6c7d85f40ddd915ce7504f43c0c56}
+      \strng{authornamehash}{8cc6c7d85f40ddd915ce7504f43c0c56}
+      \strng{authorfullhash}{8cc6c7d85f40ddd915ce7504f43c0c56}
+      \field{sortinit}{X}
+      \field{sortinithash}{e90038f30fa4b9ce59606fc8347e3cc7}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{abstract}{Blockchain consensus protocols have been a focus of attention since the advent of Bitcoin. Although classic distributed consensus algorithms made significant contributions to the development of blockchain consensus protocols, there are still many issues to be resolved due to the complexity and diversity of the blockchain. In this survey, we summarize the state-of-the-art blockchain consensus protocols. We first introduce the theoretical basis, models, and challenges of blockchain consensus protocols. Then, we present the existing blockchain protocols in the categories of proof-based protocols, committee-based protocols, and other miscellaneous protocols. Finally, we analyze their performance and discuss future research directions by comparing existing protocols.}
+      \field{issn}{0360-0300}
+      \field{journaltitle}{ACM Comput. Surv.}
+      \field{month}{7}
+      \field{number}{13s}
+      \field{title}{A Survey of Blockchain Consensus Protocols}
+      \field{volume}{55}
+      \field{year}{2023}
+      \verb{doi}
+      \verb 10.1145/3579845
+      \endverb
+      \verb{urlraw}
+      \verb https://doi.org/10.1145/3579845
+      \endverb
+      \verb{url}
+      \verb https://doi.org/10.1145/3579845
+      \endverb
+      \keyw{Blockchain consensus,cryptocurrency,security,scalability,decentralization}
+    \endentry
+    \entry{bitcoin-overview}{inproceedings}{}
+      \name{author}{5}{}{%
+        {{hash=94aeb96f7bbdfa5f304dc958ab7f265c}{%
+           family={Zheng},
+           familyi={Z\bibinitperiod},
+           given={Zibin},
+           giveni={Z\bibinitperiod}}}%
+        {{hash=d93ea8b86f5966d92a614665f6182178}{%
+           family={Xie},
+           familyi={X\bibinitperiod},
+           given={Shaoan},
+           giveni={S\bibinitperiod}}}%
+        {{hash=9fb597350639b80513a8134bb1ba6504}{%
+           family={Dai},
+           familyi={D\bibinitperiod},
+           given={Hongning},
+           giveni={H\bibinitperiod}}}%
+        {{hash=3cd0ebc9a46c36ceb086385f0a9b3df4}{%
+           family={Chen},
+           familyi={C\bibinitperiod},
+           given={Xiangping},
+           giveni={X\bibinitperiod}}}%
+        {{hash=356e7b7c2a63b9a13bc494bb2b58e7ed}{%
+           family={Wang},
+           familyi={W\bibinitperiod},
+           given={Huaimin},
+           giveni={H\bibinitperiod}}}%
+      }
+      \strng{namehash}{7167798026dee376319381ec60b4dd1a}
+      \strng{fullhash}{b91da4d9a2839d6d7a3baffed95c2e7f}
+      \strng{bibnamehash}{7167798026dee376319381ec60b4dd1a}
+      \strng{authorbibnamehash}{7167798026dee376319381ec60b4dd1a}
+      \strng{authornamehash}{7167798026dee376319381ec60b4dd1a}
+      \strng{authorfullhash}{b91da4d9a2839d6d7a3baffed95c2e7f}
+      \field{sortinit}{Z}
+      \field{sortinithash}{8f7b480688e809b50b6f6577b16f3db5}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{booktitle}{2017 IEEE International Congress on Big Data (BigData Congress)}
+      \field{title}{An Overview of Blockchain Technology: Architecture, Consensus, and Future Trends}
+      \field{year}{2017}
+      \field{pages}{557\bibrangedash 564}
+      \range{pages}{8}
+      \verb{doi}
+      \verb 10.1109/BigDataCongress.2017.85
+      \endverb
+    \endentry
+  \enddatalist
+  \missing{Torres}
+  \missing{boogie}
+  \missing{torres}
+  \missing{verisol}
+\endrefsection
+\endinput
+
