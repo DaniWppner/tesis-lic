@@ -1,3 +1,18 @@
-\section{Trabajo futuro}
+En este trabajo realizamos una apreciación de las funcionalidades de Manticore, al mismo tiempo que un desglose de su arquitectura interna y su API programable.
+Dicho análisis fue relevante a la hora de poder idear una estrategia para utilizar Manticore en la construcción de EPAs, y en la indagación de los tiempos de ejecución de la herramienta.
 
-\subsection{Uso de los hooks en Manticore para avanzar la ejecución solo en un estado.}
+Desarrollamos un algoritmo para la construcción de EPAs en el caso de tener acceso a las precondiciones de los métodos pero no al invariante, orientado al uso de ejecución simbólica y en particular, Manticore.
+Vimos las limitaciones de este nuevo algoritmo frente a cierto tipo de contratos, y pudimos corroborar tanto la facilidad con la que se lo puede hacer fallar como corroborar su funcionamiento en benchmarks de smart contracts utilizados anteriormente.
+
+Pudimos contrastar la performance en tiempo del algoritmo novedoso contra el algoritmo de construcción de EPAs clásico para ejemplos simples, y obtuvimos que el algoritmo novedoso presentaba grandes mejoras sobre el clásico al implementar ambos con Manticore, aunque el tiempo total de ejecución de este algoritmo seguía sin resultar satisfactorio.
+
+Al buscar los principales culpables de la alta cantidad de tiempo empleado por el prototipo implementado, en busca de optimizaciones, identificamos que la etapa responsable de la mayoría del tiempo de ejecución	era la de ejecución simbólica de métodos de los contratos.
+Esta etapa asimismo resultaba la más difícil de analizar (y por ende de optimizar), debido a cómo se encontraba programada.
+Por otro lado, realizamos un análisis evaluando si la mayoría del tiempo era consumido por Manticore mismo o por los programas de SMT solving, y obtuvimos resultados que sugieren que este fuera consumido por los procesos de Manticore.
+
+Consideramos que existen algunas líneas no exploradas en términos de optimización en tiempo de la herramienta implementada.
+Por un lado, podría indagarse más profundo en el comportamiento de Manticore, intentando observar cuáles son las consultas que realiza a los programas de SMT solving.
+Además, no se exploró el impacto que tiene la explosión de estados producida por la presencia de múltiples \texttt{accounts} durante los análisis en el tiempo de ejecución de Manticore, ni se exploraron técnicas para suprimir esta misma.
+
+Creemos que una línea de investigación sin explorar es el uso de los callbacks de la API de manticore para realizar un análisis en el que se avanza de a un único \textcolor{cyan}{\texttt{state}} por vez, más similar a las estrategias clásicas de construcción de EPAs.
+Por otro lado, es requerido averiguar si la capacidad de emular blockchains enteras de Manticore ofrece alguna distinción en la capacidad de generación de abstracciones, si se quiere terminar de evaluar el valor de la técnica desarollada en este trabajo.
