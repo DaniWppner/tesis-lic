@@ -1,37 +1,51 @@
 \section{Ejecución simbólica dinámica}
 
-\section{Contratos Inteligentes y Solidity}
+\section{Blockchains}
 Una blockchain es una base de datos pública, distribuida e inmutable.
-En Ethereum cada transacción registrada se refiere a propiedades sobre \textit{direcciones} en la base de datos como el balance de criptomonedas o el estado de un contrato inteligente.
 Las transacciones se agrupan en conjuntos de \textit{bloques}, que son la unidad mínima con la que se actualiza el estado de la blockchain.
 El historial de bloques agregados a la blockchain (y por ende, las transacciones ejecutadas) es público, y el estado actual de la red puede calcularse a partir de este historial.
-Además, los protocolos de consenso utilizados por la red le otorgan garantías de seguridad de que ningún actor podrá forzar el ingreso de información falsificada a ella \cite{survey-of-blockchain-security}.
 
-Como ya dijimos, Ethereum y otras blockchain mantienen un estado de cómputo distribuido, y permiten modificar este estado mediante aplicaciones programadas llamadas contratos inteligentes.
-Los contratos inteligentes se corresponden con direcciones dentro de la base de datos que es la blockchain, de la misma forma que se corresponden con direcciones los usuarios tradicionales.
-De hecho, en Ethereum los contratos inteligentes y los usuarios tradicionales cuentan con dos tipos de \textit{accounts} distintas, que pueden pertenecer a usuarios humanos por un lado o a contratos inteligentes por el otro .
-En el caso de los usuarios humanos el almacenamiento que le corresponde a cada dirección guarda sólo información sobre el balance de criptomonedas, mientras que un contrato inteligente utiliza dos campos adicionales: el \textit{codeHash}, que es utilizado para obener el código ejectuable del contrato y el \textit{storageRoot}, que es necesario para conocer una especie de memoria persistente exclusiva del contrato.
-Ambos tipos pueden recibir o enviar mensajes y Ether\footnote{Ether es la criptomoneda utilizada por Ethereum}.
-La diferencia en los dos tipos de accounts radica en qué ocurre cuando la account es seleccionada como destinataria de una transferencia de fondos o mensaje.
-Mientras que para un usuario humano simplemente se registra el suceso en la blockchain, en el caso de un contrato inteligente, este es el momento en el que el programa se ejecuta, agregando el mensaje que disparó la ejecución al contexto de la misma.
-Para poder incluir la transacción en el próximo estado de la blockchain, el minero\footnote{Los ``mineros'' son quienes participan en el protocolo de la blockchain y registran las transacciones publicadas por usuarios en bloques} que registre la transacción debe levantar la EVM y simular la ejecución del contrato para conocer su  resultado y estado final.
+Las redes de blockchain, al ser sistemas distribuidos, cuentan con protocolos de consenso para que las partes participantes puedan acordar cuál es el estado actual de la red.
+La elección de protocolo de consenso es uno de los elementos más decisivos con respecto a una blockchain, y suelen estar pensados para garantizar propiedades de seguridad criptográfica sobre su estado \cite{bitcoin-backbone-protocol}\cite{ouroboros-protocol}\cite{survey-on-protocols}.
+Ethereum, que será la tecnología de blockchain de la que hablaremos de aquí en adelante, cambió el protocolo de su red principal desde un protocolo Proof-of-Work llamado \texttt{Ethash} hacia un protocolo Proof-of-Stake denominado \texttt{Gasper} el 15 de Septiembre de 2022 en un proceso apodado ``The Merge'' (``La Fusión'') \cite{survey-of-blockchain-security} \cite{ethereum-yellow-paper} \cite{gasper-protocol} \cite{the-ethereum-merge}.
+Desde la funcionalidad de los contratos inteligentes este evento es mayoritariamente un detalle; lo único que es pertinente saber es que a fines prácticos se considera que en Ethereum es imposible que ningún actor controle el ingreso de, o altere, la información en la red.
+
+\subsection{Contratos Inteligentes en Ethereum y Solidity}
+A continuación explicaremos los aspectos relevantes de la arquitectura de la red Ethereum.
+Queremos abordar cómo los contratos inteligentes existen en ella, y cuáles son las peculiaridades de su ejecución.
+Más adelante, explicaremos las características del lenguaje Solidity y las abordaremos con un ejemplo.
+
+Las transacciones en Ethereum se refieren a propiedades sobre \textit{direcciones}, como el balance de criptomonedas o el estado de los contratos inteligentes.
+Los contratos inteligentes se corresponden con direcciones dentro de la blockchain, de la misma forma que se corresponden con direcciones los usuarios ``humanos''.
+De hecho, en Ethereum los contratos inteligentes y los usuarios tradicionales cuentan con dos tipos de \textit{accounts} distintas, que pueden pertenecer a usuarios humanos por un lado o a contratos inteligentes por el otro.
+En el caso de los usuarios humanos el almacenamiento que le corresponde a cada dirección guarda sólo información sobre el balance de criptomonedas, mientras que un contrato inteligente utiliza dos campos adicionales: el \texttt{codeHash}, que es utilizado para obener el código ejectuable del contrato y el \texttt{storageRoot}, que es necesario para conocer una especie de memoria persistente exclusiva del contrato.
+Ambos tipos de account pueden recibir o enviar mensajes y Ether\footnote{Ether es la criptomoneda utilizada por Ethereum.}.
+La diferencia en los dos tipos radica en qué ocurre cuando la account es seleccionada como destinataria de una transacción.
+Para las accountes de usuarios humanos simplemente se registra el suceso en la blockchain.
+En el caso de un contrato inteligente, el momento de recibir una transacción es el momento en el que el programa se ejecuta, y el mensaje que dispara la ejecución es utilizado como los parámetros de entrada de la misma.
+Para poder incluir la transacción en el próximo estado de la blockchain, el minero\footnote{Los ``mineros'' son quienes participan en el protocolo de la blockchain y registran las transacciones en bloques.} que registre la transacción debe levantar la EVM y simular la ejecución del contrato para conocer su estado final.
 
 La EVM es una máquina de pila casi turing completa.
 El lenguaje assembly asociado cuenta con instrucciones para números enteros, instrucciones para control de flujo y otras instrucciones referentes a particularidades de la ejecución en blockchain, como el contenido de las transacciones de la misma \cite{evm-opcodes}.
-A pesar de que el conjunto de programas expresablas en el lenguaje de la EVM es turing completo, la cantidad de operaciones que se pueden ejecutar dentro de una misma transacción están limitadas por la cantidad de \textit{gas} que esté dispuesto pagar el remitente de la transacción al minero que la publique.
-De hecho, existe una cota superior a la cantidad de gas que tiene permitido consumir un contrato, lo que significa que una ejecución dada de la EVM siempre termina en un número finito de instrucciones.
+A pesar de que el conjunto de programas expresablas en el lenguaje de la EVM es turing completo, la cantidad de operaciones que se pueden ejecutar dentro de una única transacción están limitadas artificialmente por la cantidad de \textit{gas} asociado a la transacción.
+
+El gas es una unidad de medida del esfuerzo de cómputo, y está ideado como elemento limitante de lo que se les permite hacer a los contratos inteligentes en Ethereum.
+Debido a que los mineros deben ejecutar los contratos inteligentes en hardware y con recursos de los que ellos son dueños, el gas asociado a una transacción permite conocer cuánto deben pagarles los remitentes a los mineros por incluir las transacciones en un bloque.
+Para controlar este costo, los remitentes de transacciones pueden establecer una cota superior al gas que tienen pensado gastar, al mismo tiempo que pueden ofertar distintos montos de criptomonedas por unidad de gas gastada.
+Por otro lado, existe una cota superior a la cantidad de gas que tiene permitido consumir una transacción, lo que significa que una ejecución dada de la EVM siempre termina en un número finito de instrucciones.
 
 En la actualidad, existen lenguajes utilizados para programar contratos en la red Ethereum.
-Sin embargo que más adopción que tiene actualmente para la red Ethereum es Solidity.
+De ellos, el que más adopción que tiene actualmente es Solidity.
 Es un lenguaje imperativo curly-brace que provee una sintaxis similar a la de las clases en lenguajes orientados a objetos.
-La sintaxis empleada para definir los contratos incluye variables de estado, un método constructor, métodos internos (ejecutables sólo por el mismo contrato), y  un conjunto de métodos externos que representan la interfaz con otros contratos y el mundo con la que los usuarios pueden interactuar.
-La ejecución de los métodos externos es disparada cuando los contratos son receptores de un mensaje en la blockchain, eligiendo cuál método ejecutar en base al contenido del mensaje \cite{??}. %Algo de documentación de Solidity
+La sintaxis de Solidity incluye variables de estado, un método constructor, métodos internos (ejecutables sólo por el mismo contrato), y  un conjunto de métodos externos que representan la interfaz con otros contratos y el mundo, con la que los usuarios pueden interactuar.
 
 \subsection{Ejemplo}
 En el fragmento de código \ref{fig:solidity-example} presentamos un ejemplo de un programa escrito en Solidity, \texttt{SimpleMarketplace}\footnote{Este contrato es extraido de los contratos de ejemplo ``Mircrosoft Azure Blockchain Workbench'' \cite{azure-benchmark}}, el cual implementa un mecanismo simple para vender un bien.
-Analizando línea a línea del contrato, se define en la línea 2 un tipo que tiene tres valores posibles (``\texttt{StateType}'') que representa estados de completitud de la venta.
-Las líneas 3 a 8 definen las variables de estado del contrato, entre las que tenemos variables de tipo \texttt{int}, \texttt{StateType} y \texttt{address}, indicando además mediante la palabra clave \textcolor{blue}{\texttt{public}} que resultan accesibles por contratos externos.
-El tipo \texttt{address} utilizado en \texttt{InstanceOwner} y \texttt{InstanceBuyer} consiste en valores enteros de 20 bytes de tamaño, y se utiliza para representar direcciones en la blockchain.
+A continuación haremos un breve análisis línea por línea del contrato.
+
+En la línea 2 podemos ver que se define un tipo \textcolor{cyan}{\texttt{enum}} ``\texttt{StateType}'' que tiene tres valores posibles; que representan estados de completitud de la venta.
+Las líneas 3 a 8 definen las variables de estado del contrato, entre las que tenemos variables de tipo \texttt{int}, \texttt{StateType} y \texttt{address}, indicando además mediante la palabra clave \textcolor{blue}{\texttt{public}} que estas variables resultan accesibles a contratos externos.
+El tipo \texttt{address} utilizado en las variables \texttt{InstanceOwner} y \texttt{InstanceBuyer} consiste en valores enteros de 20 bytes de tamaño, y se utiliza para representar direcciones en la blockchain.
 
 \begin{lstlisting}[language=Solidity, label={fig:solidity-example}, caption={Contrato Inteligente \texttt{SimpleMarketplace} en Solidity},captionpos=b]
 pragma solidity >=0.4.25 <0.9.0;
@@ -79,7 +93,7 @@ contract SimpleMarketplace {
 
 Observando el método \textcolor{blue}{\texttt{constructor}} de \texttt{SimpleMarketplace}, que es el método que siempre se llama al desplegar una instancia del contrato, vemos que define el objeto que se planea vender, indicando la descripción, el precio del producto y la dirección de su dueño actual \footnote{En la definición de \textcolor{blue}{\texttt{constructor}}, la palabra clave \textcolor{blue}{\texttt{memory}} indica qué estrategia debe usarse para sostener en memoria el string que entra por parámetro. Otras opciones, como \textcolor{blue}{\texttt{calldata}}, impactan en el costo de gas de la función.}.
 Luego, las líneas 20, 28 y 34 indican precondiciones de los métodos \textcolor{orange}{\texttt{MakeOffer}}, \textcolor{orange}{\texttt{Reject}} y \textcolor{orange}{\texttt{AcceptOffer}}.
-En ellas, la expresión \textcolor{blue}{\texttt{msg.sender}} se refiere a la dirección desde la que se envió el mensaje que disparó la ejecución actual del contrato.
+En ellas, la expresión \textcolor{magenta}{\texttt{msg.sender}} se refiere a la dirección desde la que se envió el mensaje que disparó la ejecución actual del contrato.
 Si prestamos atención y debido a que el valor inicial de \texttt{SateEnum} es \texttt{ItemAvailable}, el único método que está permitido llamar inmediatamente después del constructor es \textcolor{orange}{\texttt{MakeOffer}}.
 Mediante este, un potencial comprador puede realizar ofertas sobre el producto indicando un precio, que luego el dueño puede aceptar o rechazar.
 Si el dueño original no está satisfecho con la oferta puede rechazarla llamando a \textcolor{orange}{\texttt{RejectOffer}}, regresando al estado incial en el que se aceptan nuevas ofertas.
@@ -135,8 +149,8 @@ Dicho eso, llamaremos \textit{configuraciones} a las posibles combinaciones de l
     \end{itemize}
 \end{definition}
 
-Una particularidad presente en los métodos de los contratos inteligentes es que algunas instrucciones como \textcolor{blue}{\texttt{msg.sender}}, \textcolor{blue}{\texttt{msg.value}}, \textcolor{blue}{\texttt{tx.gasprice}} o \textcolor{blue}{\texttt{tx.origin}}
-\footnote{\textcolor{blue}{\texttt{msg.value}} indica cuánto Ether está recibiendo el contrato. \textcolor{blue}{\texttt{tx.gasprice}} indica cuánto Ether se le cobra al remitente por cada unidad de gas (cómputo) utilizada y \textcolor{blue}{\texttt{tx.origin}} se refiere a el usuario humano que haya enviado el mensaje que disparó la ejecución actual.} hacen referencia a variables de la blockchain.
+Una particularidad presente en los métodos de los contratos inteligentes es que algunas instrucciones como \textcolor{magenta}{\texttt{msg.sender}}, \textcolor{magenta}{\texttt{msg.value}}, \textcolor{magenta}{\texttt{tx.gasprice}} o \textcolor{magenta}{\texttt{tx.origin}}
+\footnote{\textcolor{magenta}{\texttt{msg.value}} indica cuánto Ether está recibiendo el contrato. \textcolor{magenta}{\texttt{tx.gasprice}} indica cuánto Ether se le cobra al remitente por cada unidad de gas (cómputo) utilizada y \textcolor{magenta}{\texttt{tx.origin}} se refiere a el usuario humano que haya enviado el mensaje que disparó la ejecución actual.} hacen referencia a variables de la blockchain.
 Sin embargo podemos modelar estas variables, junto con los parámetros explícitos como input codificable en $\mathds{Z}$ (los números enteros) sin pérdida de generalidad \cite{de-caso-epa}.
 La semántica de un contrato la definimos como el siguiente Labeled Transition System:
 

@@ -4,7 +4,7 @@
   url    = {https://ethereum.github.io/yellowpaper/paper.pdf}
 }
 
-@misc{ethereum-yellow-paper,
+@misc{ethereum-white-paper,
   author = {V. Buterin},
   title  = {White Paper: Ethereum: A Next-Generation Smart Contract and Decentralized Application Platform.},
   year   = {2014}
@@ -32,10 +32,31 @@
   series    = {MODELS '22}
 }
 
-
 @misc{solidity,
   title = {Lenguaje Solidity},
   url   = {https://docs.soliditylang.org/en/latest/}
+}
+
+@misc{evm-opcodes,
+  title        = {Conjunto de instrucciones de la EVM},
+  howpublished = {\url{https://github.com/wolflo/evm-opcodes}},
+  note         = {Accedido: 2023--30-10}
+}
+
+@misc{the-ethereum-merge,
+  author = {Ethereum},
+  url    = {https://ethereum.org/en/roadmap/merge/},
+  title  = {What was The Merge?},
+  year   = {2024}
+}
+
+@article{gasper-protocol,
+  author = {V Buterin},
+  year   = {2020},
+  month  = {05},
+  doi    = {10.48550/arXiv.2003.03052},
+  url    = {https://arxiv.org/abs/2003.03052},
+  title  = {Combining GHOST and Casper}
 }
 
 @misc{alloy,
@@ -150,9 +171,49 @@
   abstract = {Since its inception, the blockchain technology has shown promising application prospects. From the initial cryptocurrency to the current smart contract, blockchain has been applied to many fields. Although there are some studies on the security and privacy issues of blockchain, there lacks a systematic examination on the security of blockchain systems. In this paper, we conduct a systematic study on the security threats to blockchain and survey the corresponding real attacks by examining popular blockchain systems. We also review the security enhancement solutions for blockchain, which could be used in the development of various blockchain systems, and suggest some future directions to stir research efforts into this area.}
 }
 
-
-@misc{evm-opcodes,
-  title        = {Conjunto de instrucciones de la EVM},
-  howpublished = {\url{https://github.com/wolflo/evm-opcodes}},
-  note         = {Accedido: 2023--30-10}
+@inproceedings{bitcoin-backbone-protocol,
+  author    = {Garay, Juan
+               and Kiayias, Aggelos
+               and Leonardos, Nikos},
+  editor    = {Oswald, Elisabeth
+               and Fischlin, Marc},
+  title     = {The Bitcoin Backbone Protocol: Analysis and Applications},
+  booktitle = {Advances in Cryptology - EUROCRYPT 2015},
+  year      = {2015},
+  publisher = {Springer Berlin Heidelberg},
+  address   = {Berlin, Heidelberg},
+  pages     = {281--310},
+  abstract  = {Bitcoin is the first and most popular decentralized cryptocurrency to date. In this work, we extract and analyze the core of the Bitcoin protocol, which we term the Bitcoin backbone, and prove two of its fundamental properties which we call common prefix and chain quality in the static setting where the number of players remains fixed. Our proofs hinge on appropriate and novel assumptions on the ``hashing power'' of the adversary relative to network synchronicity; we show our results to be tight under high synchronization.},
+  isbn      = {978-3-662-46803-6}
 }
+
+@article{survey-on-protocols,
+  author     = {Xu, Jie and Wang, Cong and Jia, Xiaohua},
+  title      = {A Survey of Blockchain Consensus Protocols},
+  year       = {2023},
+  issue_date = {December 2023},
+  publisher  = {Association for Computing Machinery},
+  address    = {New York, NY, USA},
+  volume     = {55},
+  number     = {13s},
+  issn       = {0360-0300},
+  url        = {https://doi.org/10.1145/3579845},
+  doi        = {10.1145/3579845},
+  abstract   = {Blockchain consensus protocols have been a focus of attention since the advent of Bitcoin. Although classic distributed consensus algorithms made significant contributions to the development of blockchain consensus protocols, there are still many issues to be resolved due to the complexity and diversity of the blockchain. In this survey, we summarize the state-of-the-art blockchain consensus protocols. We first introduce the theoretical basis, models, and challenges of blockchain consensus protocols. Then, we present the existing blockchain protocols in the categories of proof-based protocols, committee-based protocols, and other miscellaneous protocols. Finally, we analyze their performance and discuss future research directions by comparing existing protocols.},
+  journal    = {ACM Comput. Surv.},
+  month      = {jul},
+  articleno  = {278},
+  numpages   = {35},
+  keywords   = {Blockchain consensus, cryptocurrency, security, scalability, decentralization}
+}
+
+@inproceedings{ouroboros-protocol,
+  author = {Kiayias, Aggelos and Russell, Alexander and David, Bernardo and Oliynykov, Roman},
+  year   = {2017},
+  month  = {07},
+  pages  = {357-388},
+  title  = {Ouroboros: A Provably Secure Proof-of-Stake Blockchain Protocol},
+  isbn   = {978-3-319-63687-0},
+  doi    = {10.1007/978-3-319-63688-7_12}
+}
+
