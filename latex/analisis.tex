@@ -71,7 +71,7 @@ Para evaluar esta hipótesis estudiamos el tiempo de ejecución empleado por los
 
 Ya que este mismo benchmark había sido utilizado por Godoy et al. en 2022 \cite{predicate-abstraction-for-smart-contract-validation}, a la hora de experimentar contamos con EPAs de todos los contratos involucrados, por lo que además pudimos usarlas para corroborar la correctitud de las abstracciones generadas.
 Los experimentos fueron realizados ejecutando ambos prototipos sobre cada contrato cinco veces y luego tomando el promedio del tiempo total de ejecución.
-Todas las mediciones fueron realizadas en una máquina en una máquina \textcolor{red}{\textbf{DESCRIPCION MAQUINA}}.
+Todas las mediciones fueron realizadas en una máquina con un procesador Intel Core i7-4770 \@ 3,40GHz x 8, 16 GB RAM, Mesa Intel HD Graphics4600 (HSW GT2) y almacenamiento SSD 256 GB, ejecutando Ubuntu 22.04.3 LTS.
 
 En la figura \ref{fig:classic-vs-alternativo} podemos ver los resultados del experimento realizado.
 Las mediciones fueron solo realizadas para los contratos \texttt{DefectiveComponentCounter}, \texttt{RoomThermostat}, \texttt{BasicProvenance} y \texttt{SimpleMarketplace} porque como podemos ver el tiempo de ejecución de la implementación del algoritmo clásico nunca fue menor a diez horas.
