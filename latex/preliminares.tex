@@ -33,7 +33,7 @@ Si lo que se busca es generar casos de prueba, la ejecución simbólica permite 
 A la hora de econtrar defectos, los valores concretos ofrecidos por ejecución simbólica permiten corroborar y depurar la presencia de bugs al ejecutarlos concretamente, en un contexto distinto a la ejecución simbólica que los generó.
 En el fragmento de código \ref{code:symb-exec-example} y en la figura \ref{fig:symb-tree-example} podemos ver una función sencilla y su árbol de ejecución simbólica asociado.
 
-Dada una \textit{path condition} (condición de camino), que significa la fórmula booleana mencionada, la generación de valores de entrada concretos que la satisfagan se basa típicamente en un SMT (Satisfibality Modulo Theory) solver.
+Dada una condición de camino, que es la fórmula booleana mencionada, la generación de valores de entrada concretos que la satisfagan se basa típicamente en un SMT (Satisfibality Modulo Theory) solver.
 La resolución de condiciones es uno de los principales desafíos que enfrenta la ejecución simbólica.
 Los SMT solvers escalan y permiten resolver combinaciones complejas de condiciones sobre cientos de variables.
 Sin embargo, ciertos elementos presentes en código comúnmente analizado, como la aritmética no lineal suelen ser un obstáculo en la eficiencia.
@@ -174,7 +174,7 @@ Este último, etiquetado ``\texttt{vacio}'' indica que ningún método se encuen
 
 \begin{figure}
     \centering
-    \includegraphics[width=0.45\textwidth]{figs/simple-merketplace-epa.png}
+    \includegraphics[width=0.3\textwidth]{figs/simple-merketplace-epa.png}
     \caption{EPA de \texttt{SimpleMarketplace}. Las etiquetas en los estados indican los métodos que se encuentran habilitados. Las etiquetas en las transiciones indican el método por el que ocurre la transición.}
     \label{fig:epa-example}
 \end{figure}

@@ -5,13 +5,6 @@ En cambio, sólo puede considerarse un subconjunto de los estados que la herrami
 Consideremos el siguiente ejemplo, el contrato \texttt{BoundedStack}, cuyo código podemos ver en el fragmento de código \ref{code:solidity-bounded-stack}.
 Este contrato consiste en una simple implementación de una pila como estructura de datos, con la peculiaridad de que la pila cuenta con un tamaño máximo.
 El contrato tiene sólo dos métodos externos: \textcolor{orange}{\texttt{push}} y \textcolor{orange}{\texttt{pop}}.
-La EPA de este contrato por otro lado también es bastante sencilla, y la podemos ver en la imagen \ref{fig:bounded-stack-epa}.
-Por fuera de los estados \textbf{init} y \textbf{vacio}, contamos con solo tres estados alcanzables, que son \textbf{\_push}, \textbf{\_pop} y \textbf{\_push\_pop}.
-El estado \textbf{\_push} se corresponde con la pila vacía, y es el que se produce al desplegar el contrato o luego de ejecutar \textcolor{orange}{\texttt{pop}} reiteradas veces.
-Cuando la pila tiene elementos pero no está llena se encuentra en el estado \textbf{\_push\_pop}, al que se puede llegar tanto desde sí mismo, como desde \textbf{\_push} y desde \textbf{\_pop}.
-Finalmente, el estado \textbf{\_pop} se corresponde con la pila llena, y se puede llegar tanto desde \textbf{\_push} (si el tamaño de la pila fuese uno) o desde \textbf{\_push\_pop}, pero no desde el constructor.
-Notoriamente, a menos que el contrato sea deployeado con un tamaño máximo de cero, nunca será posible alcanzar el estado \textbf{\_vacio}.
-
 \begin{lstlisting}[language=Solidity, label={code:solidity-bounded-stack}, caption={Contrato Inteligente \texttt{BoundedStack} en Solidity},captionpos=b]
 contract SizedStack {
     uint256 public size;
@@ -42,11 +35,31 @@ contract SizedStack {
     }
 }
 \end{lstlisting}
-
+La EPA de este contrato por otro lado también es bastante sencilla, y la podemos ver en la imagen \ref{fig:bounded-stack-epa}.
+Por fuera de los estados \textbf{init} y \textbf{vacio}, contamos con solo tres estados alcanzables, que son \textbf{\_push}, \textbf{\_pop} y \textbf{\_push\_pop}.
+El estado \textbf{\_push} se corresponde con la pila vacía, y es el que se produce al desplegar el contrato o luego de ejecutar \textcolor{orange}{\texttt{pop}} reiteradas veces.
+Cuando la pila tiene elementos pero no está llena se encuentra en el estado \textbf{\_push\_pop}, al que se puede llegar tanto desde sí mismo, como desde \textbf{\_push} y desde \textbf{\_pop}.
+Finalmente, el estado \textbf{\_pop} se corresponde con la pila llena, y se puede llegar tanto desde \textbf{\_push} (si el tamaño de la pila fuese uno) o desde \textbf{\_push\_pop}, pero no desde el constructor.
+Notoriamente, a menos que el contrato sea deployeado con un tamaño máximo de cero, nunca será posible alcanzar el estado \textbf{\_vacio}.
 
 Este es un buen ejemplo para observar la limitación introducida por el algoritmo alternativo al no explorar realmente todas las ejecuciones posibles de un método.
 Como se representa en la figura \ref{fig:bounded-stack-bad-epa}, veremos que es posible que el análisis del contrato \texttt{BoundedStack} por el algoritmo alternativo no pueda encontrar algunas de las transiciones presentes en la EPA, dependiendo del orden en el que elija ejecutar los métodos del contrato.
 Realicemos manualmente la exploración que realizaría el algoritmo para este contrato y veamos que es posible llegar al resultado presentado en la figura \ref{fig:bounded-stack-bad-epa}, en el que algunas transiciones son omitidas de la EPA.
+\begin{figure}[H]
+    \centering
+    \begin{subfigure}{0.4\textwidth}
+        {\includegraphics[width=\textwidth]{figs/bounded-stack-good-epa.png}}
+        \caption{Enabledness Preserving Abstraction del contrato \texttt{BoundedStack}}
+        \label{fig:bounded-stack-epa}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}{0.4\textwidth}
+        {\includegraphics[width=\textwidth]{figs/bonded-stack-bad-epa.png}}
+        \caption{EPA errónea del contrato \texttt{BoundedStack} generada por el algoritmo alternativo.
+            No se encuentran presentes las transiciones \textbf{\_pop} a \textbf{\_push\_pop} mediante \textcolor{orange}{\texttt{pop}} ni \textbf{\_push\_pop} a \textbf{\_push\_pop} mediante \textcolor{orange}{\texttt{pop}}.}
+        \label{fig:bounded-stack-bad-epa}
+    \end{subfigure}
+\end{figure}
 
 El algoritmo explora los estados alcanzables comenzando desde el constructor.
 Como vimos en la EPA de \texttt{BoundedStack}, los estados que resultan alcanzables son \textbf{\_push} y \textbf{vacio}.
@@ -65,19 +78,3 @@ Sin embargo, el algoritmo no presta atención a cuál fue la traza de métodos e
 Esto significa que la función de transición $\Delta$ quedará definida en $\Delta(\textbf{\_push\_pop},\textcolor{orange}{\texttt{pop}}) = \textbf{\_push}$ y $\Delta(\textbf{\_pop},\textcolor{orange}{\texttt{pop}}) = \textbf{\_push}$.
 De aquí en adelante la ejecución del algoritmo proseguirá hasta terminar con (al menos) esas dos transiciones faltantes.
 
-
-\begin{figure}
-    \centering
-    \begin{subfigure}{0.45\textwidth}
-        {\includegraphics[width=\textwidth]{figs/bounded-stack-good-epa.png}}
-        \caption{Enabledness Preserving Abstraction del contrato \texttt{BoundedStack}}
-        \label{fig:bounded-stack-epa}
-    \end{subfigure}
-    \hfill
-    \begin{subfigure}{0.45\textwidth}
-        {\includegraphics[width=\textwidth]{figs/bonded-stack-bad-epa.png}}
-        \caption{EPA errónea del contrato \texttt{BoundedStack} generada por el algoritmo alternativo.
-            No se encuentran presentes las transiciones \textbf{\_pop} a \textbf{\_push\_pop} mediante \textcolor{orange}{\texttt{pop}} ni \textbf{\_push\_pop} a \textbf{\_push\_pop} mediante \textcolor{orange}{\texttt{pop}}.}
-        \label{fig:bounded-stack-bad-epa}
-    \end{subfigure}
-\end{figure}

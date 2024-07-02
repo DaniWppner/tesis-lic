@@ -7,16 +7,16 @@ Vimos las limitaciones de este nuevo algoritmo frente a cierto tipo de contratos
 Pudimos contrastar la performance en tiempo del algoritmo novedoso contra el algoritmo de construcción de EPAs clásico para ejemplos simples, y obtuvimos que el algoritmo novedoso presentaba grandes mejoras sobre el clásico al implementar ambos con Manticore, aunque el tiempo total de ejecución de este algoritmo seguía sin resultar satisfactorio.
 
 Al buscar los principales culpables de la alta cantidad de tiempo empleado por el prototipo implementado, en busca de optimizaciones, identificamos que la etapa responsable de la mayoría del tiempo de ejecución	era la de ejecución simbólica de métodos de los contratos.
-Esta etapa asimismo resultaba la más difícil de analizar (y por ende de optimizar), debido a cómo se encontraba programada.
+Esta etapa asimismo resultaba la más difícil de analizar (y por ende de optimizar), debido a los patrones de asignación dinámica y multithreading que empleaba.
 Por otro lado, realizamos un análisis evaluando si la mayoría del tiempo era consumido por Manticore mismo o por los programas de SMT solving, y obtuvimos resultados que sugieren que este fuera consumido por los procesos de Manticore.
 
-Consideramos que áun existen algunas líneas que se pueden explorar en términos de optimización en tiempo de la herramienta implementada.
+Consideramos que áun existen algunas líneas que se pueden explorar en términos de optimización en tiempo del prototipo implementado.
 Por un lado, podría indagarse más profundo en el comportamiento de Manticore, intentando observar cuáles son las consultas que realiza a los programas de SMT solving.
 Por otro lado, explorar el impacto que tiene la explosión de estados producida por la presencia de múltiples \texttt{accounts} durante los análisis en el tiempo de ejecución de Manticore puede proveer un mayor entendimiento, además de ser un punto de partida para explorar técnicas que supriman esta misma explosión.
 
 Creemos que una línea de investigación futura es el uso de los callbacks de la API de manticore para realizar un análisis en el que se avanza de a un único \textcolor{cyan}{\texttt{state}} por vez, más similar a las estrategias clásicas de construcción de EPAs.
-Por otro lado, es posible que la capacidad de emular blockchains enteras de Manticore le permita encontrar propiedades en las abstracciones que le resulten más difíciles a las otras herramientas.
-Creemos que analizar esta hipótesis podría ser valioso para evaluar el valor de la estrategia presentada en este trabajo.
+Por otro lado, es posible que la capacidad de emular blockchains enteras de Manticore le permita encontrar propiedades en las abstracciones que le resulten más difíciles a otras herramienta que analizan un único contrato.
+Creemos que analizar esta hipótesis podría ser valioso para evaluar plenamente la estrategia presentada en este trabajo.
 
 \section{Trabajo relacionado}
 Desde hace un tiempo se emplea abstracción por predicados, similares a las de este trabajo, para realizar verificación de programas \cite{predicate-abstraction-for-verification}.
