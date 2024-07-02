@@ -1,22 +1,20 @@
 [0] Config.pm:304> INFO - This is Biber 2.14 (beta)
-[1] Config.pm:307> INFO - Logfile is 'tesis.blg'
-[234] biber:322> INFO - === Mon Jun 24, 2024, 07:49:23
-[278] Biber.pm:415> INFO - Reading 'tesis.bcf'
-[503] Biber.pm:943> INFO - Found 30 citekeys in bib section 0
-[574] Biber.pm:4256> INFO - Processing section 0
-[575] Utils.pm:75> INFO - Globbing data source 'bibliografia.bib'
-[576] Utils.pm:91> INFO - Globbed data source 'bibliografia.bib' to bibliografia.bib
-[615] Biber.pm:4455> INFO - Looking for bibtex format file 'bibliografia.bib' for section 0
-[621] bibtex.pm:1653> INFO - LaTeX decoding ...
-[694] bibtex.pm:1471> INFO - Found BibTeX data source 'bibliografia.bib'
-[896] Utils.pm:293> WARN - month field 'jul' in entry 'survey-on-protocols' is not an integer - this will probably not sort properly.
-[928] Utils.pm:293> WARN - I didn't find a database entry for 'torres' (section 0)
-[928] Utils.pm:293> WARN - I didn't find a database entry for 'verisol' (section 0)
-[928] Utils.pm:293> WARN - I didn't find a database entry for 'boogie' (section 0)
-[929] Utils.pm:293> WARN - I didn't find a database entry for 'Torres' (section 0)
-[1004] UCollate.pm:68> INFO - Overriding locale 'es-ES' defaults 'normalization = NFD' with 'normalization = prenormalized'
-[1004] UCollate.pm:68> INFO - Overriding locale 'es-ES' defaults 'variable = shifted' with 'variable = non-ignorable'
-[1005] Biber.pm:4084> INFO - Sorting list 'nty/global//global/global' of type 'entry' with template 'nty' and locale 'es-ES'
-[1066] bbl.pm:652> INFO - Writing 'tesis.bbl' with encoding 'UTF-8'
-[1103] bbl.pm:755> INFO - Output to tesis.bbl
-[1104] Biber.pm:128> INFO - WARNINGS: 5
+[0] Config.pm:307> INFO - Logfile is 'tesis.blg'
+[81] biber:322> INFO - === Fri Jun 28, 2024, 16:42:16
+[95] Biber.pm:415> INFO - Reading 'tesis.bcf'
+[171] Biber.pm:943> INFO - Found 44 citekeys in bib section 0
+[186] Biber.pm:4256> INFO - Processing section 0
+[187] Utils.pm:75> INFO - Globbing data source 'bibliografia.bib'
+[187] Utils.pm:91> INFO - Globbed data source 'bibliografia.bib' to bibliografia.bib
+[197] Biber.pm:4455> INFO - Looking for bibtex format file 'bibliografia.bib' for section 0
+[200] bibtex.pm:1653> INFO - LaTeX decoding ...
+[274] bibtex.pm:1471> INFO - Found BibTeX data source 'bibliografia.bib'
+[396] Utils.pm:293> WARN - month field 'may' in entry 'survey-on-symbolic-execution' is not an integer - this will probably not sort properly.
+[401] Utils.pm:293> WARN - month field 'feb' in entry 'symbolic-execution-three-decades-later' is not an integer - this will probably not sort properly.
+[448] Utils.pm:293> WARN - month field 'jul' in entry 'survey-on-protocols' is not an integer - this will probably not sort properly.
+[597] UCollate.pm:68> INFO - Overriding locale 'es-ES' defaults 'normalization = NFD' with 'normalization = prenormalized'
+[597] UCollate.pm:68> INFO - Overriding locale 'es-ES' defaults 'variable = shifted' with 'variable = non-ignorable'
+[597] Biber.pm:4084> INFO - Sorting list 'nty/global//global/global' of type 'entry' with template 'nty' and locale 'es-ES'
+[640] bbl.pm:652> INFO - Writing 'tesis.bbl' with encoding 'UTF-8'
+[665] bbl.pm:755> INFO - Output to tesis.bbl
+[665] Biber.pm:128> INFO - WARNINGS: 3

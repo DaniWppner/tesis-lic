@@ -10,9 +10,25 @@ Al buscar los principales culpables de la alta cantidad de tiempo empleado por e
 Esta etapa asimismo resultaba la más difícil de analizar (y por ende de optimizar), debido a cómo se encontraba programada.
 Por otro lado, realizamos un análisis evaluando si la mayoría del tiempo era consumido por Manticore mismo o por los programas de SMT solving, y obtuvimos resultados que sugieren que este fuera consumido por los procesos de Manticore.
 
-Consideramos que existen algunas líneas no exploradas en términos de optimización en tiempo de la herramienta implementada.
+Consideramos que áun existen algunas líneas que se pueden explorar en términos de optimización en tiempo de la herramienta implementada.
 Por un lado, podría indagarse más profundo en el comportamiento de Manticore, intentando observar cuáles son las consultas que realiza a los programas de SMT solving.
-Además, no se exploró el impacto que tiene la explosión de estados producida por la presencia de múltiples \texttt{accounts} durante los análisis en el tiempo de ejecución de Manticore, ni se exploraron técnicas para suprimir esta misma.
+Por otro lado, explorar el impacto que tiene la explosión de estados producida por la presencia de múltiples \texttt{accounts} durante los análisis en el tiempo de ejecución de Manticore puede proveer un mayor entendimiento, además de ser un punto de partida para explorar técnicas que supriman esta misma explosión.
 
-Creemos que una línea de investigación sin explorar es el uso de los callbacks de la API de manticore para realizar un análisis en el que se avanza de a un único \textcolor{cyan}{\texttt{state}} por vez, más similar a las estrategias clásicas de construcción de EPAs.
-Por otro lado, es requerido averiguar si la capacidad de emular blockchains enteras de Manticore ofrece alguna distinción en la capacidad de generación de abstracciones, si se quiere terminar de evaluar el valor de la técnica desarollada en este trabajo.
+Creemos que una línea de investigación futura es el uso de los callbacks de la API de manticore para realizar un análisis en el que se avanza de a un único \textcolor{cyan}{\texttt{state}} por vez, más similar a las estrategias clásicas de construcción de EPAs.
+Por otro lado, es posible que la capacidad de emular blockchains enteras de Manticore le permita encontrar propiedades en las abstracciones que le resulten más difíciles a las otras herramientas.
+Creemos que analizar esta hipótesis podría ser valioso para evaluar el valor de la estrategia presentada en este trabajo.
+
+\section{Trabajo relacionado}
+Desde hace un tiempo se emplea abstracción por predicados, similares a las de este trabajo, para realizar verificación de programas \cite{predicate-abstraction-for-verification}.
+Cuando el objetivo es verificación, el nivel de abstracción, el tamaño del modelo resultante y la facilidad de vincular las abstracciones generadas con el programa original varían.
+Abstraer al llamado de función permite generar abstracciones mucho mas amenas para la validación, aunque agrupar tanto el comportamiento las hace menos útiles para la verificación.
+
+La generación de EPAs es una técnica similar a la generación de typestates \cite{high-level-protocols-for-low-level-software} de un programa.
+Estas abstracciones pensadas para la verificación son menos permisivas que las EPAs, y sólo permiten trazas válidas en el artefacto original.
+Otra técnica similar es la inferencia de interfaces \cite{permissive-interfaces}.
+Existen técnicas para inferir modelos del comportamiento a partir de trazas de ejecución, infiriendo especificaciones para sucesivamente generar nuevos casos de test \cite{inference-by-traces}.
+
+En el contexto de contratos inteligentes, existen múltiples herramientas ya mencionadas dedicadas a encontrar vulnerabilidades de seguridad \cite{oyente} \cite{echidna} \cite{manticore} \cite{pakala} \cite{teether} o verificación de propiedades \cite{solidity-to-CPN} \cite{formal-analysis-based-on-CPN} \cite{verisol}.
+Otros acercamientos \cite{VeriSolid} construyen contratos inteligentes correctos a partir de especificaciones.
+Con respecto a herramientas orientadas a la validación, existen visualizadores \cite{surya} \cite{slither} de grafos de control de flujo y herencia de contratos en Solidity, pero que no visualizan funcionalidad o comportamiento como lo hacen las abstracciones de este trabajo.
+

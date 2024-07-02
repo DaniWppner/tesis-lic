@@ -1,0 +1,33 @@
+\BOOKMARK [0][-]{chapter.1}{Introduccion}{}% 1
+\BOOKMARK [1][-]{section.1.1}{Objetivos}{chapter.1}% 2
+\BOOKMARK [0][-]{chapter.2}{Motivación}{}% 3
+\BOOKMARK [0][-]{chapter.3}{Conceptos\040Preliminares}{}% 4
+\BOOKMARK [1][-]{section.3.1}{Ejecución simbólica dinámica}{chapter.3}% 5
+\BOOKMARK [1][-]{section.3.2}{Blockchains}{chapter.3}% 6
+\BOOKMARK [2][-]{subsection.3.2.1}{Contratos\040Inteligentes\040en\040Ethereum\040y\040Solidity}{section.3.2}% 7
+\BOOKMARK [2][-]{subsection.3.2.2}{Ejemplo}{section.3.2}% 8
+\BOOKMARK [1][-]{section.3.3}{Enabledness-Preserving\040Abstractions}{chapter.3}% 9
+\BOOKMARK [1][-]{section.3.4}{Modelo\040Formal}{chapter.3}% 10
+\BOOKMARK [0][-]{chapter.4}{Manticore}{}% 11
+\BOOKMARK [1][-]{section.4.1}{Herramienta por Línea de Comandos}{chapter.4}% 12
+\BOOKMARK [1][-]{section.4.2}{Manticore-Verifier}{chapter.4}% 13
+\BOOKMARK [1][-]{section.4.3}{Arquitectura}{chapter.4}% 14
+\BOOKMARK [1][-]{section.4.4}{API\040programable}{chapter.4}% 15
+\BOOKMARK [0][-]{chapter.5}{Construcción de EPAs mediante ejecución simbólica}{}% 16
+\BOOKMARK [1][-]{section.5.1}{Construcción clásica de EPAs}{chapter.5}% 17
+\BOOKMARK [1][-]{section.5.2}{Algoritmo\040alternativo}{chapter.5}% 18
+\BOOKMARK [1][-]{section.5.3}{Limitaciones}{chapter.5}% 19
+\BOOKMARK [0][-]{chapter.6}{Implementación}{}% 20
+\BOOKMARK [1][-]{section.6.1}{Algoritmo clásico}{chapter.6}% 21
+\BOOKMARK [1][-]{section.6.2}{Algoritmo\040alternativo}{chapter.6}% 22
+\BOOKMARK [1][-]{section.6.3}{Manticore\040como\040caja\040negra}{chapter.6}% 23
+\BOOKMARK [1][-]{section.6.4}{Abstracción de los contratos por combinación de enums}{chapter.6}% 24
+\BOOKMARK [0][-]{chapter.7}{Análisis}{}% 25
+\BOOKMARK [1][-]{section.7.1}{Comparación de las abstracciones generadas entre el algoritmo clásico y el alternativo}{chapter.7}% 26
+\BOOKMARK [2][-]{subsection.7.1.1}{Caso\040RoomThermostat}{section.7.1}% 27
+\BOOKMARK [2][-]{subsection.7.1.2}{Caso\040BoundedStack}{section.7.1}% 28
+\BOOKMARK [1][-]{section.7.2}{Comparación en tiempo de ejecución entre el algoritmo clásico y el alternativo}{chapter.7}% 29
+\BOOKMARK [1][-]{section.7.3}{Evaluación más detallada del tiempo de ejecución del algoritmo alternativo}{chapter.7}% 30
+\BOOKMARK [2][-]{subsection.7.3.1}{Resultados}{section.7.3}% 31
+\BOOKMARK [0][-]{chapter.8}{Conclusiones}{}% 32
+\BOOKMARK [1][-]{section.8.1}{Trabajo\040relacionado}{chapter.8}% 33

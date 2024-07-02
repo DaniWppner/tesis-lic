@@ -22,19 +22,7 @@ De hecho, los ataques a contratos inteligentes para abusar \textit{bugs} han cau
 Por esto, es común en la industria contratar a auditores independientes para la validación de contratos inteligentes,
 quienes a menudo usan herramientas para facilitar su trabajo y a menudo cuentan sólo con especificaciones informales del comportamiento deseado.
 En estas situaciones, una de las tantas técnicas útiles para la validación es  la construcción de una máquina de estados finita que abstraiga el comportamiento del contrato, destacando sólo ciertas propiedades interesantes \cite{predicate-abstraction-for-smart-contract-validation}.
-Estas máquinas abstraen al nivel de ``llamado a función'', y están fuertemente basadas en las \textit{EPAs} (Enabledness Preserving Abstraction) \cite{de-caso-epa} que son máquinas de estado que describen las posibles secuencias de llamados a funciones del contrato.
-En el trabajo presentado por Godoy et al. en 2022 \cite{predicate-abstraction-for-smart-contract-validation} utilizan un enfoque donde construyen EPAs a partir de código fuente traduciendo manualmente las pre- y post- condiciones de los contratos inteligentes a un lenguaje intermedio, Alloy \cite{alloy}.
-Más tarde en 2023 Torres at al. \cite{torres} presentó un trabajo en el que desarrollan un prototipo que genera las abstracciones a partir de contratos inteligentes programados en Solidity de manera automática mediante model checking.
 
-\section{Objetivos}
-
-Nos interesa explorar otras alternativas para la construcción de EPAs para contratos inteligentes implementados en Solidity de manera automática.
-Buscamos implementar un prototipo que se base en ejecución simbólica utilizando Manticore, una herramienta open source de ejecución simbólica dinámica con soporte tanto para la EVM como código nativo desarrollada por trailofbits \cite{manticore}.
-Esperamos generar abstracciones correctas y de manera eficiente.
-Además, Manticore respalda la simulación de una blockchain completa, manteniendo el estado de múltiples contratos y usuarios dentro de la red.
-Buscamos aprovechar estas cualidades para detectar comportamientos más complejos en las abstracciones generadas.
-
-\section{Trabajo relacionado}
 En 2013, De Caso et. al \cite{de-caso-epa} propone las EPAs como abstracciones para implementaciones de APIs especificadas en formato pre- y post-condición.
 En ese trabajo exploran la utilidad de las EPAs para la asistencia de validación de código y argumentan su usabilidad para bug finding, mejora de especificaciones formales y de documentación.
 Además, presentan una técnica para construir EPAs en general e implementan una herramienta que las sintetiza automáticamente a partir de código fuente de estructuras en C.
@@ -44,8 +32,14 @@ Proponen una estrategia de validación guiada por expertos más general, en el q
 Sugieren partir de abstracciones idénticas a las EPAs y/o basadas en el valor de variables de tipo enum, agregando predicados ideados por los auditores para discernir propiedades que les resulten interesantes.
 
 En 2023, Torres et. al \cite{torres} propone el uso de VeriSol \cite{verisol} para la generación automática de estas abstracciones por predicados de contratos inteligentes.
-Presentan una herramienta que analiza automáticamente los contratos, reduciendo su tiempo de ejecución a \textcolor{red}{\textbf{¿?}}.
-VeriSol, la herramienta utilizada, es una herramienta de bounded model checking para contratos escritos en versiones de Solidity anteriores a \textcolor{red}{\textbf{¿?}}.
+Presentan una herramienta que analiza automáticamente los contratos, reduciendo su tiempo de ejecución a unos pocos minutos para un benchmark conocido.
+VeriSol, la herramienta utilizada, es una herramienta de bounded model checking para contratos escritos en versiones de Solidity anteriores a \texttt{0.6}.
 Realiza una traducción de los contratos a un lenguaje de verificación intermedio, Boogie \cite{boogie}, perdiendo en el proceso la capacidad de modelar interacciones de los contratos con el resto de la blockchain.
 
-En este trabajo buscamos ... \textcolor{red}{\textbf{¿señalamos diferencias o ni ponemos esta oración?}}
+\section{Objetivos}
+
+Nos interesa explorar otras alternativas para la construcción de EPAs para contratos inteligentes implementados en Solidity de manera automática.
+Buscamos implementar un prototipo que se base en ejecución simbólica utilizando Manticore, una herramienta open source de ejecución simbólica dinámica con soporte tanto para la EVM como código nativo desarrollada por trailofbits \cite{manticore}.
+Esperamos generar abstracciones correctas y de manera eficiente.
+Además, Manticore respalda la simulación de una blockchain completa, manteniendo el estado de múltiples contratos y usuarios dentro de la red.
+Buscamos aprovechar estas cualidades para detectar comportamientos más complejos en las abstracciones generadas.

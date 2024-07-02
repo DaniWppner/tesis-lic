@@ -98,6 +98,105 @@
   url   = {https://github.com/trailofbits/ManticoreUI}
 }
 
+@article{survey-on-symbolic-execution,
+  author     = {Baldoni, Roberto and Coppa, Emilio and D’elia, Daniele Cono and Demetrescu, Camil and Finocchi, Irene},
+  title      = {A Survey of Symbolic Execution Techniques},
+  year       = {2018},
+  issue_date = {May 2019},
+  publisher  = {Association for Computing Machinery},
+  address    = {New York, NY, USA},
+  volume     = {51},
+  number     = {3},
+  issn       = {0360-0300},
+  url        = {https://doi.org/10.1145/3182657},
+  doi        = {10.1145/3182657},
+  abstract   = {Many security and software testing applications require checking whether certain properties of a program hold for any possible usage scenario. For instance, a tool for identifying software vulnerabilities may need to rule out the existence of any backdoor to bypass a program’s authentication. One approach would be to test the program using different, possibly random inputs. As the backdoor may only be hit for very specific program workloads, automated exploration of the space of possible inputs is of the essence. Symbolic execution provides an elegant solution to the problem, by systematically exploring many possible execution paths at the same time without necessarily requiring concrete inputs. Rather than taking on fully specified input values, the technique abstractly represents them as symbols, resorting to constraint solvers to construct actual instances that would cause property violations. Symbolic execution has been incubated in dozens of tools developed over the past four decades, leading to major practical breakthroughs in a number of prominent software reliability applications. The goal of this survey is to provide an overview of the main ideas, challenges, and solutions developed in the area, distilling them for a broad audience.},
+  journal    = {ACM Comput. Surv.},
+  month      = {may},
+  articleno  = {50},
+  numpages   = {39},
+  keywords   = {Symbolic execution, concolic execution, software testing, static analysis}
+}
+
+@article{symbolic-execution-three-decades-later,
+  author     = {Cadar, Cristian and Sen, Koushik},
+  title      = {Symbolic execution for software testing: three decades later},
+  year       = {2013},
+  issue_date = {February 2013},
+  publisher  = {Association for Computing Machinery},
+  address    = {New York, NY, USA},
+  volume     = {56},
+  number     = {2},
+  issn       = {0001-0782},
+  url        = {https://doi.org/10.1145/2408776.2408795},
+  doi        = {10.1145/2408776.2408795},
+  abstract   = {The challenges---and great promise---of modern symbolic execution techniques, and the tools to help implement them.},
+  journal    = {Commun. ACM},
+  month      = {feb},
+  pages      = {82–90},
+  numpages   = {9}
+}
+
+@article{vera-tesis,
+  author    = {Bogdanich Espina, Vera},
+  publisher = {Universidad de Buenos Aires},
+  journal   = {Tesis de Grado},
+  title     = {Ethereum smart contracts verification: a survey and a prototype tool.},
+  url       = {https://hdl.handle.net/20.500.12110/seminario_nCOM000440_Bogdanich},
+  year      = {2019}
+}
+
+@inproceedings{oyente,
+  author    = {Luu, Loi and Chu, Duc-Hiep and Olickel, Hrishi and Saxena, Prateek and Hobor, Aquinas},
+  title     = {Making Smart Contracts Smarter},
+  year      = {2016},
+  isbn      = {9781450341394},
+  publisher = {Association for Computing Machinery},
+  address   = {New York, NY, USA},
+  url       = {https://doi.org/10.1145/2976749.2978309},
+  doi       = {10.1145/2976749.2978309},
+  abstract  = {Cryptocurrencies record transactions in a decentralized data structure called a blockchain. Two of the most popular cryptocurrencies, Bitcoin and Ethereum, support the feature to encode rules or scripts for processing transactions. This feature has evolved to give practical shape to the ideas of smart contracts, or full-fledged programs that are run on blockchains. Recently, Ethereum's smart contract system has seen steady adoption, supporting tens of thousands of contracts, holding millions dollars worth of virtual coins.In this paper, we investigate the security of running smart contracts based on Ethereum in an open distributed network like those of cryptocurrencies. We introduce several new security problems in which an adversary can manipulate smart contract execution to gain profit. These bugs suggest subtle gaps in the understanding of the distributed semantics of the underlying platform. As a refinement, we propose ways to enhance the operational semantics of Ethereum to make contracts less vulnerable. For developers writing contracts for the existing Ethereum system, we build a symbolic execution tool called Oyente to find potential security bugs. Among 19, 336 existing Ethereum contracts, Oyente flags 8, 833 of them as vulnerable, including the TheDAO bug which led to a 60 million US dollar loss in June 2016. We also discuss the severity of other attacks for several case studies which have source code available and confirm the attacks (which target only our accounts) in the main Ethereum network.},
+  booktitle = {Proceedings of the 2016 ACM SIGSAC Conference on Computer and Communications Security},
+  pages     = {254–269},
+  numpages  = {16},
+  keywords  = {symbolic execution, smart contract, ethereum, cryptocurrencies, blockchain},
+  location  = {Vienna, Austria},
+  series    = {CCS '16}
+}  
+
+@misc{pakala,
+  url   = {https://github.com/palkeo/pakala},
+  title = {Pakala: A tool to search for exploitable bugs in Ethereum smart contracts.}
+}
+
+@misc{mythril,
+  url   = {https://github.com/Consensys/mythril},
+  title = {Mythril: A security analysis tool for EVM bytecode.}
+}
+
+@inproceedings{teether,
+  author    = {Krupp, Johannes and Rossow, Christian},
+  title     = {TEETHER: gnawing at ethereum to automatically exploit smart contracts},
+  year      = {2018},
+  isbn      = {9781931971461},
+  publisher = {USENIX Association},
+  address   = {USA},
+  abstract  = {Cryptocurrencies like Bitcoin not only provide a decentralized currency, but also provide a programmatic way to process transactions. Ethereum, the second largest cryptocurrency next to Bitcoin, is the first to provide a Turing-complete language to specify transaction processing, thereby enabling so-called smart contracts. This provides an opportune setting for attackers, as security vulnerabilities are tightly intertwined with financial gain. In this paper, we consider the problem of automatic vulnerability identification and exploit generation for smart contracts. We develop a generic definition of vulnerable contracts and use this to build TEETHER, a tool that allows creating an exploit for a contract given only its binary bytecode. We perform a large-scale analysis of all 38,757 unique Ethereum contracts, 815 out of which our tool finds working exploits for--completely automated.},
+  booktitle = {Proceedings of the 27th USENIX Conference on Security Symposium},
+  pages     = {1317–1333},
+  numpages  = {17},
+  location  = {Baltimore, MD, USA},
+  series    = {SEC'18}
+}
+
+@article{torres,
+  author    = {Torres, Edén},
+  publisher = {Universidad de Buenos Aires},
+  journal   = {Tesis de Grado},
+  title     = {Generador de abstracciones para smart contracts.},
+  year      = {2023}
+}
+
 @misc{open-zeppelin-library,
   author = {OpenZeppelin},
   title  = {OpenZeppelin: Build secure smart contracts in solidity},
@@ -144,6 +243,14 @@
 @misc{manticore-tiny-changes,
   title = {Repositorio con los cambios realizados sobre Manticore},
   url   = {https://github.com/DaniWppner/Manticore-tiny-changes}
+}
+
+@article{boogie,
+  author = {Leino, K Rustan M},
+  year   = {2008},
+  month  = {01},
+  pages  = {},
+  title  = {This is Boogie 2}
 }
 
 @inproceedings{bitcoin-overview,
@@ -217,3 +324,192 @@
   doi    = {10.1007/978-3-319-63688-7_12}
 }
 
+@inbook{predicate-abstraction-for-verification,
+  author    = {Jhala, Ranjit
+               and Podelski, Andreas
+               and Rybalchenko, Andrey},
+  editor    = {Clarke, Edmund M.
+               and Henzinger, Thomas A.
+               and Veith, Helmut
+               and Bloem, Roderick},
+  title     = {Predicate Abstraction for Program Verification},
+  booktitle = {Handbook of Model Checking},
+  year      = {2018},
+  publisher = {Springer International Publishing},
+  address   = {Cham},
+  pages     = {447--491},
+  abstract  = {We present basic principles of algorithms for the verification of safety and termination of programs. The algorithms call procedures on logical formulas in order to construct an abstraction and to refine an abstraction. The two underlying concepts are predicate abstraction and counterexample-guided abstraction refinement.},
+  isbn      = {978-3-319-10575-8},
+  doi       = {10.1007/978-3-319-10575-8_15},
+  url       = {https://doi.org/10.1007/978-3-319-10575-8_15}
+}
+
+@article{10.1145/381694.378811,
+  author     = {DeLine, Robert and F\"{a}hndrich, Manuel},
+  title      = {Enforcing high-level protocols in low-level software},
+  year       = {2001},
+  issue_date = {May 2001},
+  publisher  = {Association for Computing Machinery},
+  address    = {New York, NY, USA},
+  volume     = {36},
+  number     = {5},
+  issn       = {0362-1340},
+  url        = {https://doi.org/10.1145/381694.378811},
+  doi        = {10.1145/381694.378811},
+  journal    = {SIGPLAN Not.},
+  month      = {may},
+  pages      = {59–69},
+  numpages   = {11}
+}
+
+@inproceedings{high-level-protocols-for-low-level-software,
+  author    = {DeLine, Robert and F\"{a}hndrich, Manuel},
+  title     = {Enforcing high-level protocols in low-level software},
+  year      = {2001},
+  isbn      = {1581134142},
+  publisher = {Association for Computing Machinery},
+  address   = {New York, NY, USA},
+  url       = {https://doi.org/10.1145/378795.378811},
+  doi       = {10.1145/378795.378811},
+  booktitle = {Proceedings of the ACM SIGPLAN 2001 Conference on Programming Language Design and Implementation},
+  pages     = {59–69},
+  numpages  = {11},
+  location  = {Snowbird, Utah, USA},
+  series    = {PLDI '01}
+}
+
+@article{10.1145/1095430.1081713,
+  author     = {Henzinger, Thomas A. and Jhala, Ranjit and Majumdar, Rupak},
+  title      = {Permissive interfaces},
+  year       = {2005},
+  issue_date = {September 2005},
+  publisher  = {Association for Computing Machinery},
+  address    = {New York, NY, USA},
+  volume     = {30},
+  number     = {5},
+  issn       = {0163-5948},
+  url        = {https://doi.org/10.1145/1095430.1081713},
+  doi        = {10.1145/1095430.1081713},
+  abstract   = {A modular program analysis considers components independently and provides a succinct summary for each component, which is used when checking the rest of the system. Consider a system consisting of a library and a client. A temporal summary, or interface, of the library specifies legal sequences of library calls. The interface is safe if no call sequence violates the library's internal invariants; the interface is permissive if it contains every such sequence. Modular program analysis requires full interfaces, which are both safe and permissive: the client does not cause errors in the library if and only if it makes only sequences of library calls that are allowed by the full interface of the library.Previous interface-based methods have focused on safe interfaces, which may be too restrictive and thus reject good clients. We present an algorithm for automatically synthesizing software interfaces that are both safe and permissive. The algorithm generates interfaces as graphs whose vertices are labeled with predicates over the library's internal state, and whose edges are labeled with library calls. The interface state is refined incrementally until the full interface is constructed. In other words, the algorithm automatically synthesizes a typestate system for the library, against which any client can be checked for compatibility. We present an implementation of the algorithm which is based on the BLAST model checker, and we evaluate some case studies.},
+  journal    = {SIGSOFT Softw. Eng. Notes},
+  month      = {sep},
+  pages      = {31–40},
+  numpages   = {10},
+  keywords   = {software interfaces, modular verification}
+}
+
+@inproceedings{permissive-interfaces,
+  author    = {Henzinger, Thomas A. and Jhala, Ranjit and Majumdar, Rupak},
+  title     = {Permissive interfaces},
+  year      = {2005},
+  isbn      = {1595930140},
+  publisher = {Association for Computing Machinery},
+  address   = {New York, NY, USA},
+  url       = {https://doi.org/10.1145/1081706.1081713},
+  doi       = {10.1145/1081706.1081713},
+  abstract  = {A modular program analysis considers components independently and provides a succinct summary for each component, which is used when checking the rest of the system. Consider a system consisting of a library and a client. A temporal summary, or interface, of the library specifies legal sequences of library calls. The interface is safe if no call sequence violates the library's internal invariants; the interface is permissive if it contains every such sequence. Modular program analysis requires full interfaces, which are both safe and permissive: the client does not cause errors in the library if and only if it makes only sequences of library calls that are allowed by the full interface of the library.Previous interface-based methods have focused on safe interfaces, which may be too restrictive and thus reject good clients. We present an algorithm for automatically synthesizing software interfaces that are both safe and permissive. The algorithm generates interfaces as graphs whose vertices are labeled with predicates over the library's internal state, and whose edges are labeled with library calls. The interface state is refined incrementally until the full interface is constructed. In other words, the algorithm automatically synthesizes a typestate system for the library, against which any client can be checked for compatibility. We present an implementation of the algorithm which is based on the BLAST model checker, and we evaluate some case studies.},
+  booktitle = {Proceedings of the 10th European Software Engineering Conference Held Jointly with 13th ACM SIGSOFT International Symposium on Foundations of Software Engineering},
+  pages     = {31–40},
+  numpages  = {10},
+  keywords  = {software interfaces, modular verification},
+  location  = {Lisbon, Portugal},
+  series    = {ESEC/FSE-13}
+}
+
+@inproceedings{inference-by-traces,
+  author    = {Ghezzi, Carlo and Mocci, Andrea and Monga, Mattia},
+  booktitle = {2009 IEEE 31st International Conference on Software Engineering},
+  title     = {Synthesizing intensional behavior models by graph transformation},
+  year      = {2009},
+  volume    = {},
+  number    = {},
+  pages     = {430-440},
+  keywords  = {Documentation;Runtime;Inspection;Formal specifications;Service oriented architecture;Contracts;Writing;Web services;Java;Containers},
+  doi       = {10.1109/ICSE.2009.5070542}
+}
+
+@inproceedings{solidity-to-CPN,
+  author    = {Garfatta, Ikram and Klai, Ka\"{\i}s and Gra\"{\i}et, Mohamed and Gaaloul, Walid},
+  title     = {Model checking of vulnerabilities in smart contracts: a solidity-to-CPN approach},
+  year      = {2022},
+  isbn      = {9781450387132},
+  publisher = {Association for Computing Machinery},
+  address   = {New York, NY, USA},
+  url       = {https://doi.org/10.1145/3477314.3507309},
+  doi       = {10.1145/3477314.3507309},
+  abstract  = {Despite the benefits that the Blockchain technology brings to many application fields, its adoption does not come without challenges. Smart contracts, which are at the core of 2nd generation blockchains, can often be riddled with vulnerabilities that can be exploited to attack the platform and threaten its security. It is therefore crucial for the protection of the designed systems to prove the correctness of the smart contracts to be deployed. Approaches have been proposed to detect generic vulnerabilities like reentrancy, but the results would often include false positives where the detected bug is either non existent or not exploitable. Besides, such approaches do not offer to check contract-specific properties. The work presented in this paper is situated as part of a formal approach that we have proposed in an attempt to bridge this gap. This previously outlined approach is based on the transformation of Solidity smart contracts into Coloured Petri nets, which provides the possibility to verify smart contracts with reference to properties expressed as Linear Temporal Logic (LTL) formulae. Herein we extend our previous work on mainly two levels: first, by taking into account the concept of function calls in the transformation and second, by focusing on the LTL properties that can define the correctness of a smart contract. Such properties can be specific to the control- or data-flow of the contracts being checked. They can also be used to express vulnerabilities as we showcase by proposing LTL formalizations for six vulnerabilities from the literature. We then leverage the capability of the Helena model checker to detect these vulnerabilities while discerning their exploitability, as well as check temporal-based contract-specific properties.},
+  booktitle = {Proceedings of the 37th ACM/SIGAPP Symposium on Applied Computing},
+  pages     = {316–325},
+  numpages  = {10},
+  keywords  = {temporal properties, solidity, smart contract, model checker, coloured petri nets, blockchain},
+  location  = {Virtual Event},
+  series    = {SAC '22}
+}
+
+@article{verisol,
+  author     = {Shuvendu K. Lahiri and
+                Shuo Chen and
+                Yuepeng Wang and
+                Isil Dillig},
+  title      = {Formal Specification and Verification of Smart Contracts for Azure
+                Blockchain},
+  journal    = {CoRR},
+  volume     = {abs/1812.08829},
+  year       = {2018},
+  url        = {http://arxiv.org/abs/1812.08829},
+  eprinttype = {arXiv},
+  eprint     = {1812.08829},
+  timestamp  = {Wed, 02 Jan 2019 14:40:18 +0100},
+  biburl     = {https://dblp.org/rec/journals/corr/abs-1812-08829.bib},
+  bibsource  = {dblp computer science bibliography, https://dblp.org}
+}
+
+@article{formal-analysis-based-on-CPN,
+  author   = {Duo, Wang and Xin, Huang and Xiaofeng, Ma},
+  journal  = {IEEE Intelligent Systems},
+  title    = {Formal Analysis of Smart Contract Based on Colored Petri Nets},
+  year     = {2020},
+  volume   = {35},
+  number   = {3},
+  pages    = {19-30},
+  keywords = {Smart contracts;Syntactics;Security;Petri nets;Virtual machining;Analytical models;Smart Contract;Formal Analysis;Colored Petri Net;Model Checking},
+  doi      = {10.1109/MIS.2020.2977594}
+}
+
+@article{VeriSolid,
+  author     = {Anastasia Mavridou and
+                Aron Laszka and
+                Emmanouela Stachtiari and
+                Abhishek Dubey},
+  title      = {VeriSolid: Correct-by-Design Smart Contracts for Ethereum},
+  journal    = {CoRR},
+  volume     = {abs/1901.01292},
+  year       = {2019},
+  url        = {http://arxiv.org/abs/1901.01292},
+  eprinttype = {arXiv},
+  eprint     = {1901.01292},
+  timestamp  = {Thu, 31 Jan 2019 13:52:49 +0100},
+  biburl     = {https://dblp.org/rec/journals/corr/abs-1901-01292.bib},
+  bibsource  = {dblp computer science bibliography, https://dblp.org}
+}
+
+@misc{surya,
+  url   = {https://github.com/ConsenSys/surya},
+  title = {Surya, The Sun God: A Solidity Inspector}
+}
+
+@article{slither,
+  author     = {Josselin Feist and
+                Gustavo Grieco and
+                Alex Groce},
+  title      = {Slither: {A} Static Analysis Framework For Smart Contracts},
+  journal    = {CoRR},
+  volume     = {abs/1908.09878},
+  year       = {2019},
+  url        = {http://arxiv.org/abs/1908.09878},
+  eprinttype = {arXiv},
+  eprint     = {1908.09878},
+  timestamp  = {Thu, 29 Aug 2019 16:32:34 +0200},
+  biburl     = {https://dblp.org/rec/journals/corr/abs-1908-09878.bib},
+  bibsource  = {dblp computer science bibliography, https://dblp.org}
+}

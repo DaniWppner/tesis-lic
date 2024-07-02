@@ -31,6 +31,69 @@
       \verb https://developer.algorand.org/docs/get-details/dapps/avm/
       \endverb
     \endentry
+    \entry{survey-on-symbolic-execution}{article}{}
+      \name{author}{5}{}{%
+        {{hash=22a28bd4c4375f650b7bc5ca7e1def0b}{%
+           family={Baldoni},
+           familyi={B\bibinitperiod},
+           given={Roberto},
+           giveni={R\bibinitperiod}}}%
+        {{hash=838313855b1318a89487737723f117a9}{%
+           family={Coppa},
+           familyi={C\bibinitperiod},
+           given={Emilio},
+           giveni={E\bibinitperiod}}}%
+        {{hash=cacdd27cffa43475e5cc3c1b2ba5f4cb}{%
+           family={D’elia},
+           familyi={D\bibinitperiod},
+           given={Daniele\bibnamedelima Cono},
+           giveni={D\bibinitperiod\bibinitdelim C\bibinitperiod}}}%
+        {{hash=0d818aa3e968cd8759e8d31211dc6382}{%
+           family={Demetrescu},
+           familyi={D\bibinitperiod},
+           given={Camil},
+           giveni={C\bibinitperiod}}}%
+        {{hash=988d2602b6318807e4481ff5c673bbd5}{%
+           family={Finocchi},
+           familyi={F\bibinitperiod},
+           given={Irene},
+           giveni={I\bibinitperiod}}}%
+      }
+      \list{location}{1}{%
+        {New York, NY, USA}%
+      }
+      \list{publisher}{1}{%
+        {Association for Computing Machinery}%
+      }
+      \strng{namehash}{e61bf9b5a1d08d8f9562b57211fe1ff7}
+      \strng{fullhash}{0efa45ce2ef5183f884f16dd29f71523}
+      \strng{bibnamehash}{e61bf9b5a1d08d8f9562b57211fe1ff7}
+      \strng{authorbibnamehash}{e61bf9b5a1d08d8f9562b57211fe1ff7}
+      \strng{authornamehash}{e61bf9b5a1d08d8f9562b57211fe1ff7}
+      \strng{authorfullhash}{0efa45ce2ef5183f884f16dd29f71523}
+      \field{sortinit}{B}
+      \field{sortinithash}{8de16967003c7207dae369d874f1456e}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{abstract}{Many security and software testing applications require checking whether certain properties of a program hold for any possible usage scenario. For instance, a tool for identifying software vulnerabilities may need to rule out the existence of any backdoor to bypass a program’s authentication. One approach would be to test the program using different, possibly random inputs. As the backdoor may only be hit for very specific program workloads, automated exploration of the space of possible inputs is of the essence. Symbolic execution provides an elegant solution to the problem, by systematically exploring many possible execution paths at the same time without necessarily requiring concrete inputs. Rather than taking on fully specified input values, the technique abstractly represents them as symbols, resorting to constraint solvers to construct actual instances that would cause property violations. Symbolic execution has been incubated in dozens of tools developed over the past four decades, leading to major practical breakthroughs in a number of prominent software reliability applications. The goal of this survey is to provide an overview of the main ideas, challenges, and solutions developed in the area, distilling them for a broad audience.}
+      \field{issn}{0360-0300}
+      \field{journaltitle}{ACM Comput. Surv.}
+      \field{month}{5}
+      \field{number}{3}
+      \field{title}{A Survey of Symbolic Execution Techniques}
+      \field{volume}{51}
+      \field{year}{2018}
+      \verb{doi}
+      \verb 10.1145/3182657
+      \endverb
+      \verb{urlraw}
+      \verb https://doi.org/10.1145/3182657
+      \endverb
+      \verb{url}
+      \verb https://doi.org/10.1145/3182657
+      \endverb
+      \keyw{Symbolic execution,concolic execution,software testing,static analysis}
+    \endentry
     \entry{echidna}{misc}{}
       \name{author}{1}{}{%
         {{hash=2af8f7be0643a7513a2c87bdcbc9751f}{%
@@ -87,6 +150,37 @@
       \endverb
       \verb{url}
       \verb https://github.com/trailofbits/manticore
+      \endverb
+    \endentry
+    \entry{vera-tesis}{article}{}
+      \name{author}{1}{}{%
+        {{hash=541678001648136670173264e4bc8643}{%
+           family={Bogdanich\bibnamedelima Espina},
+           familyi={B\bibinitperiod\bibinitdelim E\bibinitperiod},
+           given={Vera},
+           giveni={V\bibinitperiod}}}%
+      }
+      \list{publisher}{1}{%
+        {Universidad de Buenos Aires}%
+      }
+      \strng{namehash}{541678001648136670173264e4bc8643}
+      \strng{fullhash}{541678001648136670173264e4bc8643}
+      \strng{bibnamehash}{541678001648136670173264e4bc8643}
+      \strng{authorbibnamehash}{541678001648136670173264e4bc8643}
+      \strng{authornamehash}{541678001648136670173264e4bc8643}
+      \strng{authorfullhash}{541678001648136670173264e4bc8643}
+      \field{sortinit}{B}
+      \field{sortinithash}{8de16967003c7207dae369d874f1456e}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{Tesis de Grado}
+      \field{title}{Ethereum smart contracts verification: a survey and a prototype tool.}
+      \field{year}{2019}
+      \verb{urlraw}
+      \verb https://hdl.handle.net/20.500.12110/seminario_nCOM000440_Bogdanich
+      \endverb
+      \verb{url}
+      \verb https://hdl.handle.net/20.500.12110/seminario_nCOM000440_Bogdanich
       \endverb
     \endentry
     \entry{gasper-protocol}{article}{}
@@ -171,6 +265,55 @@
       \field{title}{White Paper: Ethereum: A Next-Generation Smart Contract and Decentralized Application Platform.}
       \field{year}{2014}
     \endentry
+    \entry{symbolic-execution-three-decades-later}{article}{}
+      \name{author}{2}{}{%
+        {{hash=ae88f84413db03b7b72010c8c37881cf}{%
+           family={Cadar},
+           familyi={C\bibinitperiod},
+           given={Cristian},
+           giveni={C\bibinitperiod}}}%
+        {{hash=6dec3318a42d8d397a59554c48b43851}{%
+           family={Sen},
+           familyi={S\bibinitperiod},
+           given={Koushik},
+           giveni={K\bibinitperiod}}}%
+      }
+      \list{location}{1}{%
+        {New York, NY, USA}%
+      }
+      \list{publisher}{1}{%
+        {Association for Computing Machinery}%
+      }
+      \strng{namehash}{9773adc170e8ec7f73afb8e3ded9b9a7}
+      \strng{fullhash}{9773adc170e8ec7f73afb8e3ded9b9a7}
+      \strng{bibnamehash}{9773adc170e8ec7f73afb8e3ded9b9a7}
+      \strng{authorbibnamehash}{9773adc170e8ec7f73afb8e3ded9b9a7}
+      \strng{authornamehash}{9773adc170e8ec7f73afb8e3ded9b9a7}
+      \strng{authorfullhash}{9773adc170e8ec7f73afb8e3ded9b9a7}
+      \field{sortinit}{C}
+      \field{sortinithash}{4c244ceae61406cdc0cc2ce1cb1ff703}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{abstract}{The challenges---and great promise---of modern symbolic execution techniques, and the tools to help implement them.}
+      \field{issn}{0001-0782}
+      \field{journaltitle}{Commun. ACM}
+      \field{month}{2}
+      \field{number}{2}
+      \field{title}{Symbolic execution for software testing: three decades later}
+      \field{volume}{56}
+      \field{year}{2013}
+      \field{pages}{82\bibrangedash 90}
+      \range{pages}{9}
+      \verb{doi}
+      \verb 10.1145/2408776.2408795
+      \endverb
+      \verb{urlraw}
+      \verb https://doi.org/10.1145/2408776.2408795
+      \endverb
+      \verb{url}
+      \verb https://doi.org/10.1145/2408776.2408795
+      \endverb
+    \endentry
     \entry{de-caso-epa}{article}{}
       \name{author}{4}{}{%
         {{hash=433fcaa4f299536658dafbdedfa5aa41}{%
@@ -237,6 +380,92 @@
       \field{note}{Accedido: 2023--30-10}
       \field{title}{Conjunto de instrucciones de la EVM}
     \endentry
+    \entry{high-level-protocols-for-low-level-software}{inproceedings}{}
+      \name{author}{2}{}{%
+        {{hash=af783c30843efac5e68e235d1a427639}{%
+           family={DeLine},
+           familyi={D\bibinitperiod},
+           given={Robert},
+           giveni={R\bibinitperiod}}}%
+        {{hash=dcba735adc043e55f5e4362f297962e1}{%
+           family={Fähndrich},
+           familyi={F\bibinitperiod},
+           given={Manuel},
+           giveni={M\bibinitperiod}}}%
+      }
+      \list{location}{1}{%
+        {Snowbird, Utah, USA}%
+      }
+      \list{publisher}{1}{%
+        {Association for Computing Machinery}%
+      }
+      \strng{namehash}{169ab9bf5af56879d8ee7c32d2f039f8}
+      \strng{fullhash}{169ab9bf5af56879d8ee7c32d2f039f8}
+      \strng{bibnamehash}{169ab9bf5af56879d8ee7c32d2f039f8}
+      \strng{authorbibnamehash}{169ab9bf5af56879d8ee7c32d2f039f8}
+      \strng{authornamehash}{169ab9bf5af56879d8ee7c32d2f039f8}
+      \strng{authorfullhash}{169ab9bf5af56879d8ee7c32d2f039f8}
+      \field{sortinit}{D}
+      \field{sortinithash}{c438b3d5d027251ba63f5ed538d98af5}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{booktitle}{Proceedings of the ACM SIGPLAN 2001 Conference on Programming Language Design and Implementation}
+      \field{isbn}{1581134142}
+      \field{series}{PLDI '01}
+      \field{title}{Enforcing high-level protocols in low-level software}
+      \field{year}{2001}
+      \field{pages}{59\bibrangedash 69}
+      \range{pages}{11}
+      \verb{doi}
+      \verb 10.1145/378795.378811
+      \endverb
+      \verb{urlraw}
+      \verb https://doi.org/10.1145/378795.378811
+      \endverb
+      \verb{url}
+      \verb https://doi.org/10.1145/378795.378811
+      \endverb
+    \endentry
+    \entry{formal-analysis-based-on-CPN}{article}{}
+      \name{author}{3}{}{%
+        {{hash=cc9958a44dab68566b2c864aefda0725}{%
+           family={Duo},
+           familyi={D\bibinitperiod},
+           given={Wang},
+           giveni={W\bibinitperiod}}}%
+        {{hash=bfec0ec1150c46fd110cae3496856352}{%
+           family={Xin},
+           familyi={X\bibinitperiod},
+           given={Huang},
+           giveni={H\bibinitperiod}}}%
+        {{hash=53a133fd2d91bf150a12c2949ad8000f}{%
+           family={Xiaofeng},
+           familyi={X\bibinitperiod},
+           given={Ma},
+           giveni={M\bibinitperiod}}}%
+      }
+      \strng{namehash}{465718a603d6687364325e3206d8a14f}
+      \strng{fullhash}{465718a603d6687364325e3206d8a14f}
+      \strng{bibnamehash}{465718a603d6687364325e3206d8a14f}
+      \strng{authorbibnamehash}{465718a603d6687364325e3206d8a14f}
+      \strng{authornamehash}{465718a603d6687364325e3206d8a14f}
+      \strng{authorfullhash}{465718a603d6687364325e3206d8a14f}
+      \field{sortinit}{D}
+      \field{sortinithash}{c438b3d5d027251ba63f5ed538d98af5}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{IEEE Intelligent Systems}
+      \field{number}{3}
+      \field{title}{Formal Analysis of Smart Contract Based on Colored Petri Nets}
+      \field{volume}{35}
+      \field{year}{2020}
+      \field{pages}{19\bibrangedash 30}
+      \range{pages}{12}
+      \verb{doi}
+      \verb 10.1109/MIS.2020.2977594
+      \endverb
+      \keyw{Smart contracts;Syntactics;Security;Petri nets;Virtual machining;Analytical models;Smart Contract;Formal Analysis;Colored Petri Net;Model Checking}
+    \endentry
     \entry{the-ethereum-merge}{misc}{}
       \name{author}{1}{}{%
         {{hash=94195b7b439ec3bda396c8df3d53e0c0}{%
@@ -260,6 +489,49 @@
       \endverb
       \verb{url}
       \verb https://ethereum.org/en/roadmap/merge/
+      \endverb
+    \endentry
+    \entry{slither}{article}{}
+      \name{author}{3}{}{%
+        {{hash=ecc2ade2644763eec7905959277afe35}{%
+           family={Feist},
+           familyi={F\bibinitperiod},
+           given={Josselin},
+           giveni={J\bibinitperiod}}}%
+        {{hash=b3a8378ac059607babf9689a21d1450d}{%
+           family={Grieco},
+           familyi={G\bibinitperiod},
+           given={Gustavo},
+           giveni={G\bibinitperiod}}}%
+        {{hash=d67052ec4bf728983bc814cf0d0a5b1c}{%
+           family={Groce},
+           familyi={G\bibinitperiod},
+           given={Alex},
+           giveni={A\bibinitperiod}}}%
+      }
+      \strng{namehash}{f80bd464a186f386df37ab67a4b4dea8}
+      \strng{fullhash}{f80bd464a186f386df37ab67a4b4dea8}
+      \strng{bibnamehash}{f80bd464a186f386df37ab67a4b4dea8}
+      \strng{authorbibnamehash}{f80bd464a186f386df37ab67a4b4dea8}
+      \strng{authornamehash}{f80bd464a186f386df37ab67a4b4dea8}
+      \strng{authorfullhash}{f80bd464a186f386df37ab67a4b4dea8}
+      \field{sortinit}{F}
+      \field{sortinithash}{fb0c0faa89eb6abae8213bf60e6799ea}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{eprinttype}{arXiv}
+      \field{journaltitle}{CoRR}
+      \field{title}{Slither: {A} Static Analysis Framework For Smart Contracts}
+      \field{volume}{abs/1908.09878}
+      \field{year}{2019}
+      \verb{eprint}
+      \verb 1908.09878
+      \endverb
+      \verb{urlraw}
+      \verb http://arxiv.org/abs/1908.09878
+      \endverb
+      \verb{url}
+      \verb http://arxiv.org/abs/1908.09878
       \endverb
     \endentry
     \entry{bitcoin-backbone-protocol}{inproceedings}{}
@@ -319,6 +591,102 @@
       \field{pages}{281\bibrangedash 310}
       \range{pages}{30}
     \endentry
+    \entry{solidity-to-CPN}{inproceedings}{}
+      \name{author}{4}{}{%
+        {{hash=1dffd0fd3300ce0bb51c5e9b8daafb08}{%
+           family={Garfatta},
+           familyi={G\bibinitperiod},
+           given={Ikram},
+           giveni={I\bibinitperiod}}}%
+        {{hash=fa3534f0f54a2fd5f6081f6a1f29bfff}{%
+           family={Klai},
+           familyi={K\bibinitperiod},
+           given={Kaı̈s},
+           giveni={K\bibinitperiod}}}%
+        {{hash=f0d5219bbd6d889d4bcc57514224ce3c}{%
+           family={Graı̈et},
+           familyi={G\bibinitperiod},
+           given={Mohamed},
+           giveni={M\bibinitperiod}}}%
+        {{hash=47b3c8046cdbdc45e1ed031df378f657}{%
+           family={Gaaloul},
+           familyi={G\bibinitperiod},
+           given={Walid},
+           giveni={W\bibinitperiod}}}%
+      }
+      \list{location}{1}{%
+        {Virtual Event}%
+      }
+      \list{publisher}{1}{%
+        {Association for Computing Machinery}%
+      }
+      \strng{namehash}{a2f9a8a2e29ea6823305b26bb34f922b}
+      \strng{fullhash}{d27d3428c3842ca2df2f046b733b7dcd}
+      \strng{bibnamehash}{a2f9a8a2e29ea6823305b26bb34f922b}
+      \strng{authorbibnamehash}{a2f9a8a2e29ea6823305b26bb34f922b}
+      \strng{authornamehash}{a2f9a8a2e29ea6823305b26bb34f922b}
+      \strng{authorfullhash}{d27d3428c3842ca2df2f046b733b7dcd}
+      \field{sortinit}{G}
+      \field{sortinithash}{62eb2aa29549e4fdbd3cb154ec5711cb}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{abstract}{Despite the benefits that the Blockchain technology brings to many application fields, its adoption does not come without challenges. Smart contracts, which are at the core of 2nd generation blockchains, can often be riddled with vulnerabilities that can be exploited to attack the platform and threaten its security. It is therefore crucial for the protection of the designed systems to prove the correctness of the smart contracts to be deployed. Approaches have been proposed to detect generic vulnerabilities like reentrancy, but the results would often include false positives where the detected bug is either non existent or not exploitable. Besides, such approaches do not offer to check contract-specific properties. The work presented in this paper is situated as part of a formal approach that we have proposed in an attempt to bridge this gap. This previously outlined approach is based on the transformation of Solidity smart contracts into Coloured Petri nets, which provides the possibility to verify smart contracts with reference to properties expressed as Linear Temporal Logic (LTL) formulae. Herein we extend our previous work on mainly two levels: first, by taking into account the concept of function calls in the transformation and second, by focusing on the LTL properties that can define the correctness of a smart contract. Such properties can be specific to the control- or data-flow of the contracts being checked. They can also be used to express vulnerabilities as we showcase by proposing LTL formalizations for six vulnerabilities from the literature. We then leverage the capability of the Helena model checker to detect these vulnerabilities while discerning their exploitability, as well as check temporal-based contract-specific properties.}
+      \field{booktitle}{Proceedings of the 37th ACM/SIGAPP Symposium on Applied Computing}
+      \field{isbn}{9781450387132}
+      \field{series}{SAC '22}
+      \field{title}{Model checking of vulnerabilities in smart contracts: a solidity-to-CPN approach}
+      \field{year}{2022}
+      \field{pages}{316\bibrangedash 325}
+      \range{pages}{10}
+      \verb{doi}
+      \verb 10.1145/3477314.3507309
+      \endverb
+      \verb{urlraw}
+      \verb https://doi.org/10.1145/3477314.3507309
+      \endverb
+      \verb{url}
+      \verb https://doi.org/10.1145/3477314.3507309
+      \endverb
+      \keyw{temporal properties,solidity,smart contract,model checker,coloured petri nets,blockchain}
+    \endentry
+    \entry{inference-by-traces}{inproceedings}{}
+      \name{author}{3}{}{%
+        {{hash=cc64e9369c6010cc0554e17b4af9cb61}{%
+           family={Ghezzi},
+           familyi={G\bibinitperiod},
+           given={Carlo},
+           giveni={C\bibinitperiod}}}%
+        {{hash=2caad63480deb514d0ee4cd3e1d08bf3}{%
+           family={Mocci},
+           familyi={M\bibinitperiod},
+           given={Andrea},
+           giveni={A\bibinitperiod}}}%
+        {{hash=f53b473dc522f1c5552551b053b0e6b9}{%
+           family={Monga},
+           familyi={M\bibinitperiod},
+           given={Mattia},
+           giveni={M\bibinitperiod}}}%
+      }
+      \strng{namehash}{c1ccde40b7bd89841dfac11654c5ff09}
+      \strng{fullhash}{c1ccde40b7bd89841dfac11654c5ff09}
+      \strng{bibnamehash}{c1ccde40b7bd89841dfac11654c5ff09}
+      \strng{authorbibnamehash}{c1ccde40b7bd89841dfac11654c5ff09}
+      \strng{authornamehash}{c1ccde40b7bd89841dfac11654c5ff09}
+      \strng{authorfullhash}{c1ccde40b7bd89841dfac11654c5ff09}
+      \field{sortinit}{G}
+      \field{sortinithash}{62eb2aa29549e4fdbd3cb154ec5711cb}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{booktitle}{2009 IEEE 31st International Conference on Software Engineering}
+      \field{title}{Synthesizing intensional behavior models by graph transformation}
+      \field{year}{2009}
+      \field{pages}{430\bibrangedash 440}
+      \range{pages}{11}
+      \verb{doi}
+      \verb 10.1109/ICSE.2009.5070542
+      \endverb
+      \keyw{Documentation;Runtime;Inspection;Formal specifications;Service oriented architecture;Contracts;Writing;Web services;Java;Containers}
+    \endentry
     \entry{predicate-abstraction-for-smart-contract-validation}{inproceedings}{}
       \name{author}{4}{}{%
         {{hash=d2319c6877ce8777a06850a17535ac7c}{%
@@ -376,6 +744,135 @@
       \verb https://doi.org/10.1145/3550355.3552462
       \endverb
     \endentry
+    \entry{permissive-interfaces}{inproceedings}{}
+      \name{author}{3}{}{%
+        {{hash=eeb928073fbee58751f87d401a62561a}{%
+           family={Henzinger},
+           familyi={H\bibinitperiod},
+           given={Thomas\bibnamedelima A.},
+           giveni={T\bibinitperiod\bibinitdelim A\bibinitperiod}}}%
+        {{hash=0b731274f4d045521bac73df419287ea}{%
+           family={Jhala},
+           familyi={J\bibinitperiod},
+           given={Ranjit},
+           giveni={R\bibinitperiod}}}%
+        {{hash=78643650cab303170e95fbd8ac71e624}{%
+           family={Majumdar},
+           familyi={M\bibinitperiod},
+           given={Rupak},
+           giveni={R\bibinitperiod}}}%
+      }
+      \list{location}{1}{%
+        {Lisbon, Portugal}%
+      }
+      \list{publisher}{1}{%
+        {Association for Computing Machinery}%
+      }
+      \strng{namehash}{3e779667a8012ec0fa80446e3ecefaf7}
+      \strng{fullhash}{3e779667a8012ec0fa80446e3ecefaf7}
+      \strng{bibnamehash}{3e779667a8012ec0fa80446e3ecefaf7}
+      \strng{authorbibnamehash}{3e779667a8012ec0fa80446e3ecefaf7}
+      \strng{authornamehash}{3e779667a8012ec0fa80446e3ecefaf7}
+      \strng{authorfullhash}{3e779667a8012ec0fa80446e3ecefaf7}
+      \field{sortinit}{H}
+      \field{sortinithash}{6db6145dae8dc9e1271a8d556090b50a}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{abstract}{A modular program analysis considers components independently and provides a succinct summary for each component, which is used when checking the rest of the system. Consider a system consisting of a library and a client. A temporal summary, or interface, of the library specifies legal sequences of library calls. The interface is safe if no call sequence violates the library's internal invariants; the interface is permissive if it contains every such sequence. Modular program analysis requires full interfaces, which are both safe and permissive: the client does not cause errors in the library if and only if it makes only sequences of library calls that are allowed by the full interface of the library.Previous interface-based methods have focused on safe interfaces, which may be too restrictive and thus reject good clients. We present an algorithm for automatically synthesizing software interfaces that are both safe and permissive. The algorithm generates interfaces as graphs whose vertices are labeled with predicates over the library's internal state, and whose edges are labeled with library calls. The interface state is refined incrementally until the full interface is constructed. In other words, the algorithm automatically synthesizes a typestate system for the library, against which any client can be checked for compatibility. We present an implementation of the algorithm which is based on the BLAST model checker, and we evaluate some case studies.}
+      \field{booktitle}{Proceedings of the 10th European Software Engineering Conference Held Jointly with 13th ACM SIGSOFT International Symposium on Foundations of Software Engineering}
+      \field{isbn}{1595930140}
+      \field{series}{ESEC/FSE-13}
+      \field{title}{Permissive interfaces}
+      \field{year}{2005}
+      \field{pages}{31\bibrangedash 40}
+      \range{pages}{10}
+      \verb{doi}
+      \verb 10.1145/1081706.1081713
+      \endverb
+      \verb{urlraw}
+      \verb https://doi.org/10.1145/1081706.1081713
+      \endverb
+      \verb{url}
+      \verb https://doi.org/10.1145/1081706.1081713
+      \endverb
+      \keyw{software interfaces,modular verification}
+    \endentry
+    \entry{predicate-abstraction-for-verification}{inbook}{}
+      \name{author}{3}{}{%
+        {{hash=0b731274f4d045521bac73df419287ea}{%
+           family={Jhala},
+           familyi={J\bibinitperiod},
+           given={Ranjit},
+           giveni={R\bibinitperiod}}}%
+        {{hash=3edf53e74f24ed3b77a41f6098d6eb7b}{%
+           family={Podelski},
+           familyi={P\bibinitperiod},
+           given={Andreas},
+           giveni={A\bibinitperiod}}}%
+        {{hash=eb3653913735836756653947bf172b66}{%
+           family={Rybalchenko},
+           familyi={R\bibinitperiod},
+           given={Andrey},
+           giveni={A\bibinitperiod}}}%
+      }
+      \name{editor}{4}{}{%
+        {{hash=1822cd554880ea55fd66357a96bca03e}{%
+           family={Clarke},
+           familyi={C\bibinitperiod},
+           given={Edmund\bibnamedelima M.},
+           giveni={E\bibinitperiod\bibinitdelim M\bibinitperiod}}}%
+        {{hash=eeb928073fbee58751f87d401a62561a}{%
+           family={Henzinger},
+           familyi={H\bibinitperiod},
+           given={Thomas\bibnamedelima A.},
+           giveni={T\bibinitperiod\bibinitdelim A\bibinitperiod}}}%
+        {{hash=5ac94523768e8fc4adb7a926b36d83e0}{%
+           family={Veith},
+           familyi={V\bibinitperiod},
+           given={Helmut},
+           giveni={H\bibinitperiod}}}%
+        {{hash=9865af1b742410e6dee8ca813e1ec733}{%
+           family={Bloem},
+           familyi={B\bibinitperiod},
+           given={Roderick},
+           giveni={R\bibinitperiod}}}%
+      }
+      \list{location}{1}{%
+        {Cham}%
+      }
+      \list{publisher}{1}{%
+        {Springer International Publishing}%
+      }
+      \strng{namehash}{7d709562bd085b31f0d81e3af5b422f8}
+      \strng{fullhash}{7d709562bd085b31f0d81e3af5b422f8}
+      \strng{bibnamehash}{7d709562bd085b31f0d81e3af5b422f8}
+      \strng{authorbibnamehash}{7d709562bd085b31f0d81e3af5b422f8}
+      \strng{authornamehash}{7d709562bd085b31f0d81e3af5b422f8}
+      \strng{authorfullhash}{7d709562bd085b31f0d81e3af5b422f8}
+      \strng{editorbibnamehash}{2eed5a22a1fbe3a605ce6dc9254e65de}
+      \strng{editornamehash}{2eed5a22a1fbe3a605ce6dc9254e65de}
+      \strng{editorfullhash}{eea0cb89759dac86c5d80411829d95b2}
+      \field{sortinit}{J}
+      \field{sortinithash}{c45040a764d616897e7f5b30174d7b92}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{abstract}{We present basic principles of algorithms for the verification of safety and termination of programs. The algorithms call procedures on logical formulas in order to construct an abstraction and to refine an abstraction. The two underlying concepts are predicate abstraction and counterexample-guided abstraction refinement.}
+      \field{booktitle}{Handbook of Model Checking}
+      \field{isbn}{978-3-319-10575-8}
+      \field{title}{Predicate Abstraction for Program Verification}
+      \field{year}{2018}
+      \field{pages}{447\bibrangedash 491}
+      \range{pages}{45}
+      \verb{doi}
+      \verb 10.1007/978-3-319-10575-8_15
+      \endverb
+      \verb{urlraw}
+      \verb https://doi.org/10.1007/978-3-319-10575-8_15
+      \endverb
+      \verb{url}
+      \verb https://doi.org/10.1007/978-3-319-10575-8_15
+      \endverb
+    \endentry
     \entry{ouroboros-protocol}{inproceedings}{}
       \name{author}{4}{}{%
         {{hash=a788bdbaf3b805cdc29e079c1e4ae908}{%
@@ -419,17 +916,113 @@
       \verb 10.1007/978-3-319-63688-7_12
       \endverb
     \endentry
-    \entry{alloy}{misc}{}
+    \entry{teether}{inproceedings}{}
+      \name{author}{2}{}{%
+        {{hash=0f7986dbcdbec077412a49a346e9820d}{%
+           family={Krupp},
+           familyi={K\bibinitperiod},
+           given={Johannes},
+           giveni={J\bibinitperiod}}}%
+        {{hash=fb416c270e80f1ec4ad7d113cda7fb55}{%
+           family={Rossow},
+           familyi={R\bibinitperiod},
+           given={Christian},
+           giveni={C\bibinitperiod}}}%
+      }
+      \list{location}{1}{%
+        {Baltimore, MD, USA}%
+      }
+      \list{publisher}{1}{%
+        {USENIX Association}%
+      }
+      \strng{namehash}{0e41f3e584cbed49c7cd1996f5f0d465}
+      \strng{fullhash}{0e41f3e584cbed49c7cd1996f5f0d465}
+      \strng{bibnamehash}{0e41f3e584cbed49c7cd1996f5f0d465}
+      \strng{authorbibnamehash}{0e41f3e584cbed49c7cd1996f5f0d465}
+      \strng{authornamehash}{0e41f3e584cbed49c7cd1996f5f0d465}
+      \strng{authorfullhash}{0e41f3e584cbed49c7cd1996f5f0d465}
+      \field{sortinit}{K}
+      \field{sortinithash}{d3edc18d54b9438a72c24c925bfb38f4}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{abstract}{Cryptocurrencies like Bitcoin not only provide a decentralized currency, but also provide a programmatic way to process transactions. Ethereum, the second largest cryptocurrency next to Bitcoin, is the first to provide a Turing-complete language to specify transaction processing, thereby enabling so-called smart contracts. This provides an opportune setting for attackers, as security vulnerabilities are tightly intertwined with financial gain. In this paper, we consider the problem of automatic vulnerability identification and exploit generation for smart contracts. We develop a generic definition of vulnerable contracts and use this to build TEETHER, a tool that allows creating an exploit for a contract given only its binary bytecode. We perform a large-scale analysis of all 38,757 unique Ethereum contracts, 815 out of which our tool finds working exploits for--completely automated.}
+      \field{booktitle}{Proceedings of the 27th USENIX Conference on Security Symposium}
+      \field{isbn}{9781931971461}
+      \field{series}{SEC'18}
+      \field{title}{TEETHER: gnawing at ethereum to automatically exploit smart contracts}
+      \field{year}{2018}
+      \field{pages}{1317\bibrangedash 1333}
+      \range{pages}{17}
+    \endentry
+    \entry{verisol}{article}{}
+      \name{author}{4}{}{%
+        {{hash=9a06920f8645e691220f4461275d91f3}{%
+           family={Lahiri},
+           familyi={L\bibinitperiod},
+           given={Shuvendu\bibnamedelima K.},
+           giveni={S\bibinitperiod\bibinitdelim K\bibinitperiod}}}%
+        {{hash=cae35e2754ed78d063a20159ebcf4109}{%
+           family={Chen},
+           familyi={C\bibinitperiod},
+           given={Shuo},
+           giveni={S\bibinitperiod}}}%
+        {{hash=57b9bf41ead7a3af0f5714c621c85f83}{%
+           family={Wang},
+           familyi={W\bibinitperiod},
+           given={Yuepeng},
+           giveni={Y\bibinitperiod}}}%
+        {{hash=fd8f081bfdff32c5bab11f6680b91459}{%
+           family={Dillig},
+           familyi={D\bibinitperiod},
+           given={Isil},
+           giveni={I\bibinitperiod}}}%
+      }
+      \strng{namehash}{641eefb3c2cbc85ebb6fe178ff058d9f}
+      \strng{fullhash}{44d80060680664ea1f965fe0e9cdfb1c}
+      \strng{bibnamehash}{641eefb3c2cbc85ebb6fe178ff058d9f}
+      \strng{authorbibnamehash}{641eefb3c2cbc85ebb6fe178ff058d9f}
+      \strng{authornamehash}{641eefb3c2cbc85ebb6fe178ff058d9f}
+      \strng{authorfullhash}{44d80060680664ea1f965fe0e9cdfb1c}
       \field{sortinit}{L}
       \field{sortinithash}{dad3efd0836470093a7b4a7bb756eb8c}
+      \field{labelnamesource}{author}
       \field{labeltitlesource}{title}
-      \field{title}{Lenguaje de especificación Alloy}
+      \field{eprinttype}{arXiv}
+      \field{journaltitle}{CoRR}
+      \field{title}{Formal Specification and Verification of Smart Contracts for Azure Blockchain}
+      \field{volume}{abs/1812.08829}
+      \field{year}{2018}
+      \verb{eprint}
+      \verb 1812.08829
+      \endverb
       \verb{urlraw}
-      \verb https://github.com/AlloyTools/org.alloytools.alloy
+      \verb http://arxiv.org/abs/1812.08829
       \endverb
       \verb{url}
-      \verb https://github.com/AlloyTools/org.alloytools.alloy
+      \verb http://arxiv.org/abs/1812.08829
       \endverb
+    \endentry
+    \entry{boogie}{article}{}
+      \name{author}{1}{}{%
+        {{hash=ab5058ea2f014bb364a9bf0b3cd3e939}{%
+           family={Leino},
+           familyi={L\bibinitperiod},
+           given={K\bibnamedelima Rustan\bibnamedelima M},
+           giveni={K\bibinitperiod\bibinitdelim R\bibinitperiod\bibinitdelim M\bibinitperiod}}}%
+      }
+      \strng{namehash}{ab5058ea2f014bb364a9bf0b3cd3e939}
+      \strng{fullhash}{ab5058ea2f014bb364a9bf0b3cd3e939}
+      \strng{bibnamehash}{ab5058ea2f014bb364a9bf0b3cd3e939}
+      \strng{authorbibnamehash}{ab5058ea2f014bb364a9bf0b3cd3e939}
+      \strng{authornamehash}{ab5058ea2f014bb364a9bf0b3cd3e939}
+      \strng{authorfullhash}{ab5058ea2f014bb364a9bf0b3cd3e939}
+      \field{sortinit}{L}
+      \field{sortinithash}{dad3efd0836470093a7b4a7bb756eb8c}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{month}{01}
+      \field{title}{This is Boogie 2}
+      \field{year}{2008}
     \endentry
     \entry{solidity}{misc}{}
       \field{sortinit}{L}
@@ -500,6 +1093,69 @@
       \endverb
       \keyw{Blockchain,Security,Cryptocurrency,Smart contract}
     \endentry
+    \entry{oyente}{inproceedings}{}
+      \name{author}{5}{}{%
+        {{hash=52215df94fa3df053a9ff37eef735b8c}{%
+           family={Luu},
+           familyi={L\bibinitperiod},
+           given={Loi},
+           giveni={L\bibinitperiod}}}%
+        {{hash=7da7ade810ce8097344056432598466f}{%
+           family={Chu},
+           familyi={C\bibinitperiod},
+           given={Duc-Hiep},
+           giveni={D\bibinithyphendelim H\bibinitperiod}}}%
+        {{hash=234c9dce86ea0b40f65a0a8fc031734c}{%
+           family={Olickel},
+           familyi={O\bibinitperiod},
+           given={Hrishi},
+           giveni={H\bibinitperiod}}}%
+        {{hash=bd8f6be2fb6f2a6af3303717f7903800}{%
+           family={Saxena},
+           familyi={S\bibinitperiod},
+           given={Prateek},
+           giveni={P\bibinitperiod}}}%
+        {{hash=9e9e7df3a02984f833bbf26e3109583a}{%
+           family={Hobor},
+           familyi={H\bibinitperiod},
+           given={Aquinas},
+           giveni={A\bibinitperiod}}}%
+      }
+      \list{location}{1}{%
+        {Vienna, Austria}%
+      }
+      \list{publisher}{1}{%
+        {Association for Computing Machinery}%
+      }
+      \strng{namehash}{165c838c09554764812a7da705b7471b}
+      \strng{fullhash}{48f1f55f0c43ba90c343d7c8998dd6d7}
+      \strng{bibnamehash}{165c838c09554764812a7da705b7471b}
+      \strng{authorbibnamehash}{165c838c09554764812a7da705b7471b}
+      \strng{authornamehash}{165c838c09554764812a7da705b7471b}
+      \strng{authorfullhash}{48f1f55f0c43ba90c343d7c8998dd6d7}
+      \field{sortinit}{L}
+      \field{sortinithash}{dad3efd0836470093a7b4a7bb756eb8c}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{abstract}{Cryptocurrencies record transactions in a decentralized data structure called a blockchain. Two of the most popular cryptocurrencies, Bitcoin and Ethereum, support the feature to encode rules or scripts for processing transactions. This feature has evolved to give practical shape to the ideas of smart contracts, or full-fledged programs that are run on blockchains. Recently, Ethereum's smart contract system has seen steady adoption, supporting tens of thousands of contracts, holding millions dollars worth of virtual coins.In this paper, we investigate the security of running smart contracts based on Ethereum in an open distributed network like those of cryptocurrencies. We introduce several new security problems in which an adversary can manipulate smart contract execution to gain profit. These bugs suggest subtle gaps in the understanding of the distributed semantics of the underlying platform. As a refinement, we propose ways to enhance the operational semantics of Ethereum to make contracts less vulnerable. For developers writing contracts for the existing Ethereum system, we build a symbolic execution tool called Oyente to find potential security bugs. Among 19, 336 existing Ethereum contracts, Oyente flags 8, 833 of them as vulnerable, including the TheDAO bug which led to a 60 million US dollar loss in June 2016. We also discuss the severity of other attacks for several case studies which have source code available and confirm the attacks (which target only our accounts) in the main Ethereum network.}
+      \field{booktitle}{Proceedings of the 2016 ACM SIGSAC Conference on Computer and Communications Security}
+      \field{isbn}{9781450341394}
+      \field{series}{CCS '16}
+      \field{title}{Making Smart Contracts Smarter}
+      \field{year}{2016}
+      \field{pages}{254\bibrangedash 269}
+      \range{pages}{16}
+      \verb{doi}
+      \verb 10.1145/2976749.2978309
+      \endverb
+      \verb{urlraw}
+      \verb https://doi.org/10.1145/2976749.2978309
+      \endverb
+      \verb{url}
+      \verb https://doi.org/10.1145/2976749.2978309
+      \endverb
+      \keyw{symbolic execution,smart contract,ethereum,cryptocurrencies,blockchain}
+    \endentry
     \entry{manticoreUI}{misc}{}
       \field{sortinit}{M}
       \field{sortinithash}{2e5c2f51f7fa2d957f3206819bf86dc3}
@@ -512,6 +1168,54 @@
       \verb https://github.com/trailofbits/ManticoreUI
       \endverb
     \endentry
+    \entry{VeriSolid}{article}{}
+      \name{author}{4}{}{%
+        {{hash=6c931cd07bf7fa7649a0fc337bac813a}{%
+           family={Mavridou},
+           familyi={M\bibinitperiod},
+           given={Anastasia},
+           giveni={A\bibinitperiod}}}%
+        {{hash=3dafc75d4263b010a5021b05a9cbf685}{%
+           family={Laszka},
+           familyi={L\bibinitperiod},
+           given={Aron},
+           giveni={A\bibinitperiod}}}%
+        {{hash=c8863367ae172c478ead1c055d60ed27}{%
+           family={Stachtiari},
+           familyi={S\bibinitperiod},
+           given={Emmanouela},
+           giveni={E\bibinitperiod}}}%
+        {{hash=9dedf5cad07f10fc657fdc9bc875756d}{%
+           family={Dubey},
+           familyi={D\bibinitperiod},
+           given={Abhishek},
+           giveni={A\bibinitperiod}}}%
+      }
+      \strng{namehash}{04016327fb180e2581dc3a059a9e61c1}
+      \strng{fullhash}{f4eba763a5c9380f501c37f25619fcd9}
+      \strng{bibnamehash}{04016327fb180e2581dc3a059a9e61c1}
+      \strng{authorbibnamehash}{04016327fb180e2581dc3a059a9e61c1}
+      \strng{authornamehash}{04016327fb180e2581dc3a059a9e61c1}
+      \strng{authorfullhash}{f4eba763a5c9380f501c37f25619fcd9}
+      \field{sortinit}{M}
+      \field{sortinithash}{2e5c2f51f7fa2d957f3206819bf86dc3}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{eprinttype}{arXiv}
+      \field{journaltitle}{CoRR}
+      \field{title}{VeriSolid: Correct-by-Design Smart Contracts for Ethereum}
+      \field{volume}{abs/1901.01292}
+      \field{year}{2019}
+      \verb{eprint}
+      \verb 1901.01292
+      \endverb
+      \verb{urlraw}
+      \verb http://arxiv.org/abs/1901.01292
+      \endverb
+      \verb{url}
+      \verb http://arxiv.org/abs/1901.01292
+      \endverb
+    \endentry
     \entry{azure-benchmark}{misc}{}
       \field{sortinit}{M}
       \field{sortinithash}{2e5c2f51f7fa2d957f3206819bf86dc3}
@@ -522,6 +1226,18 @@
       \endverb
       \verb{url}
       \verb https://github.com/Azure-Samples/blockchain/tree/master/blockchain-workbench/application-and-smart-contract-samples
+      \endverb
+    \endentry
+    \entry{mythril}{misc}{}
+      \field{sortinit}{M}
+      \field{sortinithash}{2e5c2f51f7fa2d957f3206819bf86dc3}
+      \field{labeltitlesource}{title}
+      \field{title}{Mythril: A security analysis tool for EVM bytecode.}
+      \verb{urlraw}
+      \verb https://github.com/Consensys/mythril
+      \endverb
+      \verb{url}
+      \verb https://github.com/Consensys/mythril
       \endverb
     \endentry
     \entry{open-zeppelin-library}{misc}{}
@@ -546,6 +1262,18 @@
       \endverb
       \verb{url}
       \verb https://www.openzeppelin.com/contracts
+      \endverb
+    \endentry
+    \entry{pakala}{misc}{}
+      \field{sortinit}{P}
+      \field{sortinithash}{bb5b15f2db90f7aef79bb9e83defefcb}
+      \field{labeltitlesource}{title}
+      \field{title}{Pakala: A tool to search for exploitable bugs in Ethereum smart contracts.}
+      \verb{urlraw}
+      \verb https://github.com/palkeo/pakala
+      \endverb
+      \verb{url}
+      \verb https://github.com/palkeo/pakala
       \endverb
     \endentry
     \entry{manticore-tiny-changes}{misc}{}
@@ -610,6 +1338,18 @@
       \verb https://smt-lib.org/index.shtml
       \endverb
     \endentry
+    \entry{surya}{misc}{}
+      \field{sortinit}{S}
+      \field{sortinithash}{c319cff79d99c853d775f88277d4e45f}
+      \field{labeltitlesource}{title}
+      \field{title}{Surya, The Sun God: A Solidity Inspector}
+      \verb{urlraw}
+      \verb https://github.com/ConsenSys/surya
+      \endverb
+      \verb{url}
+      \verb https://github.com/ConsenSys/surya
+      \endverb
+    \endentry
     \entry{yices}{misc}{}
       \field{sortinit}{T}
       \field{sortinithash}{51f9faf24c60c62ca764a77f78cf5666}
@@ -621,6 +1361,31 @@
       \verb{url}
       \verb https://yices.csl.sri.com/
       \endverb
+    \endentry
+    \entry{torres}{article}{}
+      \name{author}{1}{}{%
+        {{hash=01fcb8b10e2baab2d61908fa666a4bc0}{%
+           family={Torres},
+           familyi={T\bibinitperiod},
+           given={Edén},
+           giveni={E\bibinitperiod}}}%
+      }
+      \list{publisher}{1}{%
+        {Universidad de Buenos Aires}%
+      }
+      \strng{namehash}{01fcb8b10e2baab2d61908fa666a4bc0}
+      \strng{fullhash}{01fcb8b10e2baab2d61908fa666a4bc0}
+      \strng{bibnamehash}{01fcb8b10e2baab2d61908fa666a4bc0}
+      \strng{authorbibnamehash}{01fcb8b10e2baab2d61908fa666a4bc0}
+      \strng{authornamehash}{01fcb8b10e2baab2d61908fa666a4bc0}
+      \strng{authorfullhash}{01fcb8b10e2baab2d61908fa666a4bc0}
+      \field{sortinit}{T}
+      \field{sortinithash}{51f9faf24c60c62ca764a77f78cf5666}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{Tesis de Grado}
+      \field{title}{Generador de abstracciones para smart contracts.}
+      \field{year}{2023}
     \endentry
     \entry{ethereum-yellow-paper}{misc}{}
       \name{author}{1}{}{%
@@ -749,10 +1514,6 @@
       \endverb
     \endentry
   \enddatalist
-  \missing{Torres}
-  \missing{boogie}
-  \missing{torres}
-  \missing{verisol}
 \endrefsection
 \endinput
 

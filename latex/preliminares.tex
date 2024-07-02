@@ -1,4 +1,59 @@
 \section{Ejecución simbólica dinámica}
+En ejecuciones concretas, un programa toma valores de entrada fijos y realiza una único camino en el árbol de control de flujo.
+Una única ejecución simbólica, en cambio, explora múltiples caminos que el programa podría tomar bajo valores de entrada diversos \cite{survey-on-symbolic-execution} \cite{symbolic-execution-three-decades-later}.
+El concepto clave detrás de estas ejecuciones es permitir que los programas sean ejecutados con valores ``simbólicos'' como entrada.
+A lo largo de una dada ejecución, se mantiene para cada camino explorado en el programa una fórmula que describe las condiciones requeridas para tomar ese camino y una memoria que asigna expresiones o valores a las variables simbólicas.
+\begin{lstlisting}[caption={Ejemplo de código para ilustrar los árboles de ejecución simbólica},label={code:symb-exec-example}]
+void aFunction ( int a , int b ) {
+    int x = 1 , y = 0;
+    
+    if( a != 0) {
+        y = 3 + x ;
+    
+        if( b == 0) {
+            x = 2 * ( a + b ) ;
+        }
+    }
+    
+    assert ( x - y != 0) ;
+}
+\end{lstlisting}
+\begin{figure}
+    \centering
+    \includegraphics[width=\textwidth]{figs/symbolic-execution-paths.png}
+    \caption{Ejemplo del árbol de ejecución generado por la función \texttt{aFunction}.
+        Los estados de ejecución, indicados con una letra mayúscula, indican la sentencia a ser ejecutada, la memoria simbólica $\sigma$ y las condiciones de camino $\pi$.
+        Las hojas son evaluadas contra la condición del \texttt{assert} correspondiente. Este ejemplo fue tomado de \cite{vera-tesis} y \cite{survey-on-symbolic-execution}}
+    \label{fig:symb-tree-example}
+\end{figure}
+
+En el contexto de pruebas automáticas de software, la ejecución simbólica permite explorar tantos caminos como sea posible en el tiempo que se le otorga y luego, para cada camino explorado, generar valores concretos que lo recorren.
+Esto permite para un gran abanico de caminos obtener valores que fuerzen su ejecución concreta.
+Si lo que se busca es generar casos de prueba, la ejecución simbólica permite obtener una alta cobertura de caminos en el programa analizado.
+A la hora de econtrar defectos, los valores concretos ofrecidos por ejecución simbólica permiten corroborar y depurar la presencia de bugs al ejecutarlos concretamente, en un contexto distinto a la ejecución simbólica que los generó.
+En el fragmento de código \ref{code:symb-exec-example} y en la figura \ref{fig:symb-tree-example} podemos ver una función sencilla y su árbol de ejecución simbólica asociado.
+
+Dada una \textit{path condition} (condición de camino), que significa la fórmula booleana mencionada, la generación de valores de entrada concretos que la satisfagan se basa típicamente en un SMT (Satisfibality Modulo Theory) solver.
+La resolución de condiciones es uno de los principales desafíos que enfrenta la ejecución simbólica.
+Los SMT solvers escalan y permiten resolver combinaciones complejas de condiciones sobre cientos de variables.
+Sin embargo, ciertos elementos presentes en código comúnmente analizado, como la aritmética no lineal suelen ser un obstáculo en la eficiencia.
+
+La ejecución simbólica clásica no puede lidiar con la resolución de condiciones demasiado complejas.
+De hecho, algunas condiciones pueden resultar indecidibles o no tener una estrategia computacionalmente razonable de resolución, como las que requieren inversión de funciones de hash \cite{manticore}.
+Un enfoque popular para resolver este problema, conocido como ejecución simbólica dinámica, es hacer que la ejecución simbólica sea dirigida por una ejecución concreta.
+Comenzando por valores concretos arbitrarios, se ejecuta el programa tanto concretamente como simbólicamente, generando las path conditions correspondientes al camino realizado por la ejecución concreta.
+Con esta técnica el motor simbólico no necesita invocar al solucionador de restricciones para decidir si una condición de rama es satisfacible.
+En cambio, para explorar diferentes caminos, se busca generar valores concretos nuevos que \textbf{no} cumplan las condiciones de camino del último camino generado.
+
+Existen múltiples herramientas enfocadas en la detección de errores de contratos inteligentes vía ejecución simbólica.
+Oyente \cite{oyente}\cite{vera-tesis} fue una de las primeras estrategias publicadas, y se enfoca en vulnerabilidades de contratos inteligentes conocidas.
+Pakala \cite{pakala}\cite{vera-tesis} analiza interacciones de múltiples transacciones de manera eficiente, buscando vulnerabilidades relacionadas a las criptomonedas.
+Mythril \cite{mythril}\cite{vera-tesis} es una herramienta open source que utiliza ejecución simbólica para analizar propiedades de seguridad predefinidas.
+teEther \cite{teether}\cite{vera-tesis} realiza ejecución simbólica sólo en una porción de los programas analizados, para alcanzar caminos que puedan ejecutar ciertas funciones críticas referentes a las transferencias de criptomonedas.
+
+Manticore \cite{manticore} realiza análisis de programas binarios y cualquier número de contratos inteligentes en interacción.
+Cuenta con un motor de ejecución simbólica agnóstico a la plataforma subyacente, y hace énfasis en el análisis de propiedades definidas por el usuario mediante el uso de callbacks y APIs programables.
+Recientemente, otros estudios \cite{vera-tesis} indicaron que Manticore resulta prometedor como herramienta de ejecución simbólica para contratos inteligentes.
 
 \section{Blockchains}
 Una blockchain es una base de datos pública, distribuida e inmutable.
