@@ -131,7 +131,7 @@ Nos resulta de interés ver cuál, si alguna, consume la mayor parte del tiempo 
 
 A continuación indicamos cuál fue la división en niveles de abstracción que hicimos de las funcionalidades de Manticore.
 En particular, por como es la arquitectura de multithreading y \textbf{\texttt{workers}} de Manticore, solo pudimos hacer esta distinción en los métodos relacionados a la resolución de valores simbólicos.
-La manera en la que se realizaba la ejecución simbólica y la generación de las path conditions era demasiado dependiente de objetos creados dinámicamente como para poder ser analizada de la misma manera.
+La manera en la que se realizaba la ejecución simbólica y la generación de las condiciones de camino era demasiado dependiente de objetos creados dinámicamente como para poder ser analizada de la misma manera.
 \begin{enumerate}
     \item \textbf{Nivel Externo}\footnote{En el momento de realizar las mediciones, los valores para este nivel se registraron bajo el nombre de  ``Nivel 3''} : utilizado para medir el tiempo que consumían las funciones de la API de manticore que nuestro prototipo llamaba directamente.
           La única función cuyo tiempo medimos en este nivel fue \texttt{generateTestCases}.
@@ -181,13 +181,15 @@ La resolución de predicados para consultar por la presencia de transiciones en 
 Por ejemplo, para el contrato \texttt{BasicProvenance}, podemos ver que a pesar que el promedio del tiempo total fue cercano a los 40 minutos, la etapa de resolución de queries demoró tan sólo valores cercanos a los 7 minutos.
 Por otro lado, la suma del tiempo empleado en promedio por ambas etapas resulta a simple vista idéntico al tiempo total promedio que se pudo medir, por lo que tampoco observamos un consumo inusualmente alto de tiempo por algún otro aspecto del análisis que no hayamos considerado.
 
-En la tabla \ref{tab:performance} podemos ver un caso de estudio de los resultados obtenidos en las mediciones del tiempo empleado en cada nivel de abstracción de los métodos de Manticore.
-Nos limitamos a analizar los valores obtenidos para el contrato \texttt{BasicProvenance} para no mezclar los valores de distintos contratos, debido a que nos interesa señalar las relaciones entre los valores para algunos de los métodos.
+En las tablas \ref{tab:performance-DefectiveComponentCounter} a \ref{tab:performance-BasicProvenance} podemos ver los resultados obtenidos en las mediciones del tiempo empleado en cada nivel de abstracción de los métodos de Manticore para los contratos.
+Podemos ver en la tabla \ref{tab:performance-BasicProvenance} los valores obtenidos para el contrato \texttt{BasicProvenance},
+en el que nos queremos enfocar primero, para señalar las relaciones entre los valores para algunos de los métodos.
 Haciendo memoria sobre el análisis de la figura \ref{fig:tiempo-categorias}, podemos ver que los aproximadamente 450 segundos empleados por el método \texttt{generateTestCases}, que es el más externo de todos, representan casi la totalidad (7.5 minutos) del tiempo empleado por la etapa de solución de queries del programa.
 De hecho, los métodos \texttt{solve\_one\_n\_batched} y \texttt{get\_value\_in\_batch}, que pertenecen a un nivel de abstracción menor, siguen siendo responsables por la mayoría del tiempo empleado (y si observamos el número de veces que cada uno fue llamado, a fines del análisis que estamos haciendo ambos métodos resultan prácticamente iguales).
 Sin embargo, al realizar el salto a los métodos de \textbf{Nivel SMT solver}, vemos que comparativamente estos casi ni aportaron al tiempo empleado.
 Los tres métodos \texttt{\_getvalue\_all}, \texttt{\_is\_sat} y \texttt{\_getvalue}, todos llamados de manera directa por los métodos del nivel superior, apenas aportan 5 segundos de los 7.5 minutos involucrados.
 
+Por otro lado, notamos que esta relación entre los métodos de los tres niveles de abstracción se preserva para los otros contratos (tablas \ref{tab:performance-DefectiveComponentCounter}, \ref{tab:performance-SimpleMarketplace} y \ref{tab:performance-RoomThermostat}) también: los métodos \texttt{generateTestCases}, \texttt{solve\_one\_n\_batched} y \texttt{get\_value\_in\_batch} consumen casi la totalidad del tiempo empleado mientras que los metodos del \textbf{Nivel SMT Solver} no consumen casi nada.
 De aquí podemos intentar obtener dos conclusiones.
 O bien las llamadas al SMT solver funcionan de una manera asincrónica, que no pudimos capturar en nuestras mediciones, o bien en efecto la mayoría del tiempo consumido por consultas a Manticore es empleado no en tiempo de procesamiento del SMT solver, sino en alguna etapa de la aplicación misma (que no fuimos capaces de medir).
 Considerando que la mayor parte del tiempo de ejecución de la aplicación fue consumido por la etapa de ejecución simbólica, y no por la de resolución de queries, es posible que el preprocesamiento de las condiciones simbólicas de Manticore, construido durante la etapa de ejecución simbólica, sea extraordinariamente complejo y por ende caro en tiempo de ejecución.
@@ -216,7 +218,7 @@ Además, un rudimentario y primer análisis del código involucrado sugiere que 
             \bottomrule
         \end{tabular}
         \caption{Tiempo empleado por los métodos de Manticore para el contrato \texttt{DefectiveComponentCounter}.}
-        \label{tab:performance}
+        \label{tab:performance-DefectiveComponentCounter}
     \end{minipage}
     \begin{minipage}{0.95\textwidth}
         \centering
@@ -234,6 +236,7 @@ Además, un rudimentario y primer análisis del código involucrado sugiere que 
             \bottomrule
         \end{tabular}
         \caption{Tiempo empleado por los métodos de Manticore para el contrato \texttt{SimpleMarketplace}.}
+        \label{tab:performance-SimpleMarketplace}
     \end{minipage}
     \begin{minipage}{0.95\textwidth}
         \centering
@@ -251,6 +254,7 @@ Además, un rudimentario y primer análisis del código involucrado sugiere que 
             \bottomrule
         \end{tabular}
         \caption{Tiempo empleado por los métodos de Manticore para el contrato \texttt{RoomThermostat}.}
+        \label{tab:performance-RoomThermostat}
     \end{minipage}
     \begin{minipage}{0.95\textwidth}
         \centering
@@ -268,6 +272,7 @@ Además, un rudimentario y primer análisis del código involucrado sugiere que 
             \bottomrule
         \end{tabular}
         \caption{Tiempo empleado por los métodos de Manticore para el contrato \texttt{BasicProvenance}.}
+        \label{tab:performance-BasicProvenance}
     \end{minipage}
     \caption*{Tiempo empleado por los métodos de Manticore involucrados en las queries por transiciones en la EPA para los distintos contratos. En el color más oscuro los métodos del \textbf{Nivel Externo}, en el color intermedio los del \textbf{Nivel \texttt{state}} y en el más claro los del \textbf{Nivel SMT solver}}
 \end{table}

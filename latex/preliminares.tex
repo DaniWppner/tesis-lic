@@ -1,5 +1,5 @@
 \section{Ejecución simbólica dinámica}
-En ejecuciones concretas, un programa toma valores de entrada fijos y realiza una único camino en el árbol de control de flujo.
+En ejecuciones concretas, un programa toma valores de entrada fijos y realiza un único camino en el árbol de control de flujo.
 Una única ejecución simbólica, en cambio, explora múltiples caminos que el programa podría tomar bajo valores de entrada diversos \cite{survey-on-symbolic-execution} \cite{symbolic-execution-three-decades-later}.
 El concepto clave detrás de estas ejecuciones es permitir que los programas sean ejecutados con valores ``simbólicos'' como entrada.
 A lo largo de una dada ejecución, se mantiene para cada camino explorado en el programa una fórmula que describe las condiciones requeridas para tomar ese camino y una memoria que asigna expresiones o valores a las variables simbólicas.
@@ -41,7 +41,7 @@ Sin embargo, ciertos elementos presentes en código comúnmente analizado, como 
 La ejecución simbólica clásica no puede lidiar con la resolución de condiciones demasiado complejas.
 De hecho, algunas condiciones pueden resultar indecidibles o no tener una estrategia computacionalmente razonable de resolución, como las que requieren inversión de funciones de hash \cite{manticore}.
 Un enfoque popular para resolver este problema, conocido como ejecución simbólica dinámica, es hacer que la ejecución simbólica sea dirigida por una ejecución concreta.
-Comenzando por valores concretos arbitrarios, se ejecuta el programa tanto concretamente como simbólicamente, generando las path conditions correspondientes al camino realizado por la ejecución concreta.
+Comenzando por valores concretos arbitrarios, se ejecuta el programa tanto concretamente como simbólicamente, generando las condiciones de camino correspondientes al camino realizado por la ejecución concreta.
 Con esta técnica el motor simbólico no necesita invocar al solucionador de restricciones para decidir si una condición de rama es satisfacible.
 En cambio, para explorar diferentes caminos, se busca generar valores concretos nuevos que \textbf{no} cumplan las condiciones de camino del último camino generado.
 
