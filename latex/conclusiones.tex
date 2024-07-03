@@ -32,3 +32,11 @@ En el contexto de contratos inteligentes, existen múltiples herramientas ya men
 Otros acercamientos \cite{VeriSolid} construyen contratos inteligentes correctos a partir de especificaciones.
 Con respecto a herramientas orientadas a la validación, existen visualizadores \cite{surya} \cite{slither} de grafos de control de flujo y herencia de contratos en Solidity, pero que no visualizan funcionalidad o comportamiento como lo hacen las abstracciones de este trabajo.
 
+En 2013 de Caso et al. \cite{de-caso-epa} construyen EPAs para programas escritos en \texttt{C} haciendo uso de Blast \cite{blast}, un model checker, como back end al estilo ``caja negra''.
+Entre las alternativas evaluadas, mencionan la posibilidad de construir EPAs mediante herramientas de generación de casos de test o mediante ejecución simbólica, y predicen algunas de las dificultades enfrentadas en este trabajo para mantener consistentes las sobreaproximaciones producidas al emplear ejecución simbólica.
+En 2016 Lera Romero et al. \cite{lera-romero-tesis} generan EPAs de programas escritos en \texttt{.NET} utilizando Corral \cite{corral} como back end, un model checker desarrollado por Microsoft Research.
+Corral es capaz de analizar código Boogie \cite{boogie}, por lo que esta construcción de EPAs requería la previa traducción de \texttt{.NET} a Boogie mediante la herramienta BytecodeTranslator \cite{bytecodetranslator}.
+En 2017 Palladino et al. \cite{paladino-tesis} construyen un traductor de Java a Boogie para utilizar Corral como back end de generación de EPAs.
+En 2023 Torres et al. \cite{torres} construyen EPAs para Solidity utilizando VeriSol, que traduce los contratos en código fuente de Solidity a Boogie, aplicando también el model checker Corral sobre el código Boogie generado.
+
+En este trabajo presentamos la primer implementación de construcción de EPAs mediante una herramienta de ejecución simbólica, y expandimos la técnica desarrollada de manera general para cualquier herramienta de ejecucion simbólica.
